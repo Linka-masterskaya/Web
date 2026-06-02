@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css'
-import { ErrorBoundary } from '@app/providers/error-boundary'
 import { Router } from '@app/providers/router'
 import { ThemeProvider } from '@app/providers/theme'
+import { ErrorBoundary } from '@shared/lib/error'
 import { QueryProvider } from '@shared/lib/query'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

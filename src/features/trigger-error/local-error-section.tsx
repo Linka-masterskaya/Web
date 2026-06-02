@@ -1,5 +1,5 @@
-import { ErrorBoundary } from '@app/providers/error-boundary'
 import { Button } from '@mantine/core'
+import { ErrorBoundary } from '@shared/lib/error'
 import { ErrorFallbackUi } from '@shared/ui/error-fallback'
 import { useState } from 'react'
 import { LocalErrorTrigger } from './local-error-trigger'

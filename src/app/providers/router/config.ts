@@ -77,7 +77,10 @@ export const router = createBrowserRouter([
             ],
           },
 
-          // Public routes without loader
+          {
+            path: '*',
+            lazy: pageLazyLoad(() => import('@pages/not-found-page')),
+          },
         ],
       },
     ],
