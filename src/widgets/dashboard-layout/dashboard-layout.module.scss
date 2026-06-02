@@ -1,0 +1,22 @@
+.layout {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 1rem;
+}
+
+.sidebar {
+  min-width: 0;
+  overflow: auto;
+  padding: .5rem;
+}
+
+.content {
+  min-width: 0;
+  overflow: auto;
+}
+
+.menu {
+  flex-direction: column;
+}
