@@ -1,0 +1,11 @@
+$margin: 1rem;
+
+.layout {
+  min-height: calc(100dvh - $margin * 2);
+  width: calc(100dvw - $margin * 2);
+  margin: $margin;
+  position: relative;
+
+  display: flex;
+  align-items: stretch;
+}
