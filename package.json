@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "biome check --write .",
     "preview": "vite preview",
-    "prepare": "lefthook install"
+    "prepare": "lefthook install",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -37,6 +39,10 @@
     "postcss-simple-vars": "^7.0.1",
     "sass": "^1.100.0",
     "typescript": "~6.0.2",
-    "vite": "^8.0.16"
+    "vite": "^8.0.16",
+    "storybook": "^10.4.2",
+    "@storybook/react-vite": "^10.4.2",
+    "@storybook/addon-a11y": "^10.4.2",
+    "@storybook/addon-docs": "^10.4.2"
   }
 }

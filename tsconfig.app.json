@@ -30,5 +30,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "scss-modules.d.ts"]
+  "include": ["src", "scss-modules.d.ts"],
+  "exclude": ["**/*.stories.ts", "**/*.stories.tsx"]
 }

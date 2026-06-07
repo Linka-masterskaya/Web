@@ -418,10 +418,54 @@ export const PopupDemonstration: React.FC = () => {
 ## Скрипты
 
 ```bash
-npm run dev    # dev-сервер
-npm run build  # сборка
-npm run lint   # линт, автофиксы и форматирование (biome check --write)
+npm run dev              # dev-сервер
+npm run build            # сборка
+npm run lint             # линт, автофиксы и форматирование (biome check --write)
+npm run storybook        # Storybook на http://localhost:6006
+npm run build-storybook  # статическая сборка Storybook в storybook-static/
 ```
+
+### [Storybook](https://storybook.js.org/) — каталог UI-компонентов
+
+**Документация**: [Storybook for React](https://storybook.js.org/docs/get-started/frameworks/react-vite).
+
+Конфигурация — `.storybook/`. Глобальный декоратор с `ThemeProvider` подключён в `.storybook/preview.tsx`.
+
+Stories размещаем **рядом с компонентом** внутри FSD-слайса, например `src/shared/ui/error-fallback/error-fallback-ui.stories.tsx`. Отдельную папку `src/stories/` не создаём.
+
+Именование в сайдбаре отражает слой FSD:
+
+- `Shared/ComponentName` — `shared/ui`
+- `Features/FeatureName` — `features`
+- `Widgets/WidgetName` — `widgets`
+
+Stories не реэкспортируем из `index.ts` модуля.
+
+Пример story:
+
+```tsx
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ErrorFallbackUi } from './error-fallback-ui'
+
+const meta = {
+  title: 'Shared/ErrorFallbackUi',
+  component: ErrorFallbackUi,
+  tags: ['autodocs'],
+} satisfies Meta<typeof ErrorFallbackUi>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    title: 'Something went wrong',
+    message: 'An unexpected error occurred.',
+    onReset: () => {},
+  },
+}
+```
+
+Если компоненту нужны провайдеры (React Query, Router и т.д.), добавляйте `decorators` в story или в `.storybook/preview.tsx`.
 
 ## Договоренности
 
