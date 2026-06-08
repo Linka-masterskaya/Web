@@ -450,7 +450,7 @@ npm run lint   # линт, автофиксы и форматирование (b
 
 ```text
 feat: add button
-feat:#15-add-feature
+feat/#15-add-feature
 ```
 
 - `feat` — фичи
