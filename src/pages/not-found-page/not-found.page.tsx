@@ -13,7 +13,7 @@ export const NotFoundPage: React.FC = () => {
       <ErrorFallbackUi
         title="404 Page not found"
         message="The page you are looking for does not exist."
-        onReset={() => navigate(createUrl(getIsAuth() ? routerPath.dashboard : routerPath.login))}
+        onReset={() => navigate(createUrl(getIsAuth() ? routerPath.dashboard : routerPath.auth))}
       />
     </Flex>
   )

@@ -4,7 +4,7 @@ import { redirect } from 'react-router'
 
 export const requireAuthLoader = async () => {
   if (!getIsAuth()) {
-    throw redirect(createUrl(routerPath.login))
+    throw redirect(createUrl(routerPath.auth))
   }
 
   const { accessToken, refreshAccessToken } = useAuthStore.getState()
