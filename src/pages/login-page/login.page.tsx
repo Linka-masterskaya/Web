@@ -9,7 +9,7 @@ export const LoginPage: React.FC = () => (
 
     <LoginButton />
 
-    <Anchor component={Link} to={createUrl(routerPath.forgotPassword)}>
+    <Anchor component={Link} to={createUrl(routerPath.authForgotPassword)}>
       Forgot password?
     </Anchor>
   </Flex>

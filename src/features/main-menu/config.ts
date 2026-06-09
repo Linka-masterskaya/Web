@@ -18,6 +18,7 @@ export const mainMenuConfig = {
       end: true,
       accessLevel: accessLevel.auth,
     },
+    /*
     {
       id: 'profile',
       url: createUrl(routerPath.profile),
@@ -30,16 +31,17 @@ export const mainMenuConfig = {
       label: 'Not Found',
       accessLevel: accessLevel.auth,
     },
+    */
     {
       id: 'login',
-      url: createUrl(routerPath.login),
+      url: createUrl(routerPath.auth),
       label: 'Login',
       end: true,
       accessLevel: accessLevel.guest,
     },
     {
       id: 'forgot-password',
-      url: createUrl(routerPath.forgotPassword),
+      url: createUrl(routerPath.authForgotPassword),
       label: 'Forgot Password',
       end: true,
       accessLevel: accessLevel.guest,

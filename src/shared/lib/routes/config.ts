@@ -2,15 +2,24 @@ import { defineRoute } from './utils/define-route'
 
 // Route segments
 export const routeSegments = {
-  login: 'login',
+  auth: 'auth',
+  register: 'register',
   forgotPassword: 'forgot-password',
+  restorePassword: 'restore-password',
   dashboard: 'dashboard',
-  profile: 'profile',
-  card: 'card',
+  library: 'library',
+  students: 'students',
+  student: 'student',
+  sets: 'sets',
+  new: 'new',
+  edit: 'edit',
+  subset: 'subset',
 } as const
 
 // Route params
 export const routeParams = {
+  setId: ':setId',
+  subsetId: ':subsetId',
   id: ':id',
 } as const
 
@@ -23,12 +32,49 @@ export const routeQueryParams = {
 
 // Routes
 export const routerPath = {
-  login: defineRoute([routeSegments.login]),
-  forgotPassword: defineRoute([routeSegments.login, routeSegments.forgotPassword]),
-
+  auth: defineRoute([routeSegments.auth]),
+  authRegister: defineRoute([routeSegments.auth, routeSegments.register]),
+  authForgotPassword: defineRoute([routeSegments.auth, routeSegments.forgotPassword]),
+  authRestorePassword: defineRoute([routeSegments.auth, routeSegments.restorePassword]),
   dashboard: defineRoute([routeSegments.dashboard]),
-
-  profile: defineRoute([routeSegments.profile]),
-
-  card: defineRoute([routeSegments.card, routeParams.id]),
+  dashboardLibrary: defineRoute([routeSegments.dashboard, routeSegments.library]),
+  dashboardStudents: defineRoute([routeSegments.dashboard, routeSegments.students]),
+  dashboardSets: defineRoute([routeSegments.dashboard, routeSegments.sets]),
+  dashboardSetsNew: defineRoute([routeSegments.dashboard, routeSegments.sets, routeSegments.new]),
+  dashboardSetId: defineRoute([routeSegments.dashboard, routeSegments.sets, routeParams.setId]),
+  dashboardSetIdEdit: defineRoute([
+    routeSegments.dashboard,
+    routeSegments.sets,
+    routeParams.setId,
+    routeSegments.edit,
+  ]),
+  dashboardSubset: defineRoute([
+    routeSegments.dashboard,
+    routeSegments.sets,
+    routeParams.setId,
+    routeSegments.subset,
+  ]),
+  dashboardSubsetNew: defineRoute([
+    routeSegments.dashboard,
+    routeSegments.sets,
+    routeParams.setId,
+    routeSegments.subset,
+    routeSegments.new,
+  ]),
+  dashboardSubsetId: defineRoute([
+    routeSegments.dashboard,
+    routeSegments.sets,
+    routeParams.setId,
+    routeSegments.subset,
+    routeParams.subsetId,
+  ]),
+  dashboardSubsetIdEdit: defineRoute([
+    routeSegments.dashboard,
+    routeSegments.sets,
+    routeParams.setId,
+    routeSegments.subset,
+    routeParams.subsetId,
+    routeSegments.edit,
+  ]),
+  studentId: defineRoute([routeSegments.sets, routeSegments.student, routeParams.id]),
 }
