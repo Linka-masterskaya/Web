@@ -1,0 +1,27 @@
+.subsetLayout {
+    --side-open-width: 258px;
+    --side-closed-width: 64px;
+
+    --left-column-width: var(--side-open-width);
+    --right-column-width: var(--side-open-width);
+
+    height: 100%;
+
+    display: grid;
+    grid-template-columns: var(--left-column-width) 1fr var(--right-column-width);
+    transition: grid-template-columns 180ms ease;
+}
+
+.subsetLayout[data-left-opened='false'] {
+    --left-column-width: var(--side-closed-width);
+}
+
+.subsetLayout[data-right-opened='false'] {
+    --right-column-width: var(--side-closed-width);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .subsetLayout {
+        transition: none;
+    }
+}
