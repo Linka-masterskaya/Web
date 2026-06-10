@@ -9,7 +9,6 @@ export const routeSegments = {
   dashboard: 'dashboard',
   library: 'library',
   students: 'students',
-  student: 'student',
   sets: 'sets',
   new: 'new',
   edit: 'edit',
@@ -76,5 +75,5 @@ export const routerPath = {
     routeParams.subsetId,
     routeSegments.edit,
   ]),
-  studentId: defineRoute([routeSegments.sets, routeSegments.student, routeParams.id]),
+  studentId: defineRoute([routeSegments.sets, routeSegments.students, routeParams.id]),
 }
