@@ -18,20 +18,6 @@ export const mainMenuConfig = {
       end: true,
       accessLevel: accessLevel.auth,
     },
-    /*
-    {
-      id: 'profile',
-      url: createUrl(routerPath.profile),
-      label: 'Profile',
-      accessLevel: accessLevel.auth,
-    },
-    {
-      id: 'card-1',
-      url: createUrl(routerPath.card, { id: '777' }),
-      label: 'Not Found',
-      accessLevel: accessLevel.auth,
-    },
-    */
     {
       id: 'login',
       url: createUrl(routerPath.auth),
