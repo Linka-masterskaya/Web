@@ -1,14 +1,8 @@
 import clsx from 'clsx'
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
 import { SidePanel } from './side-panel/side-panel'
 import styles from './subset-layout.module.scss'
-
-export type TSubsetLayoutProps = {
-  leftSlot?: ReactNode
-  rightSlot?: ReactNode
-  children?: ReactNode
-  className?: string
-}
+import type { TSubsetLayoutProps } from './types'
 
 export const SubsetLayout: React.FC<TSubsetLayoutProps> = ({
   leftSlot,
@@ -29,7 +23,7 @@ export const SubsetLayout: React.FC<TSubsetLayoutProps> = ({
         {leftSlot}
       </SidePanel>
 
-      <main>{children}</main>
+      <div>{children}</div>
 
       <SidePanel side="right" opened={isRightOpen} onToggle={() => setRightOpen((value) => !value)}>
         {rightSlot}
