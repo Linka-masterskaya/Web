@@ -8,7 +8,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-      VITE_API_URL: ${{ vars.VITE_API_URL }}
+      VITE_API_DOMAIN: ${{ vars.VITE_API_DOMAIN }}
       VITE_TEST_NUMBER: ${{ vars.VITE_TEST_NUMBER }}
       VITE_TEST_BOOLEAN: ${{ vars.VITE_TEST_BOOLEAN }}
     steps:
