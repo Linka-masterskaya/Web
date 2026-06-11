@@ -1,14 +1,7 @@
 import { ActionIcon } from '@mantine/core'
 import { PanelLeftIcon, PanelRightIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
 import styles from './side-panel.module.scss'
-
-type TSidePanelProps = {
-  side: 'left' | 'right'
-  opened: boolean
-  onToggle: () => void
-  children?: ReactNode
-}
+import type { TSidePanelProps } from './types'
 
 export const SidePanel: React.FC<TSidePanelProps> = ({ side, opened, onToggle, children }) => {
   const Icon = getIcon(side)
