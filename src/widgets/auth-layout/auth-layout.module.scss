@@ -1,40 +1,33 @@
 .authLayout {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: minmax(360px, 48vw) 1fr;
   min-height: 100vh;
+}
+
+.decorationRight {
+  grid-template-areas: "content decoration";
+}
+
+.decorationLeft {
+  grid-template-areas: "decoration content";
 }
 
 .decoration {
   grid-area: decoration;
-  width: clamp(360px, 48vw, 760px);
 }
 
-.decorationRight {
-  grid-template-columns: 1fr auto;
-  grid-template-areas: 'content decoration';
-}
-
-.decorationLeft {
-  grid-template-columns: auto 1fr;
-  grid-template-areas: 'decoration content';
-}
-
-.content{
+.content {
   grid-area: content;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 40px 24px;
 }
 
 @media (max-width: 768px) {
-  .decorationRight,
-  .decorationLeft {
+  .authLayout {
     grid-template-columns: 1fr;
-    grid-template-areas: 'content';
-  }
-
-  .decoration {
-    display: none;
+    grid-template-areas:
+      "content";
   }
 }
