@@ -1,0 +1,21 @@
+---
+name: CI check build
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  npm-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Check out branch
+        uses: actions/checkout@v3
+
+      - name: 2. Install npm
+        run: |
+          sudo apt install nodejs npm -y
+          npm ci
+
+      - name: 3. Build dist folder
+        run: |
+          npm run build
