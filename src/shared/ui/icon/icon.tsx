@@ -1,16 +1,16 @@
+import type { LucideIcon, LucideProps } from 'lucide-react'
 import * as Icons from 'lucide-react'
-import type React from 'react'
 
-// Автоматически выводим типы из импортированных иконок
+// Автоматически выводим все доступные имена иконок
 type IconName = keyof typeof Icons
 
-export interface IIconProps extends React.SVGProps<SVGSVGElement> {
+// Используем встроенные типы lucide-react
+export interface IIconProps extends LucideProps {
   name: IconName
-  size?: number | string
 }
 
 export const Icon: React.FC<IIconProps> = ({ name, size = 20, className, ...props }) => {
-  const LucideIcon = Icons[name] as React.ElementType
+  const LucideIcon = Icons[name] as LucideIcon
 
   return <LucideIcon size={size} className={className} {...props} />
 }
