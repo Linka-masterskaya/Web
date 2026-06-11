@@ -4,16 +4,17 @@
   min-height: 100vh;
 }
 
+.decoration {
+  background-color: #3E87FF;
+  grid-area: decoration;
+}
+
 .decorationRight {
   grid-template-areas: "content decoration";
 }
 
 .decorationLeft {
   grid-template-areas: "decoration content";
-}
-
-.decoration {
-  grid-area: decoration;
 }
 
 .content {
