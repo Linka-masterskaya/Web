@@ -16,14 +16,14 @@ export const theme = createTheme({
     blue: [
       '#e4f3ff',
       '#cce2ff',
-      '#99c2ff',
-      '#63a0ff',
-      '#3884ff', // primary
-      '#1870ff',
-      '#0067ff',
-      '#0057e5',
-      '#004dce',
-      '#0042b6',
+      '#99c1ff',
+      '#639fff',
+      '#3e87ff', // primary
+      '#186fff',
+      '#0066ff',
+      '#0056e5',
+      '#004cce',
+      '#0041b6',
     ],
 
     lightBlue: [
@@ -121,22 +121,25 @@ export const theme = createTheme({
 
     Button: Button.extend({
       defaultProps: {
-        size: 'md',
+        size: 'lg',
         fw: 600,
       },
       styles: {
         root: {
-          minHeight: 40,
+          maxHeight: 48,
 
           '&:hover': {
-            boxShadow: '0px 0px 2px 0px rgba(13, 29, 54, 0.15)',
+            background:
+              'linear-gradient(270deg, rgba(62, 135, 255, 0.75) 0%, rgba(56, 132, 255, 0.75) 100%)',
+            border: '1px solid #EBF3FF',
           },
 
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: '2px solid #3884FF',
           },
 
           '&:disabled': {
+            background: '#0E0E0E',
             opacity: 0.1,
             cursor: 'not-allowed',
           },
@@ -156,7 +159,7 @@ export const theme = createTheme({
           background: '#fff',
           border: '1px solid #EEEFF1',
 
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: '2px solid #3884FF',
           },
 
@@ -166,7 +169,7 @@ export const theme = createTheme({
             outline: '1px solid #EEEFF1',
           },
 
-          '[data-error] &': {
+          '[dataError] &': {
             border: '1px solid #EC2121',
           },
         },
@@ -185,11 +188,11 @@ export const theme = createTheme({
           background: '#fff',
           border: '1px solid #EEEFF1',
 
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: '2px solid #3884FF',
           },
 
-          '[data-error] &': {
+          '[dataError] &': {
             border: '1px solid #EC2121',
           },
         },
@@ -225,7 +228,7 @@ export const theme = createTheme({
           background: '#fff',
           border: '1px solid #EEEFF1',
 
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: '2px solid #3884FF',
           },
 
@@ -235,7 +238,7 @@ export const theme = createTheme({
             outline: '1px solid #EEEFF1',
           },
 
-          '[data-error] &': {
+          '[dataError] &': {
             border: '1px solid #EC2121',
           },
         },
@@ -255,7 +258,7 @@ export const theme = createTheme({
           background: '#fff',
           border: '1px solid #EEEFF1',
 
-          '&:focus-visible': {
+          '&:focusVisible': {
             outline: '2px solid #3884FF',
           },
         },
