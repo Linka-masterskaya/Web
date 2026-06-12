@@ -1,23 +1,14 @@
 .subsetLayout {
-    --side-open-width: 258px;
-    --side-closed-width: 64px;
-
-    --left-column-width: var(--side-open-width);
-    --right-column-width: var(--side-open-width);
-
     height: 100%;
 
-    display: grid;
-    grid-template-columns: var(--left-column-width) 1fr var(--right-column-width);
-    transition: grid-template-columns 180ms ease;
+    display: flex;
+    align-items: center;
+    width: 100%;
 }
 
-.subsetLayout[data-left-opened='false'] {
-    --left-column-width: var(--side-closed-width);
-}
-
-.subsetLayout[data-right-opened='false'] {
-    --right-column-width: var(--side-closed-width);
+.content {
+  flex-grow: 1;
+  min-width: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
