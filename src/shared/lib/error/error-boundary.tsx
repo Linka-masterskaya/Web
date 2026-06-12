@@ -12,7 +12,13 @@ export class ErrorBoundary extends Component<TErrorBoundaryProps, TErrorBoundary
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.props.onError?.(error, errorInfo)
     if (import.meta.env.DEV) {
-      console.error(error, errorInfo)
+      // biome-ignore lint/suspicious/noConsole: ErrorBoundary должен выводить ошибки в консоль в dev-режиме для отладки
+      console.error('[ErrorBoundary] Caught error during render:', error, {
+        name: error.name,
+        message: error.message,
+        cause: error.cause,
+        componentStack: errorInfo.componentStack,
+      })
     }
   }
 
