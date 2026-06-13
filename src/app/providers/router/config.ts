@@ -2,7 +2,6 @@ import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
 import { AuthLayout } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
-import { DashboardLayout } from '@widgets/dashboard-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -59,7 +58,6 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.dashboard,
-                Component: DashboardLayout,
                 children: [
                   {
                     index: true,
