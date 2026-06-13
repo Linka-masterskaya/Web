@@ -10,7 +10,7 @@ export const LogoutButton: React.FC = () => {
 
   const handleLogout = () => {
     logout()
-    navigate(createUrl(routerPath.login))
+    navigate(createUrl(routerPath.auth))
   }
 
   return (

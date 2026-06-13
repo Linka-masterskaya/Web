@@ -1,5 +1,5 @@
 import { ModalAppLayout } from '@shared/lib/modal'
-import { routerPath, routeSegments } from '@shared/lib/routes'
+import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
 import { AuthLayout } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
 import { DashboardLayout } from '@widgets/dashboard-layout'
@@ -23,13 +23,14 @@ export const router = createBrowserRouter([
           {
             index: true,
             loader: rootRedirectLoader,
+            element: null,
           },
 
           {
             loader: requireGuestLoader,
             children: [
               {
-                path: routeSegments.login,
+                path: routeSegments.auth,
                 Component: AuthLayout,
                 children: [
                   {
@@ -37,8 +38,16 @@ export const router = createBrowserRouter([
                     lazy: pageLazyLoad(() => import('@pages/login-page')),
                   },
                   {
+                    path: routeSegments.register,
+                    element: 'Страница в разработке',
+                  },
+                  {
                     path: routeSegments.forgotPassword,
                     lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                  },
+                  {
+                    path: routeSegments.restorePassword,
+                    element: 'Страница в разработке',
                   },
                 ],
               },
@@ -56,25 +65,85 @@ export const router = createBrowserRouter([
                     index: true,
                     lazy: pageLazyLoad(() => import('@pages/main-page')),
                   },
-                ],
-              },
 
-              {
-                path: routeSegments.profile,
-                lazy: pageLazyLoad(() => import('@pages/profile-page')),
-              },
-
-              {
-                path: routerPath.card, // Wrong use - better use children and routeSegments or routesParams
-                Component: DashboardLayout,
-                children: [
                   {
-                    index: true,
-                    lazy: pageLazyLoad(() => import('@pages/product-page')),
+                    path: routeSegments.library,
+                    element: 'Страница в разработке',
+                  },
+
+                  {
+                    path: routeSegments.students,
+                    element: 'Страница в разработке',
+                  },
+
+                  {
+                    path: routeSegments.sets,
+                    children: [
+                      {
+                        index: true,
+                        element: 'Страница в разработке',
+                      },
+
+                      {
+                        path: routeSegments.new,
+                        element: 'Страница в разработке',
+                      },
+
+                      {
+                        path: routeParams.setId,
+                        children: [
+                          {
+                            index: true,
+                            element: 'Страница в разработке',
+                          },
+
+                          {
+                            path: routeSegments.edit,
+                            element: 'Страница в разработке',
+                          },
+
+                          {
+                            path: routeSegments.subset,
+                            children: [
+                              {
+                                index: true,
+                                element: 'Страница в разработке',
+                              },
+
+                              {
+                                path: routeSegments.new,
+                                element: 'Страница в разработке',
+                              },
+
+                              {
+                                path: routeParams.subsetId,
+                                children: [
+                                  {
+                                    index: true,
+                                    element: 'Страница в разработке',
+                                  },
+
+                                  {
+                                    path: routeSegments.edit,
+                                    element: 'Страница в разработке',
+                                  },
+                                ],
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
             ],
+          },
+
+          {
+            path: routerPath.studentId,
+            loader: requireAuthLoader,
+            element: 'Страница в разработке',
           },
 
           {

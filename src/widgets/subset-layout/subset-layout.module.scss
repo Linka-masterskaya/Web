@@ -1,0 +1,18 @@
+.subsetLayout {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.content {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .subsetLayout {
+        transition: none;
+    }
+}

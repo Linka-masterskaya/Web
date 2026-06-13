@@ -1,4 +1,3 @@
-import { getIsAuth } from '@entities/auth'
 import { Flex } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { ErrorFallbackUi } from '@shared/ui/error-fallback'
@@ -13,7 +12,7 @@ export const NotFoundPage: React.FC = () => {
       <ErrorFallbackUi
         title="404 Page not found"
         message="The page you are looking for does not exist."
-        onReset={() => navigate(createUrl(getIsAuth() ? routerPath.dashboard : routerPath.login))}
+        onReset={() => navigate(createUrl(routerPath.dashboard))}
       />
     </Flex>
   )
