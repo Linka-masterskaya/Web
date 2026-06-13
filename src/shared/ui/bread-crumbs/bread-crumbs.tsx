@@ -6,7 +6,7 @@ import type { TBreadCrumbsProps } from './types'
 export const BreadCrumbs: React.FC<TBreadCrumbsProps> = ({ items }) => {
   return (
     <nav aria-label="Путь к текущей странице">
-      <ol className={styles.breadCrumbscontainer}>
+      <ol className={styles.breadCrumbsContainer}>
         {items.map((item, index) => {
           const isLast = index === items.length - 1
           const hasHref = Boolean(item.href)
