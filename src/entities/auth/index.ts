@@ -1,6 +1,7 @@
 export type { TAuthActions, TAuthState, TAuthStore } from '../types/types'
 export { accessLevel, type TAccessLevel } from './config/access-level'
 export { isAccessLevelVisible } from './lib/is-access-level-visible'
+export * from './model'
 export { useAuthStore } from './model/auth-store'
 export type { TLoginFormValues } from './model/login-form.schema'
 export {
