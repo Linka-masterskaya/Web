@@ -1,22 +1,37 @@
 .layout {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+  width: 100%;
+  background-color: var(--mantine-color-white);
 }
 
-.sidebar {
+.panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 6px 22px;
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.breadcrumbs {
+  display: flex;
   min-width: 0;
-  overflow: auto;
-  padding: .5rem;
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
 }
 
 .content {
+  flex: 1;
   min-width: 0;
-  overflow: auto;
-}
-
-.menu {
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(334px, 1fr));
+  gap: 20px;
+  padding: 0 22px;
 }
