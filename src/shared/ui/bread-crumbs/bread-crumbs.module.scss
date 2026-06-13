@@ -1,6 +1,8 @@
-.breadCrumbscontainer {
+.breadCrumbsContainer {
     width: 100%;
     height: 100%;
+    list-style: none;
+    margin: 0;
 
     display: flex;
     gap: 8px;
