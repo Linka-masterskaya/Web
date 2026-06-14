@@ -242,6 +242,10 @@ export const theme = createTheme({
             border: '1px solid #EC2121',
           },
         },
+
+        visibilityToggle: {
+          color: '#787B82',
+        },
       },
     }),
 
