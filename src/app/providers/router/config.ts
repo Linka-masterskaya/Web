@@ -54,6 +54,10 @@ export const router = createBrowserRouter([
                     path: routeSegments.restorePassword,
                     element: 'Страница в разработке',
                   },
+                  {
+                    path: routeSegments.restorePassword,
+                    element: 'Страница в разработке',
+                  },
                 ],
               },
             ],
