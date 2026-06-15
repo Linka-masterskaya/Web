@@ -1,7 +1,18 @@
 .authLayout {
   display: grid;
-  grid-template-columns: minmax(360px, 48vw) 1fr;
-  min-height: 100vh;
+  grid-template-columns:1fr 1fr;
+  height: 100%;
+  grid-template-areas: "content decoration";
+}
+
+
+.decoration {
+  background-color: #3E87FF;
+  grid-area: decoration;
+  background-image: url('');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
 
 .decorationRight {
@@ -21,7 +32,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px 24px;
 }
 
 @media (max-width: 768px) {
