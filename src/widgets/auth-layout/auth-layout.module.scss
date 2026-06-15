@@ -1,31 +1,44 @@
 .authLayout {
   display: grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   height: 100%;
   grid-template-areas: "content decoration";
 }
 
 
 .decoration {
+  position: relative;
+  width: 1115px;
+  height: 707.72px;
+  top: 97.12px;
+  left: 11px;
+  border-radius: 22px;
+  transform: rotate(17.93deg);
+  background-image: url('/images/right-decoration.png');
+  background-size: cover;
+  background-position: center;
   background-color: #3E87FF;
   grid-area: decoration;
   background-image: url('');
   background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
 }
 
 .decorationRight {
   grid-template-areas: "content decoration";
 }
 
-.decorationLeft {
+.decorationLeft .decoration {
+  width: 1115px;
+  height: 707.72px;
+  position: absolute;
+  top: 315px;
+  left: -661px;
+  border-radius: 22px;
+  transform: rotate(-9.37deg);
   grid-template-areas: "decoration content";
 }
 
-.decoration {
-  grid-area: decoration;
-}
+
 
 .content {
   grid-area: content;

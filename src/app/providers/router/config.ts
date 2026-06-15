@@ -1,6 +1,6 @@
 import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
-import { AuthLayout } from '@widgets/auth-layout'
+import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.auth,
-                Component: AuthLayout,
+                Component: AuthLayoutRight,
                 children: [
                   {
                     index: true,
@@ -42,7 +42,13 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: routeSegments.forgotPassword,
-                    lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                    Component: AuthLayoutLeft,
+                    children: [
+                      {
+                        index: true,
+                        lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                      },
+                    ],
                   },
                   {
                     path: routeSegments.restorePassword,
