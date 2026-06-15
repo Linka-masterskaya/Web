@@ -1,6 +1,6 @@
 import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
-import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout/auth-layout'
+import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
