@@ -3,24 +3,20 @@ import styles from './card.module.scss'
 import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
 
-export const Card: React.FC<TCardProps> = ({
-  className,
-  variant,
-  label,
-  level,
-  action,
-  icon,
-  imageSrc,
-  imageAlt,
-}) => {
+export const Card: React.FC<TCardProps> = (props) => {
+  const { className, variant, label, level, action } = props
   const cardClassName = clsx(styles.card, className)
 
   const content = (
     <>
       {variant === 'image' ? (
-        <img className={clsx(styles.media, styles.image)} src={imageSrc} alt={imageAlt ?? ''} />
+        <img
+          className={clsx(styles.media, styles.image)}
+          src={props.imageSrc}
+          alt={props.imageAlt}
+        />
       ) : (
-        <span className={clsx(styles.media, styles.iconTile)}>{icon}</span>
+        <span className={clsx(styles.media, styles.iconTile)}>{props.icon}</span>
       )}
 
       <span className={styles.nameRow}>

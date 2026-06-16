@@ -1,5 +1,5 @@
+import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import { Star } from 'lucide-react'
 import styles from './card-level.module.scss'
 import type { TCardLevelProps } from './types'
 
@@ -16,7 +16,7 @@ export const CardLevel: React.FC<TCardLevelProps> = ({ level, className }) => {
     <span className={clsx(styles.wrapper, className)}>
       <span className={styles.badge} aria-hidden>
         {starKeys.map((starKey) => (
-          <Star key={starKey} className={styles.star} />
+          <Icon name="Star" key={starKey} className={styles.star} />
         ))}
       </span>
       <span className={styles.badge}>{ageLabel}</span>
