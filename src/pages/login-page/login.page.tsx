@@ -1,16 +1,16 @@
-import { LoginButton } from '@features/login'
-import { Anchor, Flex, Title } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
-import { Link } from 'react-router'
+import type { TLoginFormValues } from '@entities/auth'
+import { LoginForm } from '@features/login'
 
-export const LoginPage: React.FC = () => (
-  <Flex direction="column" align="center" gap="md">
-    <Title>Login</Title>
+export const LoginPage = () => {
+  const handleSubmit = async (values: TLoginFormValues) => {
+    // biome-ignore lint/suspicious/noConsole: debug only
+    console.log('Данные логина:', values)
+    // TODO: интеграция с auth-store/API
+  }
 
-    <LoginButton />
-
-    <Anchor component={Link} to={createUrl(routerPath.authForgotPassword)}>
-      Forgot password?
-    </Anchor>
-  </Flex>
-)
+  return (
+    <div>
+      <LoginForm onSubmit={handleSubmit} />
+    </div>
+  )
+}

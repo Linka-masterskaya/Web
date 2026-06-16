@@ -1,8 +1,7 @@
 import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
-import { AuthLayout } from '@widgets/auth-layout'
+import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
-import { DashboardLayout } from '@widgets/dashboard-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -31,23 +30,32 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.auth,
-                Component: AuthLayout,
                 children: [
                   {
-                    index: true,
-                    lazy: pageLazyLoad(() => import('@pages/login-page')),
+                    Component: AuthLayoutRight,
+                    children: [
+                      {
+                        index: true,
+                        lazy: pageLazyLoad(() => import('@pages/login-page')),
+                      },
+                      {
+                        path: routeSegments.register,
+                        element: 'Страница в разработке',
+                      },
+                      {
+                        path: routeSegments.restorePassword,
+                        element: 'Страница в разработке',
+                      },
+                    ],
                   },
                   {
-                    path: routeSegments.register,
-                    element: 'Страница в разработке',
-                  },
-                  {
-                    path: routeSegments.forgotPassword,
-                    lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
-                  },
-                  {
-                    path: routeSegments.restorePassword,
-                    element: 'Страница в разработке',
+                    Component: AuthLayoutLeft,
+                    children: [
+                      {
+                        path: routeSegments.forgotPassword,
+                        lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                      },
+                    ],
                   },
                 ],
               },
@@ -59,23 +67,19 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.dashboard,
-                Component: DashboardLayout,
                 children: [
                   {
                     index: true,
                     lazy: pageLazyLoad(() => import('@pages/main-page')),
                   },
-
                   {
                     path: routeSegments.library,
                     element: 'Страница в разработке',
                   },
-
                   {
                     path: routeSegments.students,
                     element: 'Страница в разработке',
                   },
-
                   {
                     path: routeSegments.sets,
                     children: [
@@ -83,12 +87,10 @@ export const router = createBrowserRouter([
                         index: true,
                         element: 'Страница в разработке',
                       },
-
                       {
                         path: routeSegments.new,
                         element: 'Страница в разработке',
                       },
-
                       {
                         path: routeParams.setId,
                         children: [
@@ -96,12 +98,10 @@ export const router = createBrowserRouter([
                             index: true,
                             element: 'Страница в разработке',
                           },
-
                           {
                             path: routeSegments.edit,
                             element: 'Страница в разработке',
                           },
-
                           {
                             path: routeSegments.subset,
                             children: [
@@ -109,12 +109,10 @@ export const router = createBrowserRouter([
                                 index: true,
                                 element: 'Страница в разработке',
                               },
-
                               {
                                 path: routeSegments.new,
                                 element: 'Страница в разработке',
                               },
-
                               {
                                 path: routeParams.subsetId,
                                 children: [
@@ -122,7 +120,6 @@ export const router = createBrowserRouter([
                                     index: true,
                                     element: 'Страница в разработке',
                                   },
-
                                   {
                                     path: routeSegments.edit,
                                     element: 'Страница в разработке',
