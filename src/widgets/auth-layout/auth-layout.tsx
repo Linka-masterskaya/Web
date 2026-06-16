@@ -9,15 +9,13 @@ export type TAuthLayoutProps = {
 }
 
 export const AuthLayout: React.FC<TAuthLayoutProps> = ({ decorationSide, className = '' }) => {
+  const isLeft = decorationSide === 'left'
+
   return (
-    <div
-      className={clsx(
-        styles.authLayout,
-        decorationSide === 'left' ? styles.decorationLeft : styles.decorationRight,
-        className,
-      )}
-    >
-      <div className={styles.decoration} />
+    <div className={clsx(styles.authLayout, isLeft ? styles.decorationLeft : undefined, className)}>
+      <div className={clsx(styles.decoration, isLeft && styles.decorationLeftImage)}>
+        <img src="/auth-decoration.jpg" className={styles.decorationImg} alt="" />
+      </div>
       <main className={styles.content}>
         <Outlet />
       </main>

@@ -1,42 +1,17 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-width: 320px;
+  overflow: hidden;
+}
+
 .authLayout {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 100%;
+  height: 100vh;
+  grid-template-columns: repeat(2, 1fr);
   grid-template-areas: "content decoration";
-}
-
-.decoration {
-  grid-area: decoration;
-  background-image: url('/public/auth_decoration_right.png');
-  background-size: cover;
-  background-position: center;
-  background-color: #3E87FF;
-  background-repeat: no-repeat;
-  width: 1115px;
-  height: 707.72px;
-}
-
-.decorationRight {
-  grid-template-areas: "content decoration";
-  position: relative; 
-}
-
-.decorationRight .decoration {
-  position: absolute;
-  top: 97.12px;
-  left: 11px;
-}
-
-.decorationLeft {
-  grid-template-areas: "decoration content";
-  position: relative;
-}
-
-.decorationLeft .decoration {
-  background-image: url('/public/auth_decoration_left.png');
-  position: absolute;
-  top: 315px;
-  left: -661px;
+  overflow: hidden;
 }
 
 .content {
@@ -44,11 +19,46 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #fff;
+}
+
+.decoration {
+  grid-area: decoration;
+  overflow: hidden;
+  background: #3E87FF;
+  display: flex;
+  align-items: center;
+}
+
+.decorationImg {
+  width: 1115px;
+  height: 707.72px;
+  border-radius: 20px;
+  margin-top: 50%;   /* центр по вертикали */
+  margin-left:0%;
+  transform: rotate(-17.93deg) translateX(10%);
+}
+
+.decorationLeft {
+  grid-template-areas: "decoration content";
+}
+
+.decorationLeftImage {
+  justify-content: flex-end;
+}
+
+.decorationLeftImage .decorationImg {
+  transform: rotate(9.37deg) translateX(-8%);
+  margin-top: 50%;
 }
 
 @media (max-width: 768px) {
   .authLayout {
     grid-template-columns: 1fr;
     grid-template-areas: "content";
+  }
+
+  .decoration {
+    display: none;
   }
 }

@@ -30,33 +30,32 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.auth,
-                Component: AuthLayoutRight,
                 children: [
                   {
-                    index: true,
-                    lazy: pageLazyLoad(() => import('@pages/login-page')),
-                  },
-                  {
-                    path: routeSegments.register,
-                    element: 'Страница в разработке',
-                  },
-                  {
-                    path: routeSegments.forgotPassword,
-                    Component: AuthLayoutLeft,
+                    Component: AuthLayoutRight,
                     children: [
                       {
                         index: true,
-                        lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                        lazy: pageLazyLoad(() => import('@pages/login-page')),
+                      },
+                      {
+                        path: routeSegments.register,
+                        element: 'Страница в разработке',
+                      },
+                      {
+                        path: routeSegments.restorePassword,
+                        element: 'Страница в разработке',
                       },
                     ],
                   },
                   {
-                    path: routeSegments.restorePassword,
-                    element: 'Страница в разработке',
-                  },
-                  {
-                    path: routeSegments.restorePassword,
-                    element: 'Страница в разработке',
+                    Component: AuthLayoutLeft,
+                    children: [
+                      {
+                        path: routeSegments.forgotPassword,
+                        lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                      },
+                    ],
                   },
                 ],
               },
@@ -73,17 +72,14 @@ export const router = createBrowserRouter([
                     index: true,
                     lazy: pageLazyLoad(() => import('@pages/main-page')),
                   },
-
                   {
                     path: routeSegments.library,
                     element: 'Страница в разработке',
                   },
-
                   {
                     path: routeSegments.students,
                     element: 'Страница в разработке',
                   },
-
                   {
                     path: routeSegments.sets,
                     children: [
@@ -91,12 +87,10 @@ export const router = createBrowserRouter([
                         index: true,
                         element: 'Страница в разработке',
                       },
-
                       {
                         path: routeSegments.new,
                         element: 'Страница в разработке',
                       },
-
                       {
                         path: routeParams.setId,
                         children: [
@@ -104,12 +98,10 @@ export const router = createBrowserRouter([
                             index: true,
                             element: 'Страница в разработке',
                           },
-
                           {
                             path: routeSegments.edit,
                             element: 'Страница в разработке',
                           },
-
                           {
                             path: routeSegments.subset,
                             children: [
@@ -117,12 +109,10 @@ export const router = createBrowserRouter([
                                 index: true,
                                 element: 'Страница в разработке',
                               },
-
                               {
                                 path: routeSegments.new,
                                 element: 'Страница в разработке',
                               },
-
                               {
                                 path: routeParams.subsetId,
                                 children: [
@@ -130,7 +120,6 @@ export const router = createBrowserRouter([
                                     index: true,
                                     element: 'Страница в разработке',
                                   },
-
                                   {
                                     path: routeSegments.edit,
                                     element: 'Страница в разработке',
