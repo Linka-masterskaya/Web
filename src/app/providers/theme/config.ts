@@ -10,6 +10,8 @@ import {
   Textarea,
   TextInput,
 } from '@mantine/core'
+import clsx from 'clsx'
+import classes from './theme.module.scss'
 
 export const theme = createTheme({
   colors: {
@@ -81,6 +83,7 @@ export const theme = createTheme({
 
   fontFamily: 'Inter, sans-serif',
   primaryColor: 'blue',
+  primaryShade: 4,
   defaultRadius: 8,
 
   fontSizes: {
@@ -122,28 +125,14 @@ export const theme = createTheme({
     Button: Button.extend({
       defaultProps: {
         size: 'lg',
-        fw: 600,
       },
-      styles: {
-        root: {
-          maxHeight: 48,
 
-          '&:hover': {
-            background:
-              'linear-gradient(270deg, rgba(62, 135, 255, 0.75) 0%, rgba(56, 132, 255, 0.75) 100%)',
-            border: '1px solid #EBF3FF',
-          },
+      classNames: (_theme, props) => {
+        const isOutline = props.variant === 'outline'
 
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            background: '#0E0E0E',
-            opacity: 0.1,
-            cursor: 'not-allowed',
-          },
-        },
+        return {
+          root: clsx(classes.buttonRoot, isOutline ? classes.buttonOutline : classes.buttonFilled),
+        }
       },
     }),
 

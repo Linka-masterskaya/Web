@@ -1,16 +1,21 @@
-import type { TLoginFormValues } from '@entities/auth'
+import { type TLoginFormValues, useAuthStore } from '@entities/auth'
 import { LoginForm } from '@features/login'
+import { Box } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
+import { useNavigate } from 'react-router'
 
 export const LoginPage = () => {
-  const handleSubmit = async (values: TLoginFormValues) => {
-    // biome-ignore lint/suspicious/noConsole: debug only
-    console.log('Данные логина:', values)
-    // TODO: интеграция с auth-store/API
+  const login = useAuthStore((state) => state.login)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (_values: TLoginFormValues) => {
+    await login()
+    navigate(createUrl(routerPath.dashboard))
   }
 
   return (
-    <div>
+    <Box w="100%" maw={334}>
       <LoginForm onSubmit={handleSubmit} />
-    </div>
+    </Box>
   )
 }
