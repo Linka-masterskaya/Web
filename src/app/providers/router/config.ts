@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: routeSegments.register,
-                        lazy: pageLazyLoad(() => import('@pages/register-page')), // ← твой
+                        lazy: pageLazyLoad(() => import('@pages/register-page')),
                       },
                       {
                         path: routeSegments.restorePassword,
