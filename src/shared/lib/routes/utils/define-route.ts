@@ -11,6 +11,5 @@ type TJoinRoute<T extends readonly TRoutePiece[]> = T extends readonly [
     : `${Head}/${TJoinRoute<Tail>}`
   : ''
 
-export const defineRoute = <const T extends readonly TRoutePiece[]>(
-  segments: T,
-): TJoinRoute<T> => segments.join('/') as TJoinRoute<T>
+export const defineRoute = <const T extends readonly TRoutePiece[]>(segments: T): TJoinRoute<T> =>
+  segments.join('/') as TJoinRoute<T>
