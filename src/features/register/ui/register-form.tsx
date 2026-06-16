@@ -4,7 +4,7 @@ import {
   type TRegisterFormValues,
 } from '@entities/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { Button, PasswordInput, Stack, Text, TextInput } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 
 export type TRegisterFormProps = {
@@ -49,6 +49,9 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
         <Button type="submit" loading={isSubmitting} variant="filled">
           Зарегистрироваться
         </Button>
+        <Text size="xs" c="gray.6" ta="center">
+          Регистрируясь, вы соглашаетесь с условиями Политики обработки персональных данных
+        </Text>
       </Stack>
     </form>
   )

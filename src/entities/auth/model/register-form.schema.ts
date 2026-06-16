@@ -1,13 +1,10 @@
 import { z } from 'zod'
+import { emailField, passwordField } from '../lib/validation-fields'
 
 export const registerFormSchema = z
   .object({
-    email: z
-      .string()
-      .trim()
-      .min(1, { message: 'Введите email' })
-      .pipe(z.email({ message: 'Некорректный формат email' })),
-    password: z.string().min(1, { message: 'Введите пароль' }),
+    email: emailField,
+    password: passwordField,
     passwordConfirm: z.string().min(1, { message: 'Подтвердите пароль' }),
   })
   .refine((data) => data.password === data.passwordConfirm, {
