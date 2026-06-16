@@ -38,7 +38,7 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: routeSegments.register,
-                    element: 'Страница в разработке',
+                    lazy: pageLazyLoad(() => import('@pages/register-page')),
                   },
                   {
                     path: routeSegments.forgotPassword,
