@@ -1,23 +1,64 @@
-.layout {
-  inset: 0;
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-width: 320px;
+  overflow: hidden;
+}
+
+.authLayout {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas: "content decoration";
+  overflow: hidden;
+}
+
+.content {
+  grid-area: content;
   display: flex;
-  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
 }
 
-.column {
-  flex-grow: 1;
-  min-width: 0;
-  overflow: auto;
-  padding: 0.5rem;
-}
-
-.slot {
-  flex-grow: 1;
+.decoration {
+  grid-area: decoration;
+  overflow: hidden;
+  background: #3E87FF;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
-.menu {
-  flex-direction: column;
+.decorationImg {
+  width: 1115px;
+  height: 707.72px;
+  border-radius: 20px;
+  margin-top: 50%;   /* центр по вертикали */
+  margin-left:0%;
+  transform: rotate(-17.93deg) translateX(10%);
+}
+
+.decorationLeft {
+  grid-template-areas: "decoration content";
+}
+
+.decorationLeftImage {
+  justify-content: flex-end;
+}
+
+.decorationLeftImage .decorationImg {
+  transform: rotate(9.37deg) translateX(-8%);
+  margin-top: 50%;
+}
+
+@media (max-width: 768px) {
+  .authLayout {
+    grid-template-columns: 1fr;
+    grid-template-areas: "content";
+  }
+
+  .decoration {
+    display: none;
+  }
 }
