@@ -1,3 +1,4 @@
+import { Anchor, Text } from '@mantine/core'
 import React from 'react'
 import { Icon } from '../icon'
 import styles from './bread-crumbs.module.scss'
@@ -8,31 +9,37 @@ export const BreadCrumbs: React.FC<TBreadCrumbsProps> = ({ items }) => {
     <nav aria-label="Путь к текущей странице">
       <ol className={styles.breadCrumbsContainer}>
         {items.map((item, index) => {
-          const isLast = index === items.length - 1
-          const hasHref = Boolean(item.href)
-          const isCurrent = isLast || !hasHref
-          const shouldShowSeparator = !isLast
+          const isCurrent = index === items.length - 1
+          const isClickable = Boolean(item.href) && !isCurrent
+          const shouldShowSeparator = !isCurrent
 
           return (
             <React.Fragment key={item.id}>
               <li>
-                {isCurrent ? (
-                  <span
-                    className={styles.currentPage}
-                    aria-current={isCurrent ? 'page' : undefined}
+                {isClickable ? (
+                  <Anchor href={item.href} size="sm" className={styles.link}>
+                    {item.label}
+                  </Anchor>
+                ) : (
+                  <Text
+                    component="span"
+                    size="sm"
+                    className={isCurrent ? styles.currentPage : undefined}
+                    aria-current={isCurrent && 'page'}
                   >
                     {item.label}
-                  </span>
-                ) : (
-                  <a className={styles.link} href={item.href}>
-                    {item.label}
-                  </a>
+                  </Text>
                 )}
               </li>
 
               {shouldShowSeparator && (
-                <li aria-hidden="true">
-                  <Icon name="ChevronRight" color="#787B82" />
+                <li className={styles.separator} aria-hidden="true">
+                  <Icon
+                    className={styles.separatorIcon}
+                    name="ChevronRight"
+                    size={16}
+                    color="#787B82"
+                  />
                 </li>
               )}
             </React.Fragment>
