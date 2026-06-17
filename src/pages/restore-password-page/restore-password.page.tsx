@@ -1,5 +1,5 @@
 import { ChangeUserPasswordForm } from '@features/change-user-password'
-import { Title } from '@mantine/core'
+import { Box, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useNavigate } from 'react-router'
 import styles from './restore-password.module.css'
@@ -14,13 +14,13 @@ export const RestorePasswordPage = () => {
   }
 
   return (
-    <div>
+    <Box w="100%" maw={334}>
       <Title order={1} className={styles.title}>
         Введите новый
         <br />
         пароль
       </Title>
       <ChangeUserPasswordForm onSubmit={handleSubmit} />
-    </div>
+    </Box>
   )
 }
