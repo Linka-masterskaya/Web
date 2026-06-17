@@ -1,6 +1,18 @@
 import { z } from 'zod'
 
-export const passwordField = z
-  .string()
-  .min(1, { message: 'Введите пароль' })
-  .min(8, { message: 'Пароль должен содержать не менее 8 символов' })
+export const loginFormSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .min(1, { message: 'Введите email' })
+    .pipe(z.email({ message: 'Некорректный формат email' })),
+  password: z.string().min(1, { message: 'Введите пароль' }),
+  // TODO: уточнить правила валидации
+})
+
+export type TLoginFormValues = z.infer<typeof loginFormSchema>
+
+export const loginFormDefaultValues: TLoginFormValues = {
+  email: '',
+  password: '',
+}
