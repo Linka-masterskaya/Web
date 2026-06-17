@@ -220,7 +220,7 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
+      styles: (theme) => ({
         input: {
           minHeight: 40,
           padding: '10px 12px',
@@ -244,9 +244,9 @@ export const theme = createTheme({
         },
 
         visibilityToggle: {
-          color: '#787B82',
+          color: theme.colors.gray[6],
         },
-      },
+      }),
     }),
 
     Textarea: Textarea.extend({
