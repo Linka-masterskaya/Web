@@ -44,7 +44,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: routeSegments.restorePassword,
-                        element: 'Страница в разработке',
+                        lazy: pageLazyLoad(() => import('@pages/restore-password-page')),
                       },
                     ],
                   },
