@@ -9,6 +9,7 @@ import {
   Switch,
   Textarea,
   TextInput,
+  Title,
 } from '@mantine/core'
 
 export const theme = createTheme({
@@ -279,6 +280,14 @@ export const theme = createTheme({
       defaultProps: {
         size: 'lg',
       },
+    }),
+
+    Title: Title.extend({
+      styles: (_theme, props) => ({
+        root: {
+          textAlign: props.order === 1 ? 'center' : undefined,
+        },
+      }),
     }),
   },
 })
