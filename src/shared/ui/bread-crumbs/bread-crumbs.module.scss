@@ -16,3 +16,14 @@
 .link {
     color: #787B82;
 }
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.separatorIcon {
+  display: block;
+  flex-shrink: 0;
+}

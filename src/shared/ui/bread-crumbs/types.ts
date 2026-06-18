@@ -1,7 +1,7 @@
 export type TBreadCrumbItem = {
   id: string | number
   label: string
-  href?: string
+  href: string
 }
 
 export type TBreadCrumbsProps = {
