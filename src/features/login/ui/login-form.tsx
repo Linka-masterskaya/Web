@@ -1,6 +1,6 @@
 import { loginFormDefaultValues, loginFormSchema, type TLoginFormValues } from '@entities/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Anchor, Button, PasswordInput, Stack, Text, TextInput } from '@mantine/core'
+import { Anchor, Button, PasswordInput, Stack, TextInput } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
@@ -25,9 +25,6 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
       <Stack gap="md">
-        <Text ta="center" fw={700} fz="30px" lh="40px">
-          Вход
-        </Text>
         <TextInput
           type="email"
           autoComplete="email"
