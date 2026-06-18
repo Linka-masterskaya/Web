@@ -4,8 +4,10 @@ import {
   type TRegisterFormValues,
 } from '@entities/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, PasswordInput, Stack, Text, TextInput } from '@mantine/core'
+import { Anchor, Button, PasswordInput, Stack, Text, TextInput } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { useForm } from 'react-hook-form'
+import { Link } from 'react-router'
 
 export type TRegisterFormProps = {
   onSubmit: (values: TRegisterFormValues) => void | Promise<void>
@@ -50,7 +52,15 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
           Зарегистрироваться
         </Button>
         <Text size="xs" c="gray.6" ta="center">
-          Регистрируясь, вы соглашаетесь с условиями Политики обработки персональных данных
+          Регистрируясь, вы соглашаетесь с условиями{' '}
+          <Anchor
+            component={Link}
+            to={createUrl(routerPath.privacyPolicy)}
+            c="gray.6"
+            td="underline"
+          >
+            Политики обработки персональных данных
+          </Anchor>
         </Text>
       </Stack>
     </form>

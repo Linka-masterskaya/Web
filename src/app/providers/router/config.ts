@@ -144,6 +144,11 @@ export const router = createBrowserRouter([
           },
 
           {
+            path: routerPath.privacyPolicy,
+            element: 'Страница в разработке',
+          },
+
+          {
             path: '*',
             lazy: pageLazyLoad(() => import('@pages/not-found-page')),
           },

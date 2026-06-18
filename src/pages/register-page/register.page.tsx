@@ -11,7 +11,7 @@ export const RegisterPage = () => {
 
   return (
     <Flex direction="column" align="center" gap="md">
-      <Title>Регистрация</Title>
+      <Title order={1}>Регистрация</Title>
       <RegisterForm onSubmit={handleSubmit} />
     </Flex>
   )
