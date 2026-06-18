@@ -40,7 +40,7 @@ export const router = createBrowserRouter([
                       },
                       {
                         path: routeSegments.register,
-                        element: 'Страница в разработке',
+                        lazy: pageLazyLoad(() => import('@pages/register-page')),
                       },
                       {
                         path: routeSegments.restorePassword,
@@ -140,6 +140,11 @@ export const router = createBrowserRouter([
           {
             path: routerPath.studentId,
             loader: requireAuthLoader,
+            element: 'Страница в разработке',
+          },
+
+          {
+            path: routerPath.privacyPolicy,
             element: 'Страница в разработке',
           },
 
