@@ -17,7 +17,7 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
   const form = useForm<TRegisterFormValues>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: registerFormDefaultValues,
-    mode: 'onSubmit',
+    mode: 'onChange',
   })
 
   const {

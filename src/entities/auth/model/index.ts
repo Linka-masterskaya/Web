@@ -1,5 +1,3 @@
-export { emailField } from './auth-form-fields.schema'
-
 export {
   forgotPasswordFormDefaultValues,
   forgotPasswordFormSchema,
