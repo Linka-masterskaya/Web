@@ -13,6 +13,7 @@ export const routeSegments = {
   new: 'new',
   edit: 'edit',
   subset: 'subset',
+  privacyPolicy: 'privacy-policy',
 } as const
 
 // Route params
@@ -76,4 +77,5 @@ export const routerPath = {
     routeSegments.edit,
   ]),
   studentId: defineRoute([routeSegments.sets, routeSegments.students, routeParams.id]),
+  privacyPolicy: defineRoute([routeSegments.privacyPolicy]),
 }

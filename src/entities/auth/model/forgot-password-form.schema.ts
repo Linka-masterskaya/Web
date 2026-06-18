@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { emailField } from './auth-form-fields.schema'
+import { emailField } from '../lib/validation-fields'
 
 export const forgotPasswordFormSchema = z.object({
   email: emailField,

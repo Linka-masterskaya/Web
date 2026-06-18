@@ -11,5 +11,6 @@ export {
   loginFormDefaultValues,
   loginFormSchema,
 } from './model/login-form.schema'
-
+export type { TRegisterFormValues } from './model/register-form.schema'
+export { registerFormDefaultValues, registerFormSchema } from './model/register-form.schema'
 export { getIsAuth } from './utils/get-is-auth'
