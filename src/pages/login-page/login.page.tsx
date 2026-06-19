@@ -1,8 +1,9 @@
 import { type TLoginFormValues, useAuthStore } from '@entities/auth'
 import { LoginForm } from '@features/login'
-import { Box, Title } from '@mantine/core'
+import { Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useNavigate } from 'react-router'
+import styles from './login.page.module.scss'
 
 export const LoginPage = () => {
   const login = useAuthStore((state) => state.login)
@@ -14,11 +15,11 @@ export const LoginPage = () => {
   }
 
   return (
-    <Box w="100%" maw={334}>
-      <Title order={1} mb="lg">
+    <div className={styles.content}>
+      <Title order={1} className={styles.title}>
         Войти
       </Title>
       <LoginForm onSubmit={handleSubmit} />
-    </Box>
+    </div>
   )
 }

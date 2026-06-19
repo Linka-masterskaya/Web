@@ -116,9 +116,8 @@ export const theme = createTheme({
 
   components: {
     Anchor: Anchor.extend({
-      defaultProps: {
-        c: 'gray.6',
-        fw: 400,
+      classNames: {
+        root: classes.anchorRoot,
       },
     }),
 
@@ -140,28 +139,8 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            opacity: 0.5,
-            cursor: 'not-allowed',
-            outline: '1px solid #EEEFF1',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
+      classNames: {
+        input: classes.input,
       },
     }),
 
@@ -169,22 +148,8 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
+      classNames: {
+        input: classes.input,
       },
     }),
 
@@ -192,16 +157,8 @@ export const theme = createTheme({
       defaultProps: {
         radius: 4,
       },
-      styles: {
-        input: {
-          border: '1px solid #EEEFF1',
-          background: '#fff',
-
-          '&:checked': {
-            bg: '#3884FF',
-            border: '1px solid #3884FF',
-          },
-        },
+      classNames: {
+        input: classes.checkboxInput,
       },
     }),
 
@@ -209,52 +166,18 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: (theme) => ({
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            opacity: 0.5,
-            cursor: 'not-allowed',
-            outline: '1px solid #EEEFF1',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
-
-        visibilityToggle: {
-          color: theme.colors.gray[6],
-        },
-      }),
+      classNames: {
+        input: classes.input,
+        visibilityToggle: classes.passwordVisibilityToggle,
+      },
     }),
 
     Textarea: Textarea.extend({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          maxHeight: 200,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-        },
+      classNames: {
+        input: clsx(classes.input, classes.textareaInput),
       },
     }),
 
