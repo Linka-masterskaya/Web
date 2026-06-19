@@ -1,0 +1,29 @@
+.breadCrumbsContainer {
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    margin: 0;
+
+    display: flex;
+    gap: 8px;
+    padding: 8px 12px;
+}
+
+.currentPage {
+    font-weight: 600;
+}
+
+.link {
+    color: #787B82;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.separatorIcon {
+  display: block;
+  flex-shrink: 0;
+}

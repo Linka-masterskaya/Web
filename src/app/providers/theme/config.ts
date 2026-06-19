@@ -9,6 +9,7 @@ import {
   Switch,
   Textarea,
   TextInput,
+  Title,
 } from '@mantine/core'
 
 export const theme = createTheme({
@@ -220,7 +221,7 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
+      styles: (theme) => ({
         input: {
           minHeight: 40,
           padding: '10px 12px',
@@ -242,7 +243,11 @@ export const theme = createTheme({
             border: '1px solid #EC2121',
           },
         },
-      },
+
+        visibilityToggle: {
+          color: theme.colors.gray[6],
+        },
+      }),
     }),
 
     Textarea: Textarea.extend({
@@ -275,6 +280,14 @@ export const theme = createTheme({
       defaultProps: {
         size: 'lg',
       },
+    }),
+
+    Title: Title.extend({
+      styles: (_theme, props) => ({
+        root: {
+          textAlign: props.order === 1 ? 'center' : undefined,
+        },
+      }),
     }),
   },
 })

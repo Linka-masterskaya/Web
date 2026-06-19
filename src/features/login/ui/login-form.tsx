@@ -13,7 +13,7 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
   const form = useForm<TLoginFormValues>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: loginFormDefaultValues,
-    mode: 'onSubmit',
+    mode: 'onChange',
   })
 
   const {
