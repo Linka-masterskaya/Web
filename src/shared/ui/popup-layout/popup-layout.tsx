@@ -1,5 +1,5 @@
 import { ActionIcon, Flex, Title } from '@mantine/core'
-import { X } from 'lucide-react'
+import { Icon } from '@shared/ui/icon'
 import type { TPopupLayoutProps } from './types'
 
 export const PopupLayout: React.FC<TPopupLayoutProps> = ({ onClose, title, children }) => (
@@ -15,7 +15,7 @@ export const PopupLayout: React.FC<TPopupLayoutProps> = ({ onClose, title, child
             aria-label="Закрыть"
             ml="auto"
           >
-            <X size={24} />
+            <Icon name="X" size={24} />
           </ActionIcon>
         )}
       </Flex>
