@@ -11,6 +11,8 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
+import clsx from 'clsx'
+import classes from './theme.module.scss'
 
 export const theme = createTheme({
   colors: {
@@ -82,6 +84,7 @@ export const theme = createTheme({
 
   fontFamily: 'Inter, sans-serif',
   primaryColor: 'blue',
+  primaryShade: 4,
   defaultRadius: 8,
 
   fontSizes: {
@@ -114,37 +117,22 @@ export const theme = createTheme({
 
   components: {
     Anchor: Anchor.extend({
-      defaultProps: {
-        c: 'gray.6',
-        fw: 400,
+      classNames: {
+        root: classes.anchorRoot,
       },
     }),
 
     Button: Button.extend({
       defaultProps: {
         size: 'lg',
-        fw: 600,
       },
-      styles: {
-        root: {
-          maxHeight: 48,
 
-          '&:hover': {
-            background:
-              'linear-gradient(270deg, rgba(62, 135, 255, 0.75) 0%, rgba(56, 132, 255, 0.75) 100%)',
-            border: '1px solid #EBF3FF',
-          },
+      classNames: (_theme, props) => {
+        const isOutline = props.variant === 'outline'
 
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            background: '#0E0E0E',
-            opacity: 0.1,
-            cursor: 'not-allowed',
-          },
-        },
+        return {
+          root: clsx(classes.buttonRoot, isOutline ? classes.buttonOutline : classes.buttonFilled),
+        }
       },
     }),
 
@@ -152,28 +140,8 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            opacity: 0.5,
-            cursor: 'not-allowed',
-            outline: '1px solid #EEEFF1',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
+      classNames: {
+        input: classes.input,
       },
     }),
 
@@ -181,22 +149,8 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
+      classNames: {
+        input: classes.input,
       },
     }),
 
@@ -204,16 +158,8 @@ export const theme = createTheme({
       defaultProps: {
         radius: 4,
       },
-      styles: {
-        input: {
-          border: '1px solid #EEEFF1',
-          background: '#fff',
-
-          '&:checked': {
-            bg: '#3884FF',
-            border: '1px solid #3884FF',
-          },
-        },
+      classNames: {
+        input: classes.checkboxInput,
       },
     }),
 
@@ -221,52 +167,18 @@ export const theme = createTheme({
       defaultProps: {
         size: 'md',
       },
-      styles: (theme) => ({
-        input: {
-          minHeight: 40,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-
-          '&:disabled': {
-            opacity: 0.5,
-            cursor: 'not-allowed',
-            outline: '1px solid #EEEFF1',
-          },
-
-          '[dataError] &': {
-            border: '1px solid #EC2121',
-          },
-        },
-
-        visibilityToggle: {
-          color: theme.colors.gray[6],
-        },
-      }),
+      classNames: {
+        input: classes.input,
+        visibilityToggle: classes.passwordVisibilityToggle,
+      },
     }),
 
     Textarea: Textarea.extend({
       defaultProps: {
         size: 'md',
       },
-      styles: {
-        input: {
-          minHeight: 40,
-          maxHeight: 200,
-          padding: '10px 12px',
-          fontSize: '14px',
-          background: '#fff',
-          border: '1px solid #EEEFF1',
-
-          '&:focusVisible': {
-            outline: '2px solid #3884FF',
-          },
-        },
+      classNames: {
+        input: clsx(classes.input, classes.textareaInput),
       },
     }),
 
