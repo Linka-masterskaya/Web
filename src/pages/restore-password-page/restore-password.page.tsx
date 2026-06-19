@@ -16,9 +16,8 @@ export const RestorePasswordPage = () => {
   return (
     <Box w="100%" maw={334}>
       <Title order={1} className={styles.title}>
-        Введите новый
-        <br />
-        пароль
+        <span>Введите новый</span>
+        <span>пароль</span>
       </Title>
       <ChangeUserPasswordForm onSubmit={handleSubmit} />
     </Box>
