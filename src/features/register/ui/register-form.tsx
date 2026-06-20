@@ -31,6 +31,13 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack className={styles.fields}>
         <TextInput
+          type="text"
+          placeholder="Имя"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+
+        <TextInput
           type="email"
           autoComplete="email"
           placeholder="Email"
