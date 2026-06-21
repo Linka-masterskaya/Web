@@ -1,4 +1,4 @@
-import type { TChangeUserPasswordFormValues } from '@entities/user'
+import type { TEditUserProfilePasswordFormValues } from '@entities/user'
 
 export type TEditPasswordResponse = {
   success: boolean
@@ -8,7 +8,7 @@ export type TEditPasswordResponse = {
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const requestEditPassword = async (
-  values: TChangeUserPasswordFormValues,
+  values: TEditUserProfilePasswordFormValues,
 ): Promise<TEditPasswordResponse> => {
   await delay(2000)
 

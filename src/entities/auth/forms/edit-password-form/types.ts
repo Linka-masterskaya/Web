@@ -1,5 +1,6 @@
-import type { TChangeUserPasswordFormValues } from '@entities/user'
+import type { TEditUserProfilePasswordFormValues } from '@entities/user'
 
-export type TEditNameFormProps = {
-  onSubmit: (values: TChangeUserPasswordFormValues) => unknown | Promise<unknown>
+export type TEditPasswordFormProps = {
+  onSubmit: (values: TEditUserProfilePasswordFormValues) => unknown | Promise<unknown>
+  isLoading: boolean
 }

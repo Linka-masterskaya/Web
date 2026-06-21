@@ -9,13 +9,17 @@ import { Button, Stack, TextInput } from '@mantine/core'
 import { useForm } from 'react-hook-form'
 import type { TEditNameFormProps } from './types'
 
-export const EditNameForm: React.FC<TEditNameFormProps> = ({ onSubmit, openPasswordForm }) => {
+export const EditNameForm: React.FC<TEditNameFormProps> = ({
+  onSubmit,
+  openPasswordForm,
+  isLoading,
+}) => {
   const email = useUserStore((state) => state.email)
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<TChangeUserNameFormValues>({
     resolver: zodResolver(changeUserNameFormSchema),
     defaultValues: changeUserNameFormDefaultValues,
@@ -34,7 +38,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({ onSubmit, openPassw
         <Button type="button" onClick={openPasswordForm} variant="outline">
           Сменить пароль
         </Button>
-        <Button type="submit" fullWidth loading={isSubmitting}>
+        <Button type="submit" fullWidth loading={isLoading}>
           Восстановить аккаунт
         </Button>
       </Stack>

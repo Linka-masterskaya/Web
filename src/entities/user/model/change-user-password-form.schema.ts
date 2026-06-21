@@ -7,6 +7,7 @@ const passwordField = z
 
 export const oldPasswordSchema = z.string().min(1, 'Введите старый пароль')
 
+// схема для страницы восстановления пароля
 export const changeUserPasswordFormSchema = z
   .object({
     newPassword: passwordField,
@@ -20,6 +21,26 @@ export const changeUserPasswordFormSchema = z
 export type TChangeUserPasswordFormValues = z.infer<typeof changeUserPasswordFormSchema>
 
 export const changeUserPasswordFormDefaultValues: TChangeUserPasswordFormValues = {
+  newPassword: '',
+  passwordConfirm: '',
+}
+
+// схема для смены пароля в блоке пользователя
+export const editUserProfilePasswordFormSchema = z
+  .object({
+    oldPassword: oldPasswordSchema,
+    newPassword: passwordField,
+    passwordConfirm: passwordField,
+  })
+  .refine((data) => data.newPassword === data.passwordConfirm, {
+    message: 'Пароли не совпадают',
+    path: ['passwordConfirm'],
+  })
+
+export type TEditUserProfilePasswordFormValues = z.infer<typeof editUserProfilePasswordFormSchema>
+
+export const editUserProfilePasswordFormSchemaDefaultValues: TEditUserProfilePasswordFormValues = {
+  oldPassword: '',
   newPassword: '',
   passwordConfirm: '',
 }

@@ -8,10 +8,15 @@ export {
   changeUserNameFormDefaultValues,
   changeUserNameFormSchema,
 } from './model/change-user-name-form.schema'
-export type { TChangeUserPasswordFormValues } from './model/change-user-password-form.schema'
+export type {
+  TChangeUserPasswordFormValues,
+  TEditUserProfilePasswordFormValues,
+} from './model/change-user-password-form.schema'
 export {
   changeUserPasswordFormDefaultValues,
   changeUserPasswordFormSchema,
+  editUserProfilePasswordFormSchema,
+  editUserProfilePasswordFormSchemaDefaultValues,
 } from './model/change-user-password-form.schema'
 
 export type { TUserFormValues } from './model/user-form.schema'
