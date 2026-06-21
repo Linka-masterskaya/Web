@@ -28,6 +28,9 @@ export const routeQueryParams = {
   query: 'query',
   pageNumber: 'page',
   perPage: 'per_page',
+  search: 'search',
+  age: 'age',
+  level: 'level',
 } as const
 
 // Routes
