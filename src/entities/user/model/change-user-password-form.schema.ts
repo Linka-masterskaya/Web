@@ -5,6 +5,8 @@ const passwordField = z
   .min(1, { message: 'Введите пароль' })
   .min(8, { message: 'Пароль должен содержать не менее 8 символов' })
 
+export const oldPasswordSchema = z.string().min(1, 'Введите старый пароль')
+
 export const changeUserPasswordFormSchema = z
   .object({
     newPassword: passwordField,
