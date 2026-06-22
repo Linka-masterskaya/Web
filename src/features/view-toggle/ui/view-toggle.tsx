@@ -1,4 +1,4 @@
-import { ActionIcon, Group } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import type { TViewMode } from '../config'
@@ -14,31 +14,31 @@ export const ViewToggle: React.FC<TViewToggleProps> = ({ defaultView = 'list' })
     queryParams.view === 'list' || queryParams.view === 'grid' ? queryParams.view : defaultView
 
   const handleSelect = (view: TViewMode) => {
-    setQueryParams({ view: view === defaultView ? null : view }, false, { replace: true })
+    setQueryParams({ view: view === defaultView ? null : view }, false, {
+      replace: true,
+    })
   }
 
   return (
-    <Group gap={0}>
-      <ActionIcon
-        size="lg"
+    <Group gap={16}>
+      <Icon
+        name="List"
+        size="24"
         radius="md"
-        variant={current === 'list' ? 'filled' : 'default'}
+        color={current === 'list' ? '#000' : '#888'}
         aria-label="List view"
         aria-pressed={current === 'list'}
         onClick={() => handleSelect('list')}
-      >
-        <Icon name="LayoutList" size={24} />
-      </ActionIcon>
-      <ActionIcon
-        size="lg"
+      />
+      <Icon
+        name="LayoutGrid"
+        size="24"
         radius="md"
-        variant={current === 'grid' ? 'filled' : 'default'}
+        color={current === 'grid' ? '#000' : '#888'}
         aria-label="Grid view"
         aria-pressed={current === 'grid'}
         onClick={() => handleSelect('grid')}
-      >
-        <Icon name="LayoutGrid" size={24} />
-      </ActionIcon>
+      />
     </Group>
   )
 }
