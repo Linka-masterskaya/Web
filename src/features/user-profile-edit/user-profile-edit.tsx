@@ -3,11 +3,12 @@ import { useUpdatePassword, useUpdateUserName } from '@entities/auth/hooks'
 import type { TChangeUserNameFormValues, TEditUserProfilePasswordFormValues } from '@entities/user'
 import { CloseButton } from '@mantine/core'
 import { useState } from 'react'
-import type { FormMode, TUserProfileEditProps } from './types'
+import type { TUserNameViewMode, TUserProfileEditProps, TUserProfileEditView } from './types'
 import styles from './user-profile-edit.module.scss'
 
 export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) => {
-  const [mode, setMode] = useState<FormMode>('profile')
+  const [view, setView] = useState<TUserProfileEditView>('profile')
+  const [nameViewMode, setNameViewMode] = useState<TUserNameViewMode>('view')
 
   const { updateUserName, isLoading: isUpdateNameLoading } = useUpdateUserName()
 
@@ -16,34 +17,48 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) =>
   const handleProfileSubmit = async (values: TChangeUserNameFormValues) => {
     await updateUserName(values)
 
+    setNameViewMode('view')
+
     console.log('Имя изменено на: ', values.name)
   }
 
   const handleUpdatePasswordSubmit = async (values: TEditUserProfilePasswordFormValues) => {
     await updatePassword(values)
 
+    setView('profile')
+    setNameViewMode('view')
+
     console.log('Пароль изменен')
   }
 
   const openPasswordForm = () => {
-    setMode('password')
+    setView('changePassword')
+    setNameViewMode('view')
+  }
+
+  const handleClose = () => {
+    setView('profile')
+    setNameViewMode('view')
+    onClose()
   }
 
   return (
     <div className={styles.profileContainer}>
       <CloseButton
-        aria-label="Вернуться на страницу входа"
+        aria-label="Закрыть профиль"
         size="lg"
-        onClick={onClose}
+        onClick={handleClose}
         className={styles.closeButton}
       />
       <div>Здесь будет фото юзера</div>
 
-      {mode === 'profile' ? (
+      {view === 'profile' ? (
         <EditNameForm
           onSubmit={handleProfileSubmit}
           openPasswordForm={openPasswordForm}
           isLoading={isUpdateNameLoading}
+          nameViewMode={nameViewMode}
+          onEditNameClick={() => setNameViewMode('edit')}
         />
       ) : (
         <EditPasswordForm

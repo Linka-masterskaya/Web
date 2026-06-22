@@ -3,6 +3,7 @@ export type {
   TUserState,
   TUserStore,
 } from '@entities/types/types'
+export * from './api'
 export type { TChangeUserNameFormValues } from './model/change-user-name-form.schema'
 export {
   changeUserNameFormDefaultValues,
@@ -18,7 +19,6 @@ export {
   editUserProfilePasswordFormSchema,
   editUserProfilePasswordFormSchemaDefaultValues,
 } from './model/change-user-password-form.schema'
-
 export type { TUserFormValues } from './model/user-form.schema'
 export {
   userFormDefaultValues,

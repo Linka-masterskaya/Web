@@ -1,6 +1,5 @@
-import type { TEditUserProfilePasswordFormValues } from '@entities/user'
+import { changeUserPassword, type TEditUserProfilePasswordFormValues } from '@entities/user'
 import { useState } from 'react'
-import { requestEditPassword } from '../api'
 
 export const useUpdatePassword = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -9,11 +8,7 @@ export const useUpdatePassword = () => {
     setIsLoading(true)
 
     try {
-      await requestEditPassword({
-        oldPassword: values.oldPassword,
-        newPassword: values.newPassword,
-        passwordConfirm: values.passwordConfirm,
-      })
+      await changeUserPassword(values)
     } catch (err: unknown) {
       console.log(err)
     } finally {
