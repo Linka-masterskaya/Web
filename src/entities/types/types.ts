@@ -4,7 +4,7 @@ export type TAuthState = {
 }
 
 export type TAuthActions = {
-  login: () => Promise<void>
+  login: (accessToken?: string) => Promise<void>
   refreshAccessToken: () => Promise<void>
   logout: () => void
 }
