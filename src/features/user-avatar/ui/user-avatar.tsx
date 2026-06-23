@@ -56,7 +56,7 @@ export const UserAvatar = () => {
         <FileButton onChange={handleFileChange} accept={USER_AVATAR_ACCEPTED_MIME_TYPES.join(',')}>
           {(props) => (
             <ActionIcon {...props} variant="subtle" size="compact" className={styles.addButton}>
-              <Icon name="ImagePlus" size={16} color="#0E0E0E" />
+              <Icon name="ImagePlus" size={16} className={styles.icon} />
             </ActionIcon>
           )}
         </FileButton>
@@ -66,7 +66,7 @@ export const UserAvatar = () => {
         <Menu position="bottom-start" keepMounted>
           <Menu.Target>
             <ActionIcon variant="subtle" size="compact" className={styles.menuButton}>
-              <Icon name="EllipsisVertical" size={16} color="#0E0E0E" />
+              <Icon name="EllipsisVertical" size={16} className={styles.icon} />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
