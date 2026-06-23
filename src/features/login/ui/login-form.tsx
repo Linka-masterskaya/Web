@@ -1,9 +1,10 @@
 import { loginFormDefaultValues, loginFormSchema, type TLoginFormValues } from '@entities/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Anchor, Button, PasswordInput, Stack, TextInput } from '@mantine/core'
+import { Anchor, Button, PasswordInput, TextInput } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
+import styles from './login-form.module.scss'
 
 export type TLoginFormProps = {
   onSubmit: (values: TLoginFormValues) => void | Promise<void>
@@ -24,7 +25,7 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
 
   return (
     <form noValidate onSubmit={handleSubmit(onSubmit)}>
-      <Stack gap="md">
+      <div className={styles.fields}>
         <TextInput
           type="email"
           autoComplete="email"
@@ -40,18 +41,27 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
           error={errors.password?.message}
         />
 
-        <Anchor component={Link} to={createUrl(routerPath.authForgotPassword)}>
-          Забыли пароль?
+        <Anchor
+          component={Link}
+          to={createUrl(routerPath.authForgotPassword)}
+          className={styles.forgotPassword}
+        >
+          Забыли пароль
         </Anchor>
 
-        <Button type="submit" loading={isSubmitting} variant="filled">
+        <Button type="submit" loading={isSubmitting} variant="filled" className={styles.button}>
           Войти
         </Button>
 
-        <Button component={Link} to={createUrl(routerPath.authRegister)} variant="outline">
+        <Button
+          component={Link}
+          to={createUrl(routerPath.authRegister)}
+          variant="outline"
+          className={styles.button}
+        >
           Зарегистрироваться
         </Button>
-      </Stack>
+      </div>
     </form>
   )
 }
