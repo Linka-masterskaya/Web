@@ -1,8 +1,10 @@
 import {
   Anchor,
+  Avatar,
   Button,
   Checkbox,
   createTheme,
+  Menu,
   Pagination,
   PasswordInput,
   Select,
@@ -200,6 +202,35 @@ export const theme = createTheme({
           textAlign: props.order === 1 ? 'center' : undefined,
         },
       }),
+    }),
+
+    Avatar: Avatar.extend({
+      defaultProps: {
+        color: 'lightBlue',
+      },
+      styles: (theme) => ({
+        placeholder: {
+          backgroundColor: theme.colors.lightBlue?.[0] || '#ebf3ff',
+          fontFamily: 'Inter, sans-serif',
+          fontWeight: 600,
+          fontSize: '16px',
+          lineHeight: '24px',
+          color: '#0E0E0E',
+        },
+      }),
+    }),
+
+    Menu: Menu.extend({
+      classNames: {
+        dropdown: classes.menuDropdown,
+        item: classes.menuItem,
+        divider: classes.menuDivider,
+      },
+      styles: {
+        itemLabel: {
+          padding: 0,
+        },
+      },
     }),
   },
 })
