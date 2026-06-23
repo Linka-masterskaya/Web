@@ -1,0 +1,1 @@
+export const FILTER_SEARCH_DEBOUNCE_DELAY = 300
