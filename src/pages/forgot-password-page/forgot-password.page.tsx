@@ -1,20 +1,14 @@
-import { ForgotPasswordForm, type TForgotPasswordFormValues } from '@entities/auth'
-import { CloseButton, Flex, Text, Title } from '@mantine/core'
+import { ForgotPassword } from '@features/forgot-password'
+import { CloseButton, Flex, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
-import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import styles from './forgot-password.page.module.scss'
 
 export const ForgotPasswordPage: React.FC = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const navigate = useNavigate()
 
   const handleGoToLogin = () => {
     navigate(createUrl(routerPath.auth))
-  }
-
-  const handleSubmit = async (_values: TForgotPasswordFormValues) => {
-    setIsSubmitted(true) // форма пока что никуда не отправляется
   }
 
   return (
@@ -39,19 +33,7 @@ export const ForgotPasswordPage: React.FC = () => {
           Забыли пароль?
         </Title>
 
-        {isSubmitted ? (
-          <Text size="sm" className={styles.successText}>
-            Ваш запрос на восстановление пароля принят. Инструкция отправлена на Вашу почту.
-          </Text>
-        ) : (
-          <>
-            <Text size="sm" className={styles.text}>
-              Введите адрес электронной почты, которую вы использовали для регистрации в сервисе
-            </Text>
-
-            <ForgotPasswordForm onSubmit={handleSubmit} />
-          </>
-        )}
+        <ForgotPassword />
       </Flex>
     </Flex>
   )
