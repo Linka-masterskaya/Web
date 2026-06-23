@@ -120,3 +120,22 @@
   margin: 8px 0;
   border-top: 0.5px solid var(--mantine-color-gray-6);
 }
+
+.autocompleteInput {
+  padding: 14px 40px;
+}
+
+.dropdown {
+  font-size: 14px;
+  color: #787b82;
+
+  &[data-combobox-active] {
+    color: #0e0e0e;
+  }
+
+  &:hover {
+    background: #eeeff1;
+    color: #0e0e0e;
+  }
+}
+

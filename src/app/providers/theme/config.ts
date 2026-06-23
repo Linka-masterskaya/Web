@@ -1,5 +1,6 @@
 import {
   Anchor,
+  Autocomplete,
   Avatar,
   Button,
   Checkbox,
@@ -153,6 +154,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: classes.input,
+        option: classes.dropdown,
       },
     }),
 
@@ -230,6 +232,16 @@ export const theme = createTheme({
         itemLabel: {
           padding: 0,
         },
+      },
+    }),
+
+    Autocomplete: Autocomplete.extend({
+      defaultProps: {
+        size: 'md',
+      },
+      classNames: {
+        input: clsx(classes.input, classes.autocompleteInput),
+        option: classes.dropdown,
       },
     }),
   },
