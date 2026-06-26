@@ -9,8 +9,8 @@ export const RegisterPage = () => {
   const { mutateAsync: register } = useRegister()
   const navigate = useNavigate()
 
-  const handleSubmit = async (_values: TRegisterFormValues) => {
-    await register(_values)
+  const handleSubmit = async (values: TRegisterFormValues) => {
+    await register(values)
     navigate(createUrl(routerPath.dashboard))
   }
 

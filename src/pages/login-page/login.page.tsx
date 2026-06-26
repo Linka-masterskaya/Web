@@ -9,8 +9,8 @@ export const LoginPage = () => {
   const { mutateAsync: login } = useLogin()
   const navigate = useNavigate()
 
-  const handleSubmit = async (_values: TLoginFormValues) => {
-    await login(_values)
+  const handleSubmit = async (values: TLoginFormValues) => {
+    await login(values)
     navigate(createUrl(routerPath.dashboard))
   }
 
