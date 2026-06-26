@@ -210,16 +210,9 @@ export const theme = createTheme({
       defaultProps: {
         color: 'lightBlue',
       },
-      styles: (theme) => ({
-        placeholder: {
-          backgroundColor: theme.colors.lightBlue?.[0] || '#ebf3ff',
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: 600,
-          fontSize: '16px',
-          lineHeight: '24px',
-          color: '#0E0E0E',
-        },
-      }),
+      classNames: {
+        placeholder: classes.avatarPlaceholder,
+      },
     }),
 
     Menu: Menu.extend({

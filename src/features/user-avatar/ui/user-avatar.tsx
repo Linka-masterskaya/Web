@@ -1,54 +1,25 @@
-import { changeUserAvatar, deleteUserAvatar, useUserStore } from '@entities/user'
-import { ActionIcon, Avatar, FileButton, Menu } from '@mantine/core'
+import { ActionIcon, Avatar, FileButton, Loader, Menu, Overlay, Text } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import { USER_AVATAR_ACCEPTED_MIME_TYPES } from '../config'
+import { useAvatarUpload } from '../model'
 import styles from './user-avatar.module.scss'
 
 export const UserAvatar = () => {
-  const { avatarSrc, setAvatarSrc, name, email } = useUserStore()
-
-  const handleFileChange = async (file: File | null) => {
-    if (!file) {
-      return
-    }
-    const previousAvatar = avatarSrc
-    const tempUrl = URL.createObjectURL(file)
-    // оптимистичное обновление аватара - на случай длительного ответа от сервера
-    setAvatarSrc(tempUrl)
-
-    try {
-      const response = await changeUserAvatar(file)
-      setAvatarSrc(response.avatarUrl)
-    } catch (error) {
-      setAvatarSrc(previousAvatar)
-      // biome-ignore lint/suspicious/noConsole: debug only
-      console.error('Не удалось обновить аватар:', error)
-    } finally {
-      if (tempUrl) {
-        URL.revokeObjectURL(tempUrl)
-      }
-    }
-  }
-
-  const handleDelete = async () => {
-    const previousAvatar = avatarSrc
-    setAvatarSrc(null)
-
-    try {
-      await deleteUserAvatar()
-    } catch (error) {
-      setAvatarSrc(previousAvatar)
-      // biome-ignore lint/suspicious/noConsole: debug only
-      console.error('Не удалось удалить аватар:', error)
-    }
-  }
-
-  const hasAvatar = !!avatarSrc
-
-  const displayName = name?.[0] || email?.[0] || ' '
+  const { avatarSrc, hasAvatar, displayName, isLoading, error, handleFileChange, handleDelete } =
+    useAvatarUpload()
 
   return (
     <div className={styles.avatarWrapper}>
+      {isLoading && (
+        <Overlay color="#fff" backgroundOpacity={0.6} blur={2} zIndex={1} radius="50%">
+          <Loader size="sm" />
+        </Overlay>
+      )}
+      {error && (
+        <Text c="red" size="sm">
+          {error}
+        </Text>
+      )}
       <Avatar src={avatarSrc} size={120} radius="50%">
         {displayName}
       </Avatar>
