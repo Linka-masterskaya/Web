@@ -2,7 +2,7 @@ export type { TAuthActions, TAuthState, TAuthStore } from '../types/types'
 
 export { accessLevel, type TAccessLevel } from './config/access-level'
 export { ForgotPasswordForm } from './forms'
-export { useForgotPassword } from './hooks'
+export { useForgotPassword, useLogin, useRegister } from './hooks'
 export { isAccessLevelVisible } from './lib/is-access-level-visible'
 export * from './model'
 export { useAuthStore } from './model/auth-store'
