@@ -4,6 +4,7 @@ export type {
   TUserStore,
 } from '@entities/types/types'
 export * from './api'
+export { changeUserAvatar, deleteUserAvatar } from './api/user-avatar.api'
 export type { TChangeUserNameFormValues } from './model/change-user-name-form.schema'
 export {
   changeUserNameFormDefaultValues,
