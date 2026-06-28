@@ -12,15 +12,14 @@ import { useForm } from 'react-hook-form'
 import type { TEditNameFormProps } from './types'
 
 export const EditNameForm: React.FC<TEditNameFormProps> = ({
+  name,
+  email,
   onSubmit,
   openPasswordForm,
   isLoading,
   nameViewMode,
   onEditNameClick,
 }) => {
-  const name = useUserStore((state) => state.name)
-  const email = useUserStore((state) => state.email)
-
   const isViewMode = nameViewMode === 'view'
 
   const {
@@ -35,7 +34,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
   })
 
   useEffect(() => {
-    reset({ name: name ?? '' })
+    reset({ name })
   }, [name, reset])
 
   useEffect(() => {
@@ -44,8 +43,12 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
     }
   }, [isViewMode, setFocus])
 
+  const handleFormSubmit = async (values: TChangeUserNameFormValues) => {
+    await onSubmit(values)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
       <Stack gap="16px">
         <TextInput
           {...register('name')}
@@ -53,6 +56,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
           placeholder="Ваше имя"
           readOnly={isViewMode}
           error={errors.name?.message}
+          rightSectionPointerEvents="all"
           rightSection={
             <ActionIcon
               type="button"
@@ -65,7 +69,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
             </ActionIcon>
           }
         />
-        <TextInput value={email ?? ''} readOnly />
+        <TextInput value={email} readOnly />
         <Button type="button" onClick={openPasswordForm} variant="outline">
           Сменить пароль
         </Button>

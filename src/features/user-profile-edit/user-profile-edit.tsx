@@ -1,12 +1,19 @@
 import { EditNameForm, EditPasswordForm } from '@entities/auth/forms'
-import { useUpdatePassword, useUpdateUserName } from '@entities/auth/hooks'
-import type { TChangeUserNameFormValues, TEditUserProfilePasswordFormValues } from '@entities/user'
-import { CloseButton } from '@mantine/core'
+import {
+  type TChangeUserNameFormValues,
+  type TEditUserProfilePasswordFormValues,
+  useUserStore,
+} from '@entities/user'
+import { Box } from '@mantine/core'
 import { useState } from 'react'
+import { useUpdatePassword } from './model/use-update-password'
+import { useUpdateUserName } from './model/use-update-user-name'
 import type { TUserNameViewMode, TUserProfileEditProps, TUserProfileEditView } from './types'
-import styles from './user-profile-edit.module.scss'
 
-export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) => {
+export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ className }) => {
+  const name = useUserStore((state) => state.name)
+  const email = useUserStore((state) => state.email)
+
   const [view, setView] = useState<TUserProfileEditView>('profile')
   const [nameViewMode, setNameViewMode] = useState<TUserNameViewMode>('view')
 
@@ -15,20 +22,24 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) =>
   const { updatePassword, isLoading: isUpdatePasswordLoading } = useUpdatePassword()
 
   const handleProfileSubmit = async (values: TChangeUserNameFormValues) => {
-    await updateUserName(values)
+    const isSuccess = await updateUserName(values)
 
-    setNameViewMode('view')
+    if (isSuccess) {
+      setNameViewMode('view')
+    }
 
-    console.log('Имя изменено на: ', values.name)
+    return isSuccess
   }
 
   const handleUpdatePasswordSubmit = async (values: TEditUserProfilePasswordFormValues) => {
-    await updatePassword(values)
+    const isSuccess = await updatePassword(values)
 
-    setView('profile')
-    setNameViewMode('view')
+    if (isSuccess) {
+      setView('profile')
+      setNameViewMode('view')
+    }
 
-    console.log('Пароль изменен')
+    return isSuccess
   }
 
   const openPasswordForm = () => {
@@ -36,24 +47,12 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) =>
     setNameViewMode('view')
   }
 
-  const handleClose = () => {
-    setView('profile')
-    setNameViewMode('view')
-    onClose()
-  }
-
   return (
-    <div className={styles.profileContainer}>
-      <CloseButton
-        aria-label="Закрыть профиль"
-        size="lg"
-        onClick={handleClose}
-        className={styles.closeButton}
-      />
-      <div>Здесь будет фото юзера</div>
-
+    <Box className={className}>
       {view === 'profile' ? (
         <EditNameForm
+          name={name ?? ''}
+          email={email ?? ''}
           onSubmit={handleProfileSubmit}
           openPasswordForm={openPasswordForm}
           isLoading={isUpdateNameLoading}
@@ -66,6 +65,6 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ onClose }) =>
           isLoading={isUpdatePasswordLoading}
         />
       )}
-    </div>
+    </Box>
   )
 }

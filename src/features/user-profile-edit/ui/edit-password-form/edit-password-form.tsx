@@ -20,9 +20,11 @@ export const EditPasswordForm: React.FC<TEditPasswordFormProps> = ({ onSubmit, i
   })
 
   const handleUpdatePasswordSubmit = async (values: TEditUserProfilePasswordFormValues) => {
-    await onSubmit(values)
+    const isSuccess = await onSubmit(values)
 
-    reset()
+    if (isSuccess) {
+      reset()
+    }
   }
 
   return (

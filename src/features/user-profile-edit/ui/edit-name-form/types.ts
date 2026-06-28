@@ -2,7 +2,9 @@ import type { TChangeUserNameFormValues } from '@entities/user'
 import type { TUserNameViewMode } from '@features/user-profile-edit/types'
 
 export type TEditNameFormProps = {
-  onSubmit: (values: TChangeUserNameFormValues) => unknown | Promise<unknown>
+  name: string
+  email: string
+  onSubmit: (values: TChangeUserNameFormValues) => boolean | Promise<boolean>
   openPasswordForm: () => void
   isLoading: boolean
   nameViewMode: TUserNameViewMode

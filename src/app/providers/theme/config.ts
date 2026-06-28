@@ -1,8 +1,11 @@
 import {
   Anchor,
+  Autocomplete,
+  Avatar,
   Button,
   Checkbox,
   createTheme,
+  Menu,
   Pagination,
   PasswordInput,
   Select,
@@ -151,6 +154,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: classes.input,
+        option: classes.dropdown,
       },
     }),
 
@@ -200,6 +204,38 @@ export const theme = createTheme({
           textAlign: props.order === 1 ? 'center' : undefined,
         },
       }),
+    }),
+
+    Avatar: Avatar.extend({
+      defaultProps: {
+        color: 'lightBlue',
+      },
+      classNames: {
+        placeholder: classes.avatarPlaceholder,
+      },
+    }),
+
+    Menu: Menu.extend({
+      classNames: {
+        dropdown: classes.menuDropdown,
+        item: classes.menuItem,
+        divider: classes.menuDivider,
+      },
+      styles: {
+        itemLabel: {
+          padding: 0,
+        },
+      },
+    }),
+
+    Autocomplete: Autocomplete.extend({
+      defaultProps: {
+        size: 'md',
+      },
+      classNames: {
+        input: clsx(classes.input, classes.autocompleteInput),
+        option: classes.dropdown,
+      },
     }),
   },
 })

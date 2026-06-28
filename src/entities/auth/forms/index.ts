@@ -1,3 +1,3 @@
-export { EditNameForm } from './edit-name-form'
-export { EditPasswordForm } from './edit-password-form'
+export { EditNameForm } from '../../../features/user-profile-edit/ui/edit-name-form'
+export { EditPasswordForm } from '../../../features/user-profile-edit/ui/edit-password-form'
 export { ForgotPasswordForm } from './forgot-password'

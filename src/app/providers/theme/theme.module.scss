@@ -94,3 +94,56 @@
 .passwordVisibilityToggle {
   color: #787b82;
 }
+
+.menuDropdown {
+  background: rgba(238, 239, 241, 0.85);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 12px 8px;
+  min-width: 129px;
+}
+
+.menuItem {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 0px 0px;
+  text-align: center;
+}
+
+.menuItem:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.menuDivider {
+  margin: 8px 0;
+  border-top: 0.5px solid var(--mantine-color-gray-6);
+}
+
+.autocompleteInput {
+  padding: 14px 40px;
+}
+
+.dropdown {
+  font-size: 14px;
+  color: #787b82;
+
+  &[data-combobox-active] {
+    color: #0e0e0e;
+  }
+
+  &:hover {
+    background: #eeeff1;
+    color: #0e0e0e;
+  }
+}
+
+.avatarPlaceholder {
+  background-color: var(--mantine-color-lightBlue-0);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0E0E0E;
+}
