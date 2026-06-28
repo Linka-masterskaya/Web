@@ -1,13 +1,24 @@
-import { CloseButton, Stack } from '@mantine/core'
+import { UserAvatar } from '@features/user-avatar'
+import { Box, CloseButton, Flex, Stack } from '@mantine/core'
 import type { TUserProfileProps } from './types'
 import styles from './user-profile.module.scss'
+// import { UserProfileEdit } from '@features/user-profile-edit'
 
 export const UserProfile = ({ onClose }: TUserProfileProps) => {
   return (
-    <Stack className={styles.container} align="center">
-      <CloseButton className={styles.closeButton} onClick={onClose} size="md" />
-      {/* TODO: добавить <UserAvatar /> */}
-      {/* TODO: добавить <UserProfileEdit /> */}
-    </Stack>
+    <Box className={styles.container}>
+      <CloseButton
+        className={styles.closeButton}
+        onClick={onClose}
+        size="md"
+        aria-label="Закрыть профиль"
+      />
+      <Stack gap="40px" align="stretch">
+        <Flex justify="center">
+          <UserAvatar />
+        </Flex>
+        {/* <UserProfileEdit /> */}
+      </Stack>
+    </Box>
   )
 }
