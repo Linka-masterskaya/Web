@@ -11,6 +11,7 @@ export const useUpdatePassword = () => {
       await changeUserPassword(values)
       return true
     } catch (err: unknown) {
+      // biome-ignore lint/suspicious/noConsole: debug only
       console.log(err)
       return false
     } finally {

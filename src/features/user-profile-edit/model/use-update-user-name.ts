@@ -11,6 +11,7 @@ export const useUpdateUserName = () => {
       await changeUserName(values.name.trim())
       return true
     } catch (err: unknown) {
+      // biome-ignore lint/suspicious/noConsole: debug only
       console.log(err)
       return false
     } finally {

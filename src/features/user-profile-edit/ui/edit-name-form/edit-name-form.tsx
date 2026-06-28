@@ -2,7 +2,6 @@ import {
   changeUserNameFormDefaultValues,
   changeUserNameFormSchema,
   type TChangeUserNameFormValues,
-  useUserStore,
 } from '@entities/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActionIcon, Button, Stack, TextInput } from '@mantine/core'
@@ -65,7 +64,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
               aria-label="Редактировать имя"
               onClick={onEditNameClick}
             >
-              <Icon name="Pencil" size={24} />
+              <Icon name="PenLine" size={24} />
             </ActionIcon>
           }
         />
