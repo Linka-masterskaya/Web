@@ -5,6 +5,13 @@ export type {
 } from '@entities/types/types'
 export * from './api'
 export { changeUserAvatar, deleteUserAvatar } from './api/user-avatar.api'
+export type { TChangeUserAvatarFormValues } from './model/change-user-avatar-form.schema'
+export {
+  acceptedAvatarMimeTypes,
+  changeUserAvatarFormDefaultValues,
+  changeUserAvatarFormSchema,
+  maxAvatarFileSizeBytes,
+} from './model/change-user-avatar-form.schema'
 export type { TChangeUserNameFormValues } from './model/change-user-name-form.schema'
 export {
   changeUserNameFormDefaultValues,
