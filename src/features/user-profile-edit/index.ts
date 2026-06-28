@@ -1,5 +1,3 @@
-// src/features/user-profile-edit/index.ts
-
 export type {
   TUserNameViewMode,
   TUserProfileEditProps,
