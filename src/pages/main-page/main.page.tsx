@@ -9,7 +9,6 @@ export const MainPage: React.FC = () => (
 
     <TriggerErrorSection />
     <EnvVariables />
-
     <PopupDemonstration />
   </Flex>
 )

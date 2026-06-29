@@ -29,6 +29,10 @@ export const routeQueryParams = {
   pageNumber: 'page',
   perPage: 'per_page',
   favorite: 'favorite',
+  view: 'view',
+  search: 'search',
+  age: 'age',
+  level: 'level',
 } as const
 
 // Routes
