@@ -8,7 +8,6 @@ export const MainPage: React.FC = () => (
     <Title>Main Dashboard</Title>
 
     <TriggerErrorSection />
-
     <EnvVariables />
 
     <PopupDemonstration />

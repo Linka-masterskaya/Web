@@ -28,6 +28,7 @@ export const routeQueryParams = {
   query: 'query',
   pageNumber: 'page',
   perPage: 'per_page',
+  favorite: 'favorite',
 } as const
 
 // Routes

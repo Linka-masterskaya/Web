@@ -1,0 +1,32 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 4px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease;
+}
+
+.button:focus-visible {
+  outline: 1.5px solid var(--mantine-color-blue-4);
+  outline-offset: 2px;
+}
+
+.buttonActive {
+  color: var(--mantine-color-blue-4);
+  background-color: var(--mantine-color-blue-0);
+}
+
+.buttonActive:hover {
+  background-color: var(--mantine-color-blue-0);
+}
+
+.buttonActive:hover {
+  background-color: var(--mantine-color-blue-0);
+}
