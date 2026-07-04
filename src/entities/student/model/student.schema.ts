@@ -21,8 +21,8 @@ export const studentSchema = z.object({
     .max(STUDENT_AGE_MAX, { message: `Возраст до ${STUDENT_AGE_MAX} лет` }),
   level: z.enum(STUDENT_LEVEL_OPTIONS),
   state: z.enum(STUDENT_STATE_OPTIONS),
-  avatarSrc: z.url().optional(),
-  lastLesson: z.iso.datetime({ message: 'Некорректная дата последнего занятия' }),
+  avatarSrc: z.url({ message: 'Некорректный URL аватара' }).optional(),
+  lastLesson: z.iso.datetime({ message: 'Некорректная дата последнего занятия' }).optional(),
 })
 
 export const studentListSchema = z.array(studentSchema)

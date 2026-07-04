@@ -1,5 +1,5 @@
 export const STUDENT_AGE_MIN = 3
-export const STUDENT_AGE_MAX = 10
+export const STUDENT_AGE_MAX = 18
 
 export const STUDENT_STATE_OPTIONS = ['active', 'paused', 'single', 'archived'] as const
 export type TStudentState = (typeof STUDENT_STATE_OPTIONS)[number]
