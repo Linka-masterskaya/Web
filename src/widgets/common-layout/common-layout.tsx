@@ -1,5 +1,5 @@
 import { Logo } from '@shared/ui/logo'
-import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
+// import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
 import clsx from 'clsx'
 import { Outlet } from 'react-router'
 import styles from './common-layout.module.scss'
