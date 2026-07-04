@@ -13,10 +13,11 @@ export const EditPasswordForm: React.FC<TEditPasswordFormProps> = ({ onSubmit, i
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<TEditUserProfilePasswordFormValues>({
     resolver: zodResolver(editUserProfilePasswordFormSchema),
     defaultValues: editUserProfilePasswordFormSchemaDefaultValues,
+    mode: 'onChange',
   })
 
   const handleUpdatePasswordSubmit = async (values: TEditUserProfilePasswordFormValues) => {
@@ -46,7 +47,12 @@ export const EditPasswordForm: React.FC<TEditPasswordFormProps> = ({ onSubmit, i
           error={errors.passwordConfirm?.message}
         />
 
-        <Button type="submit" fullWidth loading={isLoading}>
+        <Button
+          type="submit"
+          fullWidth
+          loading={isLoading}
+          disabled={!isDirty || !isValid || isLoading}
+        >
           Сменить пароль
         </Button>
       </Stack>

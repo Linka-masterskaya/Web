@@ -26,10 +26,11 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
     handleSubmit,
     reset,
     setFocus,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<TChangeUserNameFormValues>({
     resolver: zodResolver(changeUserNameFormSchema),
     defaultValues: changeUserNameFormDefaultValues,
+    mode: 'onChange',
   })
 
   useEffect(() => {
@@ -63,16 +64,27 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
               color="gray"
               aria-label="Редактировать имя"
               onClick={onEditNameClick}
+              disabled={isLoading}
             >
-              <Icon name="PenLine" size={24} />
+              <Icon name="PenLine" size={24} color="#787B82" />
             </ActionIcon>
           }
         />
-        <TextInput value={email} readOnly />
-        <Button type="button" onClick={openPasswordForm} variant="outline">
+        <TextInput value={email} readOnly placeholder="Ваша почта" />
+        <Button
+          type="button"
+          onClick={openPasswordForm}
+          variant="outline"
+          disabled={!isViewMode || isLoading}
+        >
           Сменить пароль
         </Button>
-        <Button type="submit" fullWidth loading={isLoading}>
+        <Button
+          type="submit"
+          fullWidth
+          loading={isLoading}
+          disabled={isViewMode || !isDirty || !isValid || isLoading}
+        >
           Сохранить
         </Button>
       </Stack>
