@@ -18,7 +18,7 @@ const MOCK_STUDENTS: TStudent[] = [
     level: 'medium',
     state: 'paused',
     lastLesson: '2025-12-30T10:00:00Z',
-    avatarSrc: 'https://ibb.co/9kPpDPBg',
+    avatarSrc: 'https://i.ibb.co/5gZ10ZC4/ekaterina-student.jpg',
   },
   {
     id: 'student-3',
