@@ -44,7 +44,7 @@ export const AvatarUpload = ({
       {!hasAvatar && (
         <FileButton onChange={handleFileChange} accept={accept}>
           {(props) => (
-            <ActionIcon {...props} variant="light" size="compact" className={styles.addButton}>
+            <ActionIcon {...props} variant="subtle" size="compact" className={styles.addButton}>
               <Icon name="ImagePlus" size={16} className={styles.icon} />
             </ActionIcon>
           )}
@@ -55,7 +55,7 @@ export const AvatarUpload = ({
         <Menu position="bottom-start" keepMounted>
           <Menu.Target>
             {menuTarget ?? (
-              <ActionIcon variant="light" size="compact" className={styles.menuButton}>
+              <ActionIcon variant="subtle" size="compact" className={styles.menuButton}>
                 <Icon name="EllipsisVertical" size={16} className={styles.icon} />
               </ActionIcon>
             )}

@@ -1,5 +1,5 @@
 import { useStudent, useUpdateStudent } from '@entities/student'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type TUseStudentAvatarOptions = {
   studentId: string
@@ -13,6 +13,15 @@ export const useStudentAvatar = ({ studentId }: TUseStudentAvatarOptions) => {
 
   // Храним ссылку на временный URL для отзыва при размонтировании/ошибке
   const tempUrlRef = useRef<string | null>(null)
+
+  // Отзываем blob URL при размонтировании, если handleFileChange ещё в полёте
+  useEffect(() => {
+    return () => {
+      if (tempUrlRef.current) {
+        URL.revokeObjectURL(tempUrlRef.current)
+      }
+    }
+  }, [])
 
   const avatarSrc = student?.avatarSrc ?? null
   const isLoading = isStudentLoading || isMutationLoading
