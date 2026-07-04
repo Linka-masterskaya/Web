@@ -1,3 +1,3 @@
 export type TUserProfileProps = {
-  onClose?: () => void
+  onClose: () => void
 }

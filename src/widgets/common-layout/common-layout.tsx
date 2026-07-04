@@ -1,4 +1,5 @@
 import { Logo } from '@shared/ui/logo'
+import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
 import clsx from 'clsx'
 import { Outlet } from 'react-router'
 import styles from './common-layout.module.scss'
@@ -13,7 +14,14 @@ export const CommonLayout: React.FC<TCommonLayoutProps> = ({
     <header className={styles.header}>
       <Logo className={styles.logo} />
       <div className={styles.title}>{titleSlot}</div>
-      <div className={styles.actions}>{actionsSlot}</div>
+      <div
+        className={styles.actions}
+
+        // Тут Кирилл вольет свои изменения и тогда можно будет добавить отображение этой кнопки здесь
+        // {isDashboardRoute && <ProfileToggleButton/>}
+      >
+        {actionsSlot}
+      </div>
     </header>
 
     <main className={styles.content}>
