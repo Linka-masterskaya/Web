@@ -25,7 +25,7 @@ export const FilterFavorite: React.FC = () => {
       aria-pressed={isActive}
       onClick={handleToggle}
     >
-      <Heart size={20} strokeWidth={1.5} aria-hidden="true" />
+      <Heart className={styles.icon} size={20} strokeWidth={1.5} aria-hidden="true" />
     </ActionIcon>
   )
 }

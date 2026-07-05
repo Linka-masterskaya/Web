@@ -10,8 +10,7 @@
   cursor: pointer;
   color: var(--mantine-color-black);
   transition:
-    color 120ms ease,
-    background-color 120ms ease;
+    color 120ms ease;
 }
 
 .button:focus-visible {
@@ -19,11 +18,15 @@
   outline-offset: 2px;
 }
 
-.buttonActive {
-  color: var(--mantine-color-blue-4);
-  background-color: var(--mantine-color-blue-0);
+.icon {
+  fill: transparent;
+  transition: fill 120ms ease;
 }
 
-.buttonActive:hover {
-  background-color: var(--mantine-color-blue-0);
+.buttonActive {
+  color: var(--mantine-color-blue-4);
+}
+
+.buttonActive .icon {
+  fill: currentColor;
 }
