@@ -8,6 +8,7 @@
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
+  color: var(--mantine-color-black);
   transition:
     color 120ms ease,
     background-color 120ms ease;
@@ -20,10 +21,6 @@
 
 .buttonActive {
   color: var(--mantine-color-blue-4);
-  background-color: var(--mantine-color-blue-0);
-}
-
-.buttonActive:hover {
   background-color: var(--mantine-color-blue-0);
 }
 
