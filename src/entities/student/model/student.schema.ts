@@ -28,3 +28,15 @@ export const studentSchema = z.object({
 export const studentListSchema = z.array(studentSchema)
 
 export type TStudent = z.infer<typeof studentSchema>
+
+export type TStudentFormValues = Pick<TStudent, 'name' | 'email' | 'age' | 'state'> & {
+  avatarFile: File | null
+}
+
+export const studentFormDefaultValues: TStudentFormValues = {
+  name: '',
+  email: '',
+  age: STUDENT_AGE_MIN,
+  state: 'active',
+  avatarFile: null,
+}
