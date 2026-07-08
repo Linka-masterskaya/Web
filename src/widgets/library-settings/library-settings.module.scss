@@ -1,0 +1,111 @@
+/* Размеры по макету Figma (модалка 1280x870) */
+
+.container {
+  height: min(870px, calc(100dvh - 80px));
+
+  /* Потолок как у .mantine-Modal-content (100dvh - 2 * y-offset):
+     если контейнер не выше него, у модалки не появляется свой скролл */
+  max-height: calc(100dvh - 2 * var(--modal-y-offset, 5dvh));
+}
+
+.header {
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+  height: 62px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--mantine-color-gray-2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.search {
+  /* По макету: инпут 566x36, отступ от края модалки 356px минус padding шапки 20px */
+  flex-shrink: 0;
+  width: 566px;
+  margin-left: 336px;
+
+  input {
+    height: 36px;
+    min-height: 36px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+}
+
+.headerIcons {
+  margin-left: auto;
+  color: var(--mantine-color-gray-9);
+}
+
+.body {
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.categories {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 272px;
+  min-height: min-content;
+
+  /* Снизу 16px + 4px запас вьюпорта под outline = 20px по макету */
+  padding: 40px 0 16px;
+
+  /* По макету колонка отделена тенью, а не бордером */
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.categoriesTitle {
+  color: #0e0e0e;
+}
+
+.categoriesScroll {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Отступы заданы на вьюпорте, а не на корне ScrollArea: иначе вьюпорт
+   совпадает с границами пунктов и обрезает линии focus-outline (2px + 2px offset).
+   Слева 22px (8 + 14 по макету), справа 34px под скроллбар,
+   4px сверху/снизу — запас под outline первого и последнего пункта */
+.categoriesViewport {
+  padding: 4px 34px 4px 22px;
+}
+
+.cards {
+  flex-grow: 1;
+  min-width: 0;
+  min-height: min-content;
+
+  /* Горизонтальные отступы перенесены на вьюпорт сетки (.cardsViewport),
+     чтобы hover/focus-outline карточек не обрезался краями области прокрутки.
+     Снизу 36px + 4px запас вьюпорта = 40px */
+  padding: 40px 0 36px;
+}
+
+.cardsTitle {
+  color: #0e0e0e;
+
+  /* Отступ колонки, ранее задававшийся через padding у .cards */
+  margin-left: 28px;
+}
+
+.cardsScroll {
+  flex: 1;
+  min-height: 0;
+}
+
+/* Слева 28px и справа 38px по макету (272 + 28 + сетка 940 + 38 = 1278),
+   4px сверху/снизу — запас под outline первого и последнего ряда карточек */
+.cardsViewport {
+  padding: 4px 38px 4px 28px;
+}
+
+.footer {
+  flex-shrink: 0;
+  height: 86px;
+  padding: 19px 40px;
+  border-top: 1px solid var(--mantine-color-gray-2);
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+}
