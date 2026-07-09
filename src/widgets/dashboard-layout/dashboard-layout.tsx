@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Outlet } from 'react-router'
 import styles from './dashboard-layout.module.scss'
 import type { TDashboardLayoutProps } from './types'
 
@@ -15,6 +16,6 @@ export const DashboardLayout: React.FC<TDashboardLayoutProps> = ({
       <div className={styles.actions}>{actionsSlot}</div>
     </div>
 
-    <div className={styles.content}>{children}</div>
+    <div className={styles.content}>{children ?? <Outlet />}</div>
   </div>
 )
