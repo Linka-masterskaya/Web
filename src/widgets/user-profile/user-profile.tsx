@@ -1,8 +1,8 @@
 import { UserAvatar } from '@features/user-avatar'
+import { UserProfileEdit } from '@features/user-profile-edit'
 import { Box, CloseButton, Flex, Stack } from '@mantine/core'
 import type { TUserProfileProps } from './types'
 import styles from './user-profile.module.scss'
-// import { UserProfileEdit } from '@features/user-profile-edit'
 
 export const UserProfile = ({ onClose }: TUserProfileProps) => {
   return (
@@ -17,7 +17,7 @@ export const UserProfile = ({ onClose }: TUserProfileProps) => {
         <Flex justify="center">
           <UserAvatar />
         </Flex>
-        {/* <UserProfileEdit /> */}
+        <UserProfileEdit />
       </Stack>
     </Box>
   )
