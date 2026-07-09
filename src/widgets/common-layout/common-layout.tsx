@@ -1,6 +1,7 @@
 import { FilterFavorite } from '@features/filter-favorite'
 import { routerPath } from '@shared/lib/routes'
 import { Logo } from '@shared/ui/logo'
+import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
 import clsx from 'clsx'
 import { Outlet, useLocation } from 'react-router'
 import styles from './common-layout.module.scss'
@@ -23,6 +24,7 @@ export const CommonLayout: React.FC<TCommonLayoutProps> = ({
         <div className={styles.actions}>
           {actionsSlot}
           {isDashboardRoute && <FilterFavorite />}
+          {isDashboardRoute && <ProfileToggleButton />}
         </div>
       </header>
 

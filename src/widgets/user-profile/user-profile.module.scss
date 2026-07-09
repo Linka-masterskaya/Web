@@ -1,0 +1,17 @@
+.container {
+	position: relative;
+	max-width: 518px;
+	box-shadow: 0px 4px 4px 0px #00000040;
+	background-color: #ffffff;
+	border: 1px solid #EEEFF1;
+	border-radius: 20px;
+	padding: 84px 92px 40px;
+}
+
+.closeButton {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+
+	&:hover { color: var(--mantine-color-gray-9); }
+}
