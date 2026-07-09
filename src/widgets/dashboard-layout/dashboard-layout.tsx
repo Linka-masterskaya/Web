@@ -6,7 +6,6 @@ import type { TDashboardLayoutProps } from './types'
 export const DashboardLayout: React.FC<TDashboardLayoutProps> = ({
   breadcrumbsSlot,
   actionsSlot,
-  children,
   className,
   ...otherProps
 }) => (
@@ -16,6 +15,8 @@ export const DashboardLayout: React.FC<TDashboardLayoutProps> = ({
       <div className={styles.actions}>{actionsSlot}</div>
     </div>
 
-    <div className={styles.content}>{children ?? <Outlet />}</div>
+    <div className={styles.content}>
+      <Outlet />
+    </div>
   </div>
 )
