@@ -138,13 +138,8 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
         </Flex>
 
         <Flex direction="column" gap="lg" className={styles.cards}>
-          {/* styles переопределяет text-align: center из theme/config.ts — по макету заголовок слева */}
           {activeCategory && (
-            <Title
-              order={1}
-              className={styles.cardsTitle}
-              styles={{ root: { textAlign: 'left', lineHeight: '40px' } }}
-            >
+            <Title order={2} className={styles.cardsTitle} size={30}>
               {activeCategory.name}
             </Title>
           )}
