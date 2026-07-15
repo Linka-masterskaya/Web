@@ -2,7 +2,7 @@ import { LIBRARY_SEARCH_MIN_QUERY_LENGTH, useLibraryCardSearch } from '@entities
 import { Autocomplete } from '@mantine/core'
 import { useDebouncedValue } from '@mantine/hooks'
 import { Icon } from '@shared/ui/icon'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { LIBRARY_SEARCH_DEBOUNCE_DELAY } from './config'
 import type { TLibrarySearchProps } from './types'
 
@@ -12,6 +12,11 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
 
   // Enter нажат раньше, чем debounce/запрос вернули результаты — сабмит откладывается
   const [isSubmitPending, setIsSubmitPending] = useState(false)
+
+  // После onOptionSubmit Autocomplete сам вызывает onChange с текстом выбранной опции,
+  // поэтому очистить строку внутри onOptionSubmit нельзя — флаг откладывает очистку
+  // до этого onChange (см. handleChange)
+  const shouldClearRef = useRef(false)
 
   const { data: foundCards = [] } = useLibraryCardSearch(debouncedValue)
 
@@ -39,6 +44,14 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
 
   const handleChange = (nextValue: string) => {
     setIsSubmitPending(false)
+
+    // Отложенная очистка после выбора опции: игнорируем подставленный текст опции
+    if (shouldClearRef.current) {
+      shouldClearRef.current = false
+      setValue('')
+      return
+    }
+
     setValue(nextValue)
   }
 
@@ -48,6 +61,7 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
     const card = foundCards.find((foundCard) => foundCard.title === title)
 
     if (card) {
+      shouldClearRef.current = true
       onSelect(card)
     }
   }
@@ -63,6 +77,7 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
 
     if (card) {
       setIsSubmitPending(false)
+      setValue('')
       onSelect(card)
       return
     }
@@ -80,6 +95,7 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
 
     if (card) {
       setIsSubmitPending(false)
+      setValue('')
       onSelect(card)
       return
     }

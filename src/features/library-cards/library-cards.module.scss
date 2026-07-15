@@ -29,5 +29,9 @@
 }
 
 .selected {
-  border-color: var(--mantine-color-blue-4);
+  outline: 2px solid var(--mantine-color-blue-4);
+}
+
+.scrollAnchor {
+  display: contents;
 }

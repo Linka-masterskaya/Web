@@ -30,4 +30,7 @@ export const mockCards: TLibraryCard[] = [
   { id: 11, title: 'Сок', image: 'https://placehold.co/220x162', categoryId: 11 },
   { id: 12, title: 'Соль', image: 'https://placehold.co/220x162', categoryId: 10 },
   { id: 13, title: 'Сова', image: 'https://placehold.co/220x162', categoryId: 1 },
+  { id: 14, title: 'Рыба', image: 'https://placehold.co/220x162', categoryId: 1 },
+  { id: 15, title: 'Ящерица', image: 'https://placehold.co/220x162', categoryId: 1 },
+  { id: 16, title: 'Конь', image: 'https://placehold.co/220x162', categoryId: 1 },
 ]

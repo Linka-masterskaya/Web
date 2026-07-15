@@ -7,7 +7,17 @@ import {
 import { LibraryCards } from '@features/library-cards'
 import { LibraryCategories } from '@features/library-categories'
 import { LibrarySearch } from '@features/library-search'
-import { ActionIcon, Button, Center, Flex, Loader, ScrollArea, Text, Title } from '@mantine/core'
+import {
+  ActionIcon,
+  Button,
+  Center,
+  Flex,
+  FocusTrap,
+  Loader,
+  ScrollArea,
+  Text,
+  Title,
+} from '@mantine/core'
 import { useModal } from '@shared/lib/modal'
 import { Icon } from '@shared/ui/icon'
 import { PopupLayout } from '@shared/ui/popup-layout'
@@ -29,6 +39,9 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
   )
   const [selectedCards, setSelectedCards] = useState<TLibraryCard[]>([])
 
+  // Карточка, выбранная через поиск: сетка прокручивается так, чтобы её ряд стал первым видимым
+  const [searchedCard, setSearchedCard] = useState<TLibraryCard | null>(null)
+
   // При первом открытии — категория из config или первая из списка
   const activeCategoryId = selectedCategoryId ?? categories[0]?.id ?? null
   const activeCategory = categories.find((category) => category.id === activeCategoryId)
@@ -44,10 +57,20 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
     setSelectedCards((prevCards) => (prevCards[0]?.id === card.id ? [] : [card]))
   }
 
+  // Переключение категории
+  const handleCategorySelect = (categoryId: number) => {
+    setSelectedCategoryId(categoryId)
+    setSelectedCards([])
+    // Сбрасываем цель прокрутки, чтобы возврат в категорию не скроллил к старому результату поиска
+    setSearchedCard(null)
+  }
+
   // Выбор подсказки в поиске: активируем категорию найденной карточки и выделяем её в сетке
   const handleSearchSelect = (card: TLibraryCard) => {
     setSelectedCategoryId(card.categoryId)
     setSelectedCards([card])
+    // Копия объекта — чтобы повторный выбор той же карточки снова запускал прокрутку
+    setSearchedCard({ ...card })
   }
 
   const handleConfirm = () => {
@@ -68,7 +91,14 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
       return <Text c="red.6">Не удалось загрузить карточки. Попробуйте позже.</Text>
     }
 
-    return <LibraryCards cards={cards} selectedCards={selectedCards} onSelect={handleCardSelect} />
+    return (
+      <LibraryCards
+        cards={cards}
+        selectedCards={selectedCards}
+        onSelect={handleCardSelect}
+        scrollToCard={searchedCard}
+      />
+    )
   }
 
   const renderBody = () => {
@@ -90,7 +120,6 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
 
     return (
       <Flex className={styles.body}>
-        {/* gap 20 + 4px запас вьюпорта под outline = 24px по макету */}
         <Flex direction="column" gap="lg" className={styles.categories}>
           <Text fw={700} ta="center" lh="24px" className={styles.categoriesTitle}>
             Категории
@@ -103,12 +132,11 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
             <LibraryCategories
               categories={categories}
               selectedCategoryId={activeCategoryId}
-              onSelect={setSelectedCategoryId}
+              onSelect={handleCategorySelect}
             />
           </ScrollArea>
         </Flex>
 
-        {/* gap 20 + 4px запас вьюпорта под outline = 24px по макету */}
         <Flex direction="column" gap="lg" className={styles.cards}>
           {/* styles переопределяет text-align: center из theme/config.ts — по макету заголовок слева */}
           {activeCategory && (
@@ -135,6 +163,7 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
   return (
     <PopupLayout>
       <Flex direction="column" className={styles.container}>
+        <FocusTrap.InitialFocus />
         <Flex align="center" className={styles.header}>
           <LibrarySearch className={styles.search} onSelect={handleSearchSelect} />
           <Flex align="center" gap="xl" className={styles.headerIcons}>

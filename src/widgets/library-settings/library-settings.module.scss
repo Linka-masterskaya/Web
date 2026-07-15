@@ -1,10 +1,6 @@
-/* Размеры по макету Figma (модалка 1280x870) */
-
 .container {
+  width: min(1280px, calc(100dvw - 80px));
   height: min(870px, calc(100dvh - 80px));
-
-  /* Потолок как у .mantine-Modal-content (100dvh - 2 * y-offset):
-     если контейнер не выше него, у модалки не появляется свой скролл */
   max-height: calc(100dvh - 2 * var(--modal-y-offset, 5dvh));
 }
 
@@ -19,7 +15,6 @@
 }
 
 .search {
-  /* По макету: инпут 566x36, отступ от края модалки 356px минус padding шапки 20px */
   flex-shrink: 0;
   width: 566px;
   margin-left: 336px;
@@ -48,11 +43,7 @@
   flex-shrink: 0;
   width: 272px;
   min-height: min-content;
-
-  /* Снизу 16px + 4px запас вьюпорта под outline = 20px по макету */
   padding: 40px 0 16px;
-
-  /* По макету колонка отделена тенью, а не бордером */
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -65,10 +56,6 @@
   min-height: 0;
 }
 
-/* Отступы заданы на вьюпорте, а не на корне ScrollArea: иначе вьюпорт
-   совпадает с границами пунктов и обрезает линии focus-outline (2px + 2px offset).
-   Слева 22px (8 + 14 по макету), справа 34px под скроллбар,
-   4px сверху/снизу — запас под outline первого и последнего пункта */
 .categoriesViewport {
   padding: 4px 34px 4px 22px;
 }
@@ -77,17 +64,11 @@
   flex-grow: 1;
   min-width: 0;
   min-height: min-content;
-
-  /* Горизонтальные отступы перенесены на вьюпорт сетки (.cardsViewport),
-     чтобы hover/focus-outline карточек не обрезался краями области прокрутки.
-     Снизу 36px + 4px запас вьюпорта = 40px */
-  padding: 40px 0 36px;
 }
 
 .cardsTitle {
   color: #0e0e0e;
-
-  /* Отступ колонки, ранее задававшийся через padding у .cards */
+  margin-top: 40px;
   margin-left: 28px;
 }
 
@@ -96,10 +77,9 @@
   min-height: 0;
 }
 
-/* Слева 28px и справа 38px по макету (272 + 28 + сетка 940 + 38 = 1278),
-   4px сверху/снизу — запас под outline первого и последнего ряда карточек */
 .cardsViewport {
   padding: 4px 38px 4px 28px;
+  scroll-padding-top: 4px;
 }
 
 .footer {
