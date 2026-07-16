@@ -64,7 +64,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
     control,
     handleSubmit,
     register,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty, isValid, isLoading },
   } = form
 
   useEffect(() => {
@@ -177,7 +177,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
           />
         </Group>
 
-        <Button type="submit" loading={isSubmitting}>
+        <Button type="submit" loading={isSubmitting} disabled={!isDirty || !isValid || isLoading}>
           Сохранить
         </Button>
       </Stack>
