@@ -1,19 +1,2 @@
-.avatarWrapper {
-  position: relative;
-}
-
-.addButton {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
-.menuButton {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.icon {
-  color: var(--mantine-color-gray-9);
-}
+/* Все базовые стили вынесены в shared/ui/avatar.
+   Здесь — user-специфичные переопределения при необходимости. */
