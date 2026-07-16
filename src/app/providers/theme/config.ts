@@ -18,6 +18,7 @@ import clsx from 'clsx'
 import classes from './theme.module.scss'
 
 export const theme = createTheme({
+  black: '#0e0e0e',
   colors: {
     blue: [
       '#e4f3ff',

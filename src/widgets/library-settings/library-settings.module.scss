@@ -48,7 +48,7 @@
 }
 
 .categoriesTitle {
-  color: #0e0e0e;
+  color: var(--mantine-color-black);
 }
 
 .categoriesScroll {
@@ -67,7 +67,7 @@
 }
 
 .cardsTitle {
-  color: #0e0e0e;
+  color: var(--mantine-color-black);
   line-height: 40px;
   margin-top: 40px;
   margin-left: 28px;

@@ -21,7 +21,7 @@
   }
 
   span[title] {
-    color: #0e0e0e;
+    color: var(--mantine-color-black);
     font-size: var(--mantine-font-size-sm);
     font-weight: 400;
     line-height: 20px;
