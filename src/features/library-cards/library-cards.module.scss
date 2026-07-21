@@ -1,0 +1,37 @@
+.card {
+  flex-shrink: 0;
+  width: 220px;
+  height: 209px;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-default);
+  box-shadow: none;
+
+  img {
+    height: 162px;
+    border-radius: 0;
+  }
+
+  > span {
+    flex-grow: 1;
+    min-height: 0;
+    padding: 12px;
+  }
+
+  span[title] {
+    color: var(--mantine-color-black);
+    font-size: var(--mantine-font-size-sm);
+    font-weight: 400;
+    line-height: 20px;
+  }
+}
+
+.selected {
+  outline: 2px solid var(--mantine-color-blue-4);
+}
+
+.scrollAnchor {
+  display: contents;
+}
