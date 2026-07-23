@@ -2,6 +2,7 @@ import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
 import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
+import { DashboardBreadcrumbs, DashboardLayout } from '@widgets/dashboard-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -67,6 +68,9 @@ export const router = createBrowserRouter([
             children: [
               {
                 path: routeSegments.dashboard,
+                element: createElement(DashboardLayout, {
+                  breadcrumbsSlot: createElement(DashboardBreadcrumbs),
+                }),
                 children: [
                   {
                     index: true,
@@ -74,18 +78,18 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: routeSegments.library,
-                    element: 'Страница в разработке',
+                    lazy: pageLazyLoad(() => import('@pages/library-page')),
                   },
                   {
                     path: routeSegments.students,
-                    element: 'Страница в разработке',
+                    lazy: pageLazyLoad(() => import('@pages/students-page')),
                   },
                   {
                     path: routeSegments.sets,
                     children: [
                       {
                         index: true,
-                        element: 'Страница в разработке',
+                        lazy: pageLazyLoad(() => import('@pages/sets-page')),
                       },
                       {
                         path: routeSegments.new,

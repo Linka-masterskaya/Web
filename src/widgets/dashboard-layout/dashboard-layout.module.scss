@@ -30,8 +30,5 @@
 .content {
   flex: 1;
   min-width: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(334px, 1fr));
-  gap: 20px;
-  padding: 0 22px;
+  padding: 0 22px 50px;
 }
