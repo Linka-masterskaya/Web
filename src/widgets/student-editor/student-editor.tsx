@@ -1,12 +1,12 @@
 import type { TStudentFormValues } from '@entities/student'
 import { StudentForm } from '@features/student-form/'
-import { Button } from '@mantine/core'
+import { Text } from '@mantine/core'
 import { PopupLayout } from '@shared/ui/popup-layout'
 import type { TStudentEditorProps } from './types'
 
 const TITLES: Record<'create' | 'edit', string> = {
-  create: 'Новый ученик',
-  edit: 'Редактировать ученика',
+  create: 'Добавление ученика',
+  edit: 'Редактирование профиля ученика',
 }
 
 export const StudentEditor: React.FC<TStudentEditorProps> = ({
@@ -22,17 +22,16 @@ export const StudentEditor: React.FC<TStudentEditorProps> = ({
   }
 
   return (
-    <PopupLayout title={TITLES[mode]} onClose={onClose}>
+    <PopupLayout onClose={onClose}>
+      <Text ta="center" w="100%" fw={700} mb="md">
+        {TITLES[mode]}
+      </Text>
       <StudentForm
         defaultValues={defaultValues}
         initialAvatarUrl={avatarSrc}
+        submitLabel={mode === 'create' ? 'Добавить ученика' : 'Сохранить изменения'}
         onSubmit={handleSubmit}
       />
-      {onClose && (
-        <Button variant="default" onClick={onClose} fullWidth mt="xs">
-          Отмена
-        </Button>
-      )}
     </PopupLayout>
   )
 }

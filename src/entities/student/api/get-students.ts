@@ -8,6 +8,7 @@ const MOCK_STUDENTS: TStudent[] = [
     age: 5,
     level: 'easy',
     state: 'active',
+    cardsShift: 'full',
     lastLesson: '2026-05-12T14:30:00Z',
   },
   {
@@ -17,6 +18,7 @@ const MOCK_STUDENTS: TStudent[] = [
     age: 7,
     level: 'medium',
     state: 'paused',
+    cardsShift: 'left',
     lastLesson: '2025-12-30T10:00:00Z',
     avatarSrc: 'https://i.ibb.co/5gZ10ZC4/ekaterina-student.jpg',
   },
@@ -27,6 +29,7 @@ const MOCK_STUDENTS: TStudent[] = [
     age: 9,
     level: 'hard',
     state: 'archived',
+    cardsShift: 'right',
     lastLesson: '2026-05-12T16:00:00Z',
   },
   {
@@ -36,6 +39,7 @@ const MOCK_STUDENTS: TStudent[] = [
     age: 10,
     level: 'easy',
     state: 'single',
+    cardsShift: 'full',
     lastLesson: '2024-12-01T09:00:00Z',
   },
 ]

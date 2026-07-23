@@ -19,3 +19,12 @@ export const STUDENT_LEVEL_LABELS: Record<TStudentLevel, string> = {
   medium: 'Средний',
   hard: 'Сложный',
 }
+
+export const STUDENT_CARDS_SHIFT_OPTIONS = ['left', 'full', 'right'] as const
+export type TStudentCardsShift = (typeof STUDENT_CARDS_SHIFT_OPTIONS)[number]
+
+export const STUDENT_CARDS_SHIFT_LABELS: Record<TStudentCardsShift, string> = {
+  left: 'Слева',
+  full: 'На весь экран',
+  right: 'Справа',
+}

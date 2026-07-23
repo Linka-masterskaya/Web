@@ -5,10 +5,20 @@ import {
   STUDENT_STATE_OPTIONS,
   studentFormDefaultValues,
   studentSchema,
+  type TStudentCardsShift,
   type TStudentFormValues,
 } from '@entities/student'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Button, Center, Group, Select, Stack, TextInput } from '@mantine/core'
+import {
+  Button,
+  Center,
+  Group,
+  SegmentedControl,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { AvatarUpload } from '@shared/ui/avatar'
 import { Icon } from '@shared/ui/icon'
 import { useEffect, useMemo, useState } from 'react'
@@ -20,6 +30,7 @@ const studentFormFieldsSchema = studentSchema.pick({
   email: true,
   age: true,
   state: true,
+  cardsShift: true,
 })
 
 type TStudentFormFieldsValues = z.infer<typeof studentFormFieldsSchema>
@@ -27,10 +38,16 @@ type TStudentFormFieldsValues = z.infer<typeof studentFormFieldsSchema>
 export type TStudentFormProps = {
   defaultValues?: Partial<TStudentFormValues>
   initialAvatarUrl?: string | null
+  submitLabel?: string
   onSubmit: (values: TStudentFormValues) => void | Promise<void>
 }
 
-export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStudentFormProps) => {
+export const StudentForm = ({
+  defaultValues,
+  initialAvatarUrl,
+  submitLabel,
+  onSubmit,
+}: TStudentFormProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(() => defaultValues?.avatarFile ?? null)
   const [currentAvatarSrc, setCurrentAvatarSrc] = useState<string | null>(initialAvatarUrl ?? null)
   const [previewSrc, setPreviewSrc] = useState<string | null>(() =>
@@ -50,6 +67,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
       email: defaultValues?.email ?? studentFormDefaultValues.email,
       age: defaultValues?.age ?? studentFormDefaultValues.age,
       state: defaultValues?.state ?? studentFormDefaultValues.state,
+      cardsShift: defaultValues?.cardsShift ?? studentFormDefaultValues.cardsShift,
     }),
     [defaultValues],
   )
@@ -176,9 +194,39 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
             )}
           />
         </Group>
-
+        <Group justify="space-between" align="center" wrap="nowrap">
+          <Text>Смещение карточек в наборах</Text>
+          <Controller
+            control={control}
+            name="cardsShift"
+            render={({ field }) => (
+              <SegmentedControl
+                aria-label="Смещение карточек в наборах"
+                value={field.value}
+                onChange={(value) => field.onChange(value as TStudentCardsShift)}
+                data={[
+                  {
+                    value: 'left',
+                    label: <Icon name="AlignLeft" size={24} color="var(--mantine-color-blue-5)" />,
+                  },
+                  {
+                    value: 'full',
+                    label: (
+                      <Icon name="AlignJustify" size={24} color="var(--mantine-color-blue-5)" />
+                    ),
+                  },
+                  {
+                    value: 'right',
+                    label: <Icon name="AlignRight" size={24} color="var(--mantine-color-blue-5)" />,
+                  },
+                ]}
+                w={140}
+              />
+            )}
+          />
+        </Group>
         <Button type="submit" loading={isSubmitting} disabled={!isDirty || !isValid || isLoading}>
-          Сохранить
+          {submitLabel ?? 'Сохранить'}
         </Button>
       </Stack>
     </form>

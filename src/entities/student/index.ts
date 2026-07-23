@@ -6,10 +6,13 @@ export { updateStudent } from './api/update-student'
 export {
   STUDENT_AGE_MAX,
   STUDENT_AGE_MIN,
+  STUDENT_CARDS_SHIFT_LABELS,
+  STUDENT_CARDS_SHIFT_OPTIONS,
   STUDENT_LEVEL_LABELS,
   STUDENT_LEVEL_OPTIONS,
   STUDENT_STATE_LABELS,
   STUDENT_STATE_OPTIONS,
+  type TStudentCardsShift,
   type TStudentLevel,
   type TStudentState,
 } from './config'

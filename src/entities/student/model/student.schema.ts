@@ -2,6 +2,7 @@ import { z } from 'zod'
 import {
   STUDENT_AGE_MAX,
   STUDENT_AGE_MIN,
+  STUDENT_CARDS_SHIFT_OPTIONS,
   STUDENT_LEVEL_OPTIONS,
   STUDENT_STATE_OPTIONS,
 } from '../config'
@@ -21,6 +22,7 @@ export const studentSchema = z.object({
     .max(STUDENT_AGE_MAX, { message: `Возраст до ${STUDENT_AGE_MAX} лет` }),
   level: z.enum(STUDENT_LEVEL_OPTIONS),
   state: z.enum(STUDENT_STATE_OPTIONS),
+  cardsShift: z.enum(STUDENT_CARDS_SHIFT_OPTIONS),
   avatarSrc: z.url({ message: 'Некорректный URL аватара' }).optional(),
   lastLesson: z.iso.datetime({ message: 'Некорректная дата последнего занятия' }).optional(),
 })
@@ -29,7 +31,10 @@ export const studentListSchema = z.array(studentSchema)
 
 export type TStudent = z.infer<typeof studentSchema>
 
-export type TStudentFormValues = Pick<TStudent, 'name' | 'email' | 'age' | 'state'> & {
+export type TStudentFormValues = Pick<
+  TStudent,
+  'name' | 'email' | 'age' | 'state' | 'cardsShift'
+> & {
   avatarFile: File | null
 }
 
@@ -39,4 +44,5 @@ export const studentFormDefaultValues: TStudentFormValues = {
   age: STUDENT_AGE_MIN,
   state: 'active',
   avatarFile: null,
+  cardsShift: 'full',
 }

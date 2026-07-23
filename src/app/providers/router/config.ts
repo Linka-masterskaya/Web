@@ -78,7 +78,7 @@ export const router = createBrowserRouter([
                   },
                   {
                     path: routeSegments.students,
-                    element: 'Страница в разработке',
+                    lazy: pageLazyLoad(() => import('@pages/students-page')),
                   },
                   {
                     path: routeSegments.sets,
