@@ -1,0 +1,33 @@
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  width: 100%;
+  min-inline-size: 0;
+  height: 40px;
+  padding: var(--mantine-spacing-sm);
+  border: 1px solid var(--mantine-color-lightBlue-0);
+  border-radius: var(--mantine-radius-default);
+  background-color: var(--mantine-color-white);
+}
+
+.value {
+  flex: 1;
+  color: var(--mantine-color-gray-6);
+  font-size: var(--mantine-font-size-md);
+  line-height: 24px;
+  text-align: center;
+  user-select: none;
+}
+
+.button svg {
+  color: var(--mantine-color-black);
+}
+
+.button[aria-disabled="true"] {
+  cursor: not-allowed;
+}
+
+.button[aria-disabled="true"] svg {
+  color: var(--mantine-color-lightBlue-0);
+}
