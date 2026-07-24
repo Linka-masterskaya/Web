@@ -1,4 +1,5 @@
 import type { TStudentFormValues } from '@entities/student'
+import type { TStudentFormSubmitMeta } from '@features/student-form'
 
 export type TStudentEditorMode = 'create' | 'edit'
 
@@ -7,5 +8,5 @@ export type TStudentEditorProps = {
   defaultValues?: Partial<TStudentFormValues>
   avatarSrc?: string | null
   onClose?: () => void
-  onSubmit?: (values: TStudentFormValues) => void | Promise<void>
+  onSubmit?: (values: TStudentFormValues, meta: TStudentFormSubmitMeta) => void | Promise<void>
 }

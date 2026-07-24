@@ -3,7 +3,6 @@ import {
   STUDENT_AGE_MAX,
   STUDENT_AGE_MIN,
   STUDENT_CARDS_SHIFT_OPTIONS,
-  STUDENT_LEVEL_OPTIONS,
   STUDENT_STATE_OPTIONS,
 } from '../config'
 
@@ -20,7 +19,6 @@ export const studentSchema = z.object({
     .int()
     .min(STUDENT_AGE_MIN, { message: `Возраст от ${STUDENT_AGE_MIN} лет` })
     .max(STUDENT_AGE_MAX, { message: `Возраст до ${STUDENT_AGE_MAX} лет` }),
-  level: z.enum(STUDENT_LEVEL_OPTIONS),
   state: z.enum(STUDENT_STATE_OPTIONS),
   cardsShift: z.enum(STUDENT_CARDS_SHIFT_OPTIONS),
   avatarSrc: z.url({ message: 'Некорректный URL аватара' }).optional(),

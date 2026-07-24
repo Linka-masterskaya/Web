@@ -1,2 +1,2 @@
-export type { TStudentFormProps } from './student-form'
+export type { TStudentFormProps, TStudentFormSubmitMeta } from './student-form'
 export { StudentForm } from './student-form'
