@@ -19,6 +19,26 @@ export const mainMenuConfig = {
       accessLevel: accessLevel.auth,
     },
     {
+      id: 'library',
+      url: createUrl(routerPath.dashboardLibrary),
+      label: 'Library',
+      end: true,
+      accessLevel: accessLevel.auth,
+    },
+    {
+      id: 'students',
+      url: createUrl(routerPath.dashboardStudents),
+      label: 'Students',
+      end: true,
+      accessLevel: accessLevel.auth,
+    },
+    {
+      id: 'sets',
+      url: createUrl(routerPath.dashboardSets),
+      label: 'Sets',
+      accessLevel: accessLevel.auth,
+    },
+    {
       id: 'login',
       url: createUrl(routerPath.auth),
       label: 'Login',
