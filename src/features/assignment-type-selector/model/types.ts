@@ -1,10 +1,11 @@
 type TIconName =
   | 'Grid3x3'
   | 'ArrowDown01'
-  | 'ListCheck'
+  | 'ListCheck' // не нашла иконку, которая прям один в один как на макете, но можно использовать ListTodo и скрыть квадрат:
+  // <ListTodo className="[&>rect]:hidden" /> это если прям очень нужно, чтобы галочка была слева
   | 'ListChecks'
   | 'GitCompareArrows'
-  | 'Split' // не нашла нужную, подобрала по смыслу, если подскажете, буду благодарна!
+  | 'Combine'
 
 export type TAssignmentTypeOption = {
   id: string
