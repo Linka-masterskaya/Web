@@ -12,7 +12,7 @@ export const SubsetLayout: React.FC<TSubsetLayoutProps> = ({
     <div className={clsx(styles.subsetLayout, className)}>
       {leftSlot}
 
-      {children != null && <div className="content">{children}</div>}
+      {children != null && <div className={styles.content}>{children}</div>}
 
       {rightSlot}
     </div>
