@@ -1,0 +1,133 @@
+.container {
+  position: relative;
+  width: min(518px, 100%);
+  min-height: 400px;
+  padding: 40px;
+  overflow: hidden;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 20px;
+  box-shadow: var(--mantine-shadow-lg);
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--mantine-color-black);
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+    background: transparent;
+  }
+}
+
+.title {
+  margin: 0;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 24px;
+}
+
+.searchInput {
+  height: 40px;
+  font-size: 14px;
+}
+
+.searchInput {
+  padding-left: 40px;
+}
+
+.recipients {
+  display: flex;
+  flex-direction: column;
+  min-height: 156px;
+  max-height: 264px;
+  margin: 24px 0 0;
+  overflow-y: auto;
+  scrollbar-color: var(--mantine-color-gray-2) transparent;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--mantine-color-gray-2);
+    border-radius: 5px;
+  }
+}
+
+.recipient {
+  display: flex;
+  flex: 0 0 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  color: var(--mantine-color-gray-6);
+  font: inherit;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:hover,
+  &:focus-visible,
+  &[aria-pressed='true'] {
+    color: var(--mantine-color-black);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-blue-4);
+    outline-offset: -2px;
+  }
+}
+
+.recipientName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recipientEmail {
+  flex-shrink: 0;
+  color: var(--mantine-color-black);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.emptyRecipients {
+  margin: auto;
+  color: var(--mantine-color-gray-6);
+  text-align: center;
+}
+
+.submitButton {
+  align-self: center;
+  width: min(334px, 100%);
+  margin-top: 40px;
+}
+
+.state {
+  display: flex;
+  min-height: 358px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.errorText {
+  margin-top: 8px;
+  color: var(--mantine-color-red-6);
+  font-size: 14px;
+  text-align: center;
+}
