@@ -13,6 +13,7 @@ import { StudentEditor } from '@widgets/student-editor'
 
 const STUDENT_EDITOR_MODAL_OPTIONS = {
   withCloseButton: false,
+  radius: 20,
   size: 'calc(440px + 2 * var(--mantine-spacing-xxl))',
   transitionProps: {
     transition: 'fade',

@@ -24,6 +24,7 @@ import { Icon } from '@shared/ui/icon'
 import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { z } from 'zod'
+import styles from './student-form.module.scss'
 
 const studentFormFieldsSchema = studentSchema.pick({
   name: true,
@@ -185,6 +186,10 @@ export const StudentForm = ({
                   rightSection={<Icon name="ChevronDown" size={16} />}
                   withCheckIcon={false}
                   allowDeselect={false}
+                  comboboxProps={{
+                    offset: 4,
+                    shadow: 'lg',
+                  }}
                 />
               )}
             />
@@ -206,6 +211,10 @@ export const StudentForm = ({
                   rightSection={<Icon name="ChevronDown" size={16} />}
                   withCheckIcon={false}
                   allowDeselect={false}
+                  comboboxProps={{
+                    offset: 4,
+                    shadow: 'lg',
+                  }}
                 />
               )}
             />
@@ -226,23 +235,34 @@ export const StudentForm = ({
                     {
                       value: 'left',
                       label: (
-                        <Icon name="AlignLeft" size={24} color="var(--mantine-color-blue-5)" />
+                        <span className={styles.shiftIcon}>
+                          <Icon name="AlignLeft" size={24} color="var(--mantine-color-blue-5)" />
+                        </span>
                       ),
                     },
                     {
                       value: 'full',
                       label: (
-                        <Icon name="AlignJustify" size={24} color="var(--mantine-color-blue-5)" />
+                        <span className={styles.shiftIcon}>
+                          <Icon name="AlignJustify" size={24} color="var(--mantine-color-blue-5)" />
+                        </span>
                       ),
                     },
                     {
                       value: 'right',
                       label: (
-                        <Icon name="AlignRight" size={24} color="var(--mantine-color-blue-5)" />
+                        <span className={styles.shiftIcon}>
+                          <Icon name="AlignRight" size={24} color="var(--mantine-color-blue-5)" />
+                        </span>
                       ),
                     },
                   ]}
-                  w={141}
+                  classNames={{
+                    control: styles.shiftControl,
+                    root: styles.shiftControlRoot,
+                    indicator: styles.shiftControlIndicator,
+                  }}
+                  w={132}
                 />
               )}
             />
