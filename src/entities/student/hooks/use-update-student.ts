@@ -17,6 +17,7 @@ export const useUpdateStudent = () => {
       queryClient.setQueryData<TStudent[]>(studentQueryKeys.list(), (old) =>
         old?.map((s) => (s.id === updated.id ? updated : s)),
       )
+      queryClient.invalidateQueries({ queryKey: studentQueryKeys.list() })
     },
   })
 }

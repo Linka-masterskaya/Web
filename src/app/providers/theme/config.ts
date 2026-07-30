@@ -104,6 +104,7 @@ export const theme = createTheme({
     md: '16px',
     lg: '20px',
     xl: '24px',
+    xxl: '40px',
   },
 
   headings: {
@@ -147,6 +148,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: classes.input,
+        label: classes.inputLabel,
       },
     }),
 
@@ -156,6 +158,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: classes.input,
+        label: classes.inputLabel,
         option: classes.dropdown,
       },
     }),
@@ -176,6 +179,7 @@ export const theme = createTheme({
       classNames: {
         input: classes.input,
         visibilityToggle: classes.passwordVisibilityToggle,
+        label: classes.inputLabel,
       },
     }),
 
@@ -185,6 +189,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: clsx(classes.input, classes.textareaInput),
+        label: classes.inputLabel,
       },
     }),
 
@@ -236,6 +241,7 @@ export const theme = createTheme({
       },
       classNames: {
         input: clsx(classes.input, classes.autocompleteInput),
+        label: classes.inputLabel,
         option: classes.dropdown,
       },
     }),

@@ -6,11 +6,11 @@ export { updateStudent } from './api/update-student'
 export {
   STUDENT_AGE_MAX,
   STUDENT_AGE_MIN,
-  STUDENT_LEVEL_LABELS,
-  STUDENT_LEVEL_OPTIONS,
+  STUDENT_CARDS_SHIFT_LABELS,
+  STUDENT_CARDS_SHIFT_OPTIONS,
   STUDENT_STATE_LABELS,
   STUDENT_STATE_OPTIONS,
-  type TStudentLevel,
+  type TStudentCardsShift,
   type TStudentState,
 } from './config'
 export { useCreateStudent } from './hooks/use-create-student'
