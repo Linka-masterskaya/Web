@@ -1,0 +1,165 @@
+.container {
+  position: relative;
+  box-sizing: border-box;
+  width: min(518px, 100%);
+  min-height: 342px;
+  padding: 84px 40px 40px;
+  overflow: hidden;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 20px;
+  box-shadow: var(--mantine-shadow-lg);
+  transition: min-height 160ms ease;
+}
+
+.expanded {
+  min-height: 586px;
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  color: var(--mantine-color-black);
+
+  &:hover {
+    color: var(--mantine-color-gray-7);
+    background: transparent;
+  }
+}
+
+.title {
+  margin: 0 20px;
+  font-size: 20px;
+  line-height: 30px;
+  text-align: left;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.rootFolders {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 24px 20px 0;
+  padding: 0;
+  border: 0;
+}
+
+.folderButton,
+.childFolderButton {
+  color: var(--mantine-color-gray-6);
+  font: inherit;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+
+  &:hover,
+  &:focus-visible,
+  &[aria-pressed='true'] {
+    color: var(--mantine-color-black);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-blue-4);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.folderButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 32px;
+  padding: 0;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+}
+
+.childrenSection {
+  margin-top: 40px;
+}
+
+.searchInput {
+  height: 40px;
+  padding-left: 40px;
+  font-size: 14px;
+}
+
+.childFolders {
+  display: flex;
+  min-height: 148px;
+  max-height: 172px;
+  flex-direction: column;
+  margin-top: 24px;
+  overflow-y: auto;
+  scrollbar-color: var(--mantine-color-gray-2) transparent;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--mantine-color-gray-2);
+    border-radius: 5px;
+  }
+}
+
+.childFolderButton {
+  flex: 0 0 44px;
+  padding: 0px 0px;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: left;
+}
+
+.emptyChildren {
+  margin: auto;
+  color: var(--mantine-color-gray-6);
+  text-align: center;
+}
+
+.submitButton {
+  align-self: center;
+  width: min(334px, 100%);
+  margin-top: 24px;
+}
+
+.state {
+  display: flex;
+  min-height: 192px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  text-align: center;
+}
+
+.errorText {
+  margin-top: 8px;
+  color: var(--mantine-color-red-6);
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .container {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .title,
+  .rootFolders {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
