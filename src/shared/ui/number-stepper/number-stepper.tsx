@@ -1,5 +1,6 @@
-import { ActionIcon, Fieldset } from '@mantine/core'
+import { ActionIcon, Box, Input } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
+import { useId } from 'react'
 import styles from './number-stepper.module.scss'
 import type { TNumberStepperProps } from './types'
 
@@ -11,9 +12,13 @@ export const NumberStepper: React.FC<TNumberStepperProps> = ({
   onChange,
   min,
   max,
+  label,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
 }) => {
+  const generatedLabelId = useId()
+  const labelId = label ? generatedLabelId : undefined
+
   const isDecrementDisabled = value <= min
   const isIncrementDisabled = value >= max
 
@@ -30,37 +35,45 @@ export const NumberStepper: React.FC<TNumberStepperProps> = ({
   }
 
   return (
-    <Fieldset
-      variant="unstyled"
-      className={styles.stepper}
-      aria-label={ariaLabel}
-      aria-labelledby={ariaLabelledBy}
-    >
-      <ActionIcon
-        variant="transparent"
-        size={BUTTON_SIZE}
-        className={styles.button}
-        onClick={handleDecrement}
-        aria-disabled={isDecrementDisabled}
-        aria-label="Уменьшить значение"
-      >
-        <Icon name="Minus" size={ICON_SIZE} />
-      </ActionIcon>
+    <Box className={styles.wrapper}>
+      {label ? (
+        <Input.Label id={labelId} className={styles.label}>
+          {label}
+        </Input.Label>
+      ) : null}
 
-      <span className={styles.value} aria-live="polite">
-        {value}
-      </span>
-
-      <ActionIcon
-        variant="transparent"
-        size={BUTTON_SIZE}
-        className={styles.button}
-        onClick={handleIncrement}
-        aria-disabled={isIncrementDisabled}
-        aria-label="Увеличить значение"
+      <Box
+        role="group"
+        className={styles.stepper}
+        aria-label={label ? undefined : ariaLabel}
+        aria-labelledby={label ? labelId : ariaLabelledBy}
       >
-        <Icon name="Plus" size={ICON_SIZE} />
-      </ActionIcon>
-    </Fieldset>
+        <ActionIcon
+          variant="transparent"
+          size={BUTTON_SIZE}
+          className={styles.button}
+          onClick={handleDecrement}
+          disabled={isDecrementDisabled}
+          aria-label="Уменьшить значение"
+        >
+          <Icon name="Minus" size={ICON_SIZE} />
+        </ActionIcon>
+
+        <span className={styles.value} aria-live="polite">
+          {value}
+        </span>
+
+        <ActionIcon
+          variant="transparent"
+          size={BUTTON_SIZE}
+          className={styles.button}
+          onClick={handleIncrement}
+          disabled={isIncrementDisabled}
+          aria-label="Увеличить значение"
+        >
+          <Icon name="Plus" size={ICON_SIZE} />
+        </ActionIcon>
+      </Box>
+    </Box>
   )
 }

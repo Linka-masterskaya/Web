@@ -1,3 +1,18 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-xs);
+  width: 100%;
+}
+
+.label {
+  display: block;
+  color: var(--mantine-color-gray-6);
+  font-weight: 400;
+  line-height: 20px;
+  text-align: center;
+}
+
 .stepper {
   display: flex;
   align-items: center;
@@ -24,10 +39,11 @@
   color: var(--mantine-color-black);
 }
 
-.button[aria-disabled="true"] {
+.button:disabled {
   cursor: not-allowed;
+  background-color: transparent;
 }
 
-.button[aria-disabled="true"] svg {
+.button:disabled svg {
   color: var(--mantine-color-lightBlue-0);
 }
