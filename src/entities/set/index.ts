@@ -1,8 +1,11 @@
 export { getSet } from './api/get-set'
+export { moveSet } from './api/move-set'
 export { sendSet } from './api/send-set'
+export { useMoveSet } from './hooks/use-move-set'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
 export { setQueryKeys } from './lib/query-keys'
+export { moveSetParamsSchema, type TMoveSetParams } from './model/move-set.schema'
 export {
   sendSetParamsSchema,
   sendSetResponseSchema,
