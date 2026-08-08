@@ -1,1 +1,1 @@
-export { apiClient } from './api-client'
+export { apiClient, setApiAccessTokenProvider } from './api-client'
