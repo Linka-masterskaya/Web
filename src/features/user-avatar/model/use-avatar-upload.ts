@@ -15,7 +15,6 @@ export const useAvatarUpload = () => {
     const tempUrl = URL.createObjectURL(file)
     setIsLoading(true)
     setError(null)
-    // оптимистичное обновление аватара - на случай длительного ответа от сервера
     setAvatarSrc(tempUrl)
 
     try {
@@ -23,6 +22,7 @@ export const useAvatarUpload = () => {
       setAvatarSrc(response.avatarUrl)
     } catch (error) {
       setAvatarSrc(previousAvatar)
+      setError(error instanceof Error ? error.message : 'Не удалось обновить аватар')
       // biome-ignore lint/suspicious/noConsole: debug only
       console.error('Не удалось обновить аватар:', error)
     } finally {
@@ -43,6 +43,7 @@ export const useAvatarUpload = () => {
       await deleteUserAvatar()
     } catch (error) {
       setAvatarSrc(previousAvatar)
+      setError(error instanceof Error ? error.message : 'Не удалось удалить аватар')
       // biome-ignore lint/suspicious/noConsole: debug only
       console.error('Не удалось удалить аватар:', error)
     } finally {

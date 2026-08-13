@@ -1,35 +1,58 @@
-// Имитация задержки
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+import { apiClient } from '@shared/lib/api'
+import { HTTPError } from 'ky'
+import { z } from 'zod'
 
-/**
- * Заглушка для смены аватара.
- * TODO: заменить на реальный запрос к бэкенду, когда будет готов.
- */
+const changeUserAvatarResponseSchema = z
+  .object({
+    avatar_url: z.string().min(1),
+  })
+  .transform((response) => ({
+    avatarUrl: response.avatar_url,
+  }))
 
-export const changeUserAvatar = async (file: File): Promise<{ avatarUrl: string }> => {
-  // TODO: убрать, когда появится бэкенд
-  // biome-ignore lint/suspicious/noConsole: debug only
-  console.log('Аватар изменён')
-
-  // Имитация ответа от сервера (задержка 500 мс)
-  // TODO: убрать, когда появится бэкенд
-  await delay(500)
-
-  // Возвращаем временную ссылку на файл (пока нет бэкенда)
-  // TODO: заменить на реальный URL от сервера
-  return { avatarUrl: URL.createObjectURL(file) }
+type TApiErrorBody = {
+  error: {
+    code: string
+    message: string
+    details?: Record<string, unknown>
+  }
 }
 
-/**
- * Заглушка для удаления аватара.
- * TODO: заменить на реальный запрос к бэкенду, когда будет готов.
- */
-export const deleteUserAvatar = async (): Promise<void> => {
-  // TODO: убрать, когда появится бэкенд
-  // biome-ignore lint/suspicious/noConsole: debug only
-  console.log('Аватар удалён')
+const FALLBACK_ERROR_MESSAGE = 'Что-то пошло не так. Попробуйте ещё раз.'
 
-  // Имитация ответа от сервера (задержка 300 мс)
-  // TODO: убрать, когда появится бэкенд
-  await delay(300)
+const getServerErrorMessage = async (error: unknown): Promise<string> => {
+  if (!(error instanceof HTTPError)) {
+    return FALLBACK_ERROR_MESSAGE
+  }
+
+  try {
+    const body = (await error.response.clone().json()) as Partial<TApiErrorBody>
+
+    if (typeof body?.error?.message === 'string') {
+      return body.error.message
+    }
+  } catch {}
+
+  return FALLBACK_ERROR_MESSAGE
+}
+
+export const changeUserAvatar = async (file: File): Promise<{ avatarUrl: string }> => {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  try {
+    return await apiClient
+      .put('profile/me/avatar', { body: formData })
+      .json(changeUserAvatarResponseSchema)
+  } catch (error) {
+    throw new Error(await getServerErrorMessage(error))
+  }
+}
+
+export const deleteUserAvatar = async (): Promise<void> => {
+  try {
+    await apiClient.delete('profile/me/avatar')
+  } catch (error) {
+    throw new Error(await getServerErrorMessage(error))
+  }
 }
