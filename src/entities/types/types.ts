@@ -5,6 +5,7 @@ export type TAuthState = {
 
 export type TAuthActions = {
   login: (accessToken: string) => void
+  setAccessToken: (accessToken: string) => void
   logout: () => void
 }
 

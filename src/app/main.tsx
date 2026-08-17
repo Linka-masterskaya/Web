@@ -2,7 +2,11 @@ import '@mantine/core/styles.css'
 import { Router } from '@app/providers/router'
 import { ThemeProvider } from '@app/providers/theme'
 import { useAuthStore } from '@entities/auth'
-import { setApiAccessTokenProvider } from '@shared/lib/api'
+import {
+  setApiAccessTokenProvider,
+  setApiAccessTokenUpdateHandler,
+  setApiAuthFailureHandler,
+} from '@shared/lib/api'
 import { ErrorBoundary } from '@shared/lib/error'
 import { QueryProvider } from '@shared/lib/query'
 import { StrictMode } from 'react'
@@ -14,6 +18,12 @@ if (!root) {
 }
 
 setApiAccessTokenProvider(() => useAuthStore.getState().accessToken)
+setApiAccessTokenUpdateHandler((accessToken) => {
+  useAuthStore.getState().setAccessToken(accessToken)
+})
+setApiAuthFailureHandler(() => {
+  useAuthStore.getState().logout()
+})
 
 createRoot(root).render(
   <StrictMode>
