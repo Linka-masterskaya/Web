@@ -71,7 +71,7 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   }
 
   return (
-    <Stack className={styles.container} style={gridStyle} aria-label={props.title}>
+    <Stack className={styles.container} style={gridStyle}>
       <Title className={styles.title} order={1}>
         {props.title}
       </Title>
