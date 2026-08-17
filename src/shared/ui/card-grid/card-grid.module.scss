@@ -1,0 +1,124 @@
+.container {
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    background: var(--mantine-color-lightBlue-0);
+    border-radius: 16px;
+  }
+  
+  .title {
+    margin: 0;
+    height: var(--card-grid-title-height, 188px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    text-align: center;
+    color: var(--mantine-color-black);
+    line-height: 40px;
+    background: var(--mantine-color-white);
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: 8px;
+  }
+  
+  .grid {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--card-grid-cols), minmax(0, 1fr));
+    grid-template-rows: repeat(var(--card-grid-rows), minmax(0, 1fr));
+    gap: 12px;
+  }
+  
+  .card {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+    overflow: hidden;
+    background: var(--mantine-color-white);
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: 8px;
+  }
+  
+  button.card {
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .cardActive {
+    border: 2px solid var(--mantine-color-blue-4);
+    box-shadow: 0 0 1px #b8d5ff;
+  }
+  
+  .image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+  
+  .cardEmpty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .placeholderIcon {
+    color: var(--mantine-color-blue-4);
+  }
+  
+  .check {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--mantine-color-gray-2);
+    border-radius: 50%;
+    background: var(--mantine-color-white);
+  }
+  
+  .checkSelected {
+    border-color: var(--mantine-color-green-6);
+    background: var(--mantine-color-green-6);
+  
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 5px;
+      border-left: 1.5px solid var(--mantine-color-white);
+      border-bottom: 1.5px solid var(--mantine-color-white);
+      transform: translate(-50%, -60%) rotate(-45deg);
+    }
+  }
+  
+  .checkSelectedActive {
+    border-color: var(--mantine-color-green-6);
+    background: var(--mantine-color-green-1);
+  
+    &::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 5px;
+      border-left: 1.5px solid var(--mantine-color-green-6);
+      border-bottom: 1.5px solid var(--mantine-color-green-6);
+      transform: translate(-50%, -60%) rotate(-45deg);
+    }
+  }
