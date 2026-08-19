@@ -1,13 +1,19 @@
-import { ForgotPasswordForm, type TForgotPasswordFormValues } from '@entities/auth'
+import {
+  ForgotPasswordForm,
+  type TForgotPasswordFormValues,
+  useForgotPassword,
+} from '@entities/auth'
 import { Stack, Text } from '@mantine/core'
 import { useState } from 'react'
 import styles from './forgot-password.module.scss'
 
 export const ForgotPassword: React.FC = () => {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const { mutateAsync } = useForgotPassword()
 
-  const handleSubmit = async (_values: TForgotPasswordFormValues) => {
-    setIsSubmitted(true) // форма пока что никуда не отправляется
+  const handleSubmit = async (values: TForgotPasswordFormValues) => {
+    await mutateAsync(values)
+    setIsSubmitted(true)
   }
 
   if (isSubmitted) {
