@@ -1,3 +1,5 @@
+import type { TSetSettings } from './model/set-settings.schema'
+
 // Возраст
 export const SET_AGE_MIN = 3
 export const SET_AGE_MAX = 18
@@ -25,7 +27,9 @@ export const SET_AGE_OPTIONS = Array.from({ length: SET_AGE_MAX - SET_AGE_MIN + 
 }) satisfies { value: string; label: string }[]
 
 // Уровень сложности
-export type TSetLevel = 'easy' | 'medium' | 'hard'
+export const SET_LEVEL_VALUES = ['easy', 'medium', 'hard'] as const
+
+export type TSetLevel = (typeof SET_LEVEL_VALUES)[number]
 
 export const SET_LEVEL_OPTIONS = [
   {
@@ -43,7 +47,9 @@ export const SET_LEVEL_OPTIONS = [
 ] satisfies { value: TSetLevel; label: string }[]
 
 // Голос озвучки
-export type TSetVoice = 'alena' | 'ivan'
+export const SET_VOICE_VALUES = ['alena', 'ivan'] as const
+
+export type TSetVoice = (typeof SET_VOICE_VALUES)[number]
 
 export const SET_VOICE_OPTIONS = [
   {
@@ -57,15 +63,7 @@ export const SET_VOICE_OPTIONS = [
 ] satisfies { value: TSetVoice; label: string }[]
 
 // Дефолтные значения параметров набора
-export const SET_SETTINGS_DEFAULT_VALUES: {
-  age: string
-  level: TSetLevel
-  voice: TSetVoice
-  notes: string
-  isTypingPack: boolean
-  isAutoSpeak: boolean
-  isQuizPack: boolean
-} = {
+export const SET_SETTINGS_DEFAULT_VALUES: TSetSettings = {
   age: '5',
   level: 'easy',
   voice: 'alena',

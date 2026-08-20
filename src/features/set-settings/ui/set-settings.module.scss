@@ -94,6 +94,8 @@
 	border: 1px solid var(--mantine-color-gray-2);
 	border-radius: 10px;
 	align-items: center;
+	cursor: pointer;
+	user-select: none;
 }
 
 .settingLabel {
@@ -101,6 +103,7 @@
 	font-size: 14px;
 	line-height: 20px;
 	color: var(--mantine-color-gray-6);
+	cursor: pointer;
 }
 
 .switchTrack {

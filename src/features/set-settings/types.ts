@@ -1,16 +1,7 @@
-import type { TSetLevel, TSetVoice } from './config'
-
-export type TSetSettings = {
-  age: string
-  level: TSetLevel
-  voice: TSetVoice
-  notes: string
-  isTypingPack: boolean
-  isAutoSpeak: boolean
-  isQuizPack: boolean
-}
+import type { TSetSettings } from './model/set-settings.schema'
 
 export type TSetSettingsProps = {
+  defaultValues?: Partial<TSetSettings>
   onClose?: () => void
-  onSave?: (values: TSetSettings) => void
+  onSave?: (values: TSetSettings) => void | Promise<void>
 }
