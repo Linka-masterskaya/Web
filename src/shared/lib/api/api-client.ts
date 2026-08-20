@@ -9,7 +9,7 @@ let accessTokenProvider: TAccessTokenProvider = () => null
 let accessTokenUpdateHandler: TAccessTokenUpdateHandler = () => undefined
 let authFailureHandler: TAuthFailureHandler = () => undefined
 let refreshingPromise: Promise<string> | null = null
-let failedRefresh: { accessToken: string | null; error: unknown } | null = null
+let failedRefresh: { accessToken: string; error: unknown } | null = null
 
 const normalizeBaseUrl = (domain: string): string => {
   const trimmed = domain.replace(/\/$/, '')
@@ -29,13 +29,13 @@ export const setApiAuthFailureHandler = (handler: TAuthFailureHandler): void => 
   authFailureHandler = handler
 }
 
-const refreshClient = ky.create({
+export const sessionApiClient = ky.create({
   baseUrl: normalizeBaseUrl(env.apiDomain()),
   credentials: 'include',
 })
 
 const refreshAccessToken = async (): Promise<string> => {
-  const response = await refreshClient.post('auth/refresh').json<unknown>()
+  const response = await sessionApiClient.post('auth/refresh').json<unknown>()
 
   if (
     typeof response !== 'object' ||
@@ -44,7 +44,7 @@ const refreshAccessToken = async (): Promise<string> => {
     typeof response.access_token !== 'string' ||
     response.access_token.length === 0
   ) {
-    throw new Error('Refresh endpoint returned an invalid access token')
+    throw new Error('Сервер вернул некорректный access token')
   }
 
   return response.access_token
@@ -58,7 +58,10 @@ const getAccessTokenFromAuthorization = (authorization: string | null): string |
   return authorization.slice('Bearer '.length)
 }
 
-const getNewAccessToken = (failedAccessToken: string | null): Promise<string> => {
+const isInvalidRefreshTokenError = (error: unknown): error is HTTPError =>
+  error instanceof HTTPError && error.response.status === 401
+
+const getNewAccessToken = (failedAccessToken: string): Promise<string> => {
   if (refreshingPromise) {
     return refreshingPromise
   }
@@ -67,23 +70,29 @@ const getNewAccessToken = (failedAccessToken: string | null): Promise<string> =>
     return Promise.reject(failedRefresh.error)
   }
 
-  if (!refreshingPromise) {
-    refreshingPromise = refreshAccessToken()
-      .then((accessToken) => {
-        failedRefresh = null
-        accessTokenUpdateHandler(accessToken)
+  refreshingPromise = refreshAccessToken()
+    .then((accessToken) => {
+      failedRefresh = null
 
-        return accessToken
-      })
-      .catch((error: unknown) => {
+      // За время refresh пользователь мог выйти из аккаунта
+      // или войти под другим пользователем.
+      if (accessTokenProvider() === failedAccessToken) {
+        accessTokenUpdateHandler(accessToken)
+      }
+
+      return accessToken
+    })
+    .catch((error: unknown) => {
+      if (isInvalidRefreshTokenError(error)) {
         failedRefresh = { accessToken: failedAccessToken, error }
         authFailureHandler()
-        throw error
-      })
-      .finally(() => {
-        refreshingPromise = null
-      })
-  }
+      }
+
+      throw error
+    })
+    .finally(() => {
+      refreshingPromise = null
+    })
 
   return refreshingPromise
 }
@@ -110,6 +119,11 @@ export const apiClient = ky.create({
         const failedAccessToken = getAccessTokenFromAuthorization(
           request.headers.get('Authorization'),
         )
+
+        if (!failedAccessToken) {
+          return
+        }
+
         const currentAccessToken = accessTokenProvider()
 
         if (currentAccessToken && currentAccessToken !== failedAccessToken) {
@@ -127,5 +141,12 @@ export const apiClient = ky.create({
     limit: 1,
     methods: ['get', 'post', 'put', 'patch', 'delete'],
     statusCodes: [401],
+    shouldRetry: ({ error }) => {
+      if (error instanceof HTTPError && error.response.status === 401) {
+        return Boolean(getAccessTokenFromAuthorization(error.request.headers.get('Authorization')))
+      }
+
+      return undefined
+    },
   },
 })
