@@ -12,10 +12,7 @@ export const useUpdateStudent = () => {
     onSuccess: (updated) => {
       queryClient.setQueryData<TStudent>(studentQueryKeys.detail(updated.id), updated)
 
-      queryClient.setQueryData<TStudent[]>(studentQueryKeys.list(), (old) =>
-        old?.map((s) => (s.id === updated.id ? updated : s)),
-      )
-      queryClient.invalidateQueries({ queryKey: studentQueryKeys.list() })
+      queryClient.invalidateQueries({ queryKey: studentQueryKeys.all })
     },
   })
 }

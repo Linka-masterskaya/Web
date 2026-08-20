@@ -1,8 +1,8 @@
 import {
   STUDENT_AGE_MAX,
   STUDENT_AGE_MIN,
-  STUDENT_STATE_LABELS,
-  STUDENT_STATE_OPTIONS,
+  STUDENT_STATUS_LABELS,
+  STUDENT_STATUS_OPTIONS,
   studentFormDefaultValues,
   studentSchema,
   type TStudentCardsShift,
@@ -30,32 +30,26 @@ const studentFormFieldsSchema = studentSchema.pick({
   name: true,
   email: true,
   age: true,
-  state: true,
+  status: true,
   cardsShift: true,
 })
 
 type TStudentFormFieldsValues = z.infer<typeof studentFormFieldsSchema>
 
 export type TStudentFormSubmitMeta = {
+  /** Аватар был удалён пользователем (для PATCH avatar_media_id: null) */
   avatarRemoved: boolean
 }
 
 export type TStudentFormProps = {
   defaultValues?: Partial<TStudentFormValues>
   initialAvatarUrl?: string | null
-  submitLabel?: string
   onSubmit: (values: TStudentFormValues, meta: TStudentFormSubmitMeta) => void | Promise<void>
 }
 
-export const StudentForm = ({
-  defaultValues,
-  initialAvatarUrl,
-  submitLabel,
-  onSubmit,
-}: TStudentFormProps) => {
+export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStudentFormProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(() => defaultValues?.avatarFile ?? null)
   const [avatarRemoved, setAvatarRemoved] = useState(false)
-  const [isAvatarDirty, setIsAvatarDirty] = useState(false)
   const [currentAvatarSrc, setCurrentAvatarSrc] = useState<string | null>(initialAvatarUrl ?? null)
   const [previewSrc, setPreviewSrc] = useState<string | null>(() =>
     defaultValues?.avatarFile ? URL.createObjectURL(defaultValues.avatarFile) : null,
@@ -73,7 +67,7 @@ export const StudentForm = ({
       name: defaultValues?.name ?? studentFormDefaultValues.name,
       email: defaultValues?.email ?? studentFormDefaultValues.email,
       age: defaultValues?.age ?? studentFormDefaultValues.age,
-      state: defaultValues?.state ?? studentFormDefaultValues.state,
+      status: defaultValues?.status ?? studentFormDefaultValues.status,
       cardsShift: defaultValues?.cardsShift ?? studentFormDefaultValues.cardsShift,
     }),
     [defaultValues],
@@ -82,7 +76,7 @@ export const StudentForm = ({
   const form = useForm<TStudentFormFieldsValues>({
     resolver: zodResolver(studentFormFieldsSchema),
     defaultValues: mergedDefaultValues,
-    mode: 'onChange',
+    mode: 'onSubmit',
   })
 
   const {
@@ -108,9 +102,7 @@ export const StudentForm = ({
         ...values,
         avatarFile,
       },
-      {
-        avatarRemoved,
-      },
+      { avatarRemoved },
     )
 
   const handleFileChange = (file: File) => {
@@ -124,7 +116,6 @@ export const StudentForm = ({
 
     setAvatarFile(file)
     setAvatarRemoved(false)
-    setIsAvatarDirty(true)
   }
 
   const handleDeleteAvatar = () => {
@@ -137,145 +128,130 @@ export const StudentForm = ({
     setCurrentAvatarSrc(null)
     setAvatarFile(null)
     setAvatarRemoved(true)
-    setIsAvatarDirty(true)
   }
 
   return (
     <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-      <Stack w="100%" maw={440} mx="auto" gap="xxl">
+      <Stack>
         <Center>
           <AvatarUpload
             avatarSrc={previewSrc ?? currentAvatarSrc}
             initials={<Icon name="UserRound" size={50} color="var(--mantine-color-blue-4)" />}
             onReplace={handleFileChange}
             onDelete={handleDeleteAvatar}
-            radius="var(--mantine-radius-default)"
+            radius="50%"
           />
         </Center>
 
-        <Stack gap="xl">
-          <TextInput
-            label="Имя ученика"
-            placeholder="Введите имя"
-            {...register('name')}
-            error={errors.name?.message}
+        <TextInput
+          label="Имя ученика"
+          placeholder="Введите имя"
+          {...register('name')}
+          error={errors.name?.message}
+        />
+
+        <TextInput
+          type="email"
+          label="Email"
+          placeholder="Введите email"
+          {...register('email')}
+          error={errors.email?.message}
+        />
+
+        <Group grow align="flex-start">
+          <Controller
+            control={control}
+            name="age"
+            render={({ field }) => (
+              <Select
+                label="Возраст"
+                placeholder="Выберите возраст"
+                data={studentAgeOptions}
+                value={String(field.value)}
+                onChange={(value) =>
+                  field.onChange(value ? Number(value) : studentFormDefaultValues.age)
+                }
+                error={errors.age?.message}
+                rightSection={<Icon name="ChevronDown" size={16} />}
+                withCheckIcon={false}
+                allowDeselect={false}
+              />
+            )}
           />
 
-          <TextInput
-            type="email"
-            label="Email"
-            placeholder="Введите email"
-            {...register('email')}
-            error={errors.email?.message}
+          <Controller
+            control={control}
+            name="status"
+            render={({ field }) => (
+              <Select
+                label="Статус"
+                placeholder="Выберите статус"
+                data={STUDENT_STATUS_OPTIONS.map((status) => ({
+                  value: status,
+                  label: STUDENT_STATUS_LABELS[status],
+                }))}
+                value={field.value}
+                onChange={(value) => field.onChange(value ?? studentFormDefaultValues.status)}
+                error={errors.status?.message}
+                rightSection={<Icon name="ChevronDown" size={16} />}
+                withCheckIcon={false}
+                allowDeselect={false}
+              />
+            )}
           />
+        </Group>
 
-          <Group grow align="flex-start" gap="sm">
-            <Controller
-              control={control}
-              name="age"
-              render={({ field }) => (
-                <Select
-                  label="Возраст"
-                  placeholder="Выберите возраст"
-                  data={studentAgeOptions}
-                  value={String(field.value)}
-                  onChange={(value) =>
-                    field.onChange(value ? Number(value) : studentFormDefaultValues.age)
-                  }
-                  error={errors.age?.message}
-                  rightSection={<Icon name="ChevronDown" size={16} />}
-                  withCheckIcon={false}
-                  allowDeselect={false}
-                  comboboxProps={{
-                    offset: 4,
-                    shadow: 'lg',
-                  }}
-                />
-              )}
-            />
+        <Group align="center" wrap="nowrap" gap={12} justify="flex-start">
+          <Text fz="sm" fw={700} lh="20px" c="black">
+            Смещение карточек в наборах
+          </Text>
+          <Controller
+            control={control}
+            name="cardsShift"
+            render={({ field }) => (
+              <SegmentedControl
+                aria-label="Смещение карточек в наборах"
+                value={field.value ?? studentFormDefaultValues.cardsShift}
+                onChange={(value) => field.onChange(value as TStudentCardsShift)}
+                data={[
+                  {
+                    value: 'left',
+                    label: (
+                      <span className={styles.shiftIcon}>
+                        <Icon name="AlignLeft" size={24} color="var(--mantine-color-blue-5)" />
+                      </span>
+                    ),
+                  },
+                  {
+                    value: 'full',
+                    label: (
+                      <span className={styles.shiftIcon}>
+                        <Icon name="AlignJustify" size={24} color="var(--mantine-color-blue-5)" />
+                      </span>
+                    ),
+                  },
+                  {
+                    value: 'right',
+                    label: (
+                      <span className={styles.shiftIcon}>
+                        <Icon name="AlignRight" size={24} color="var(--mantine-color-blue-5)" />
+                      </span>
+                    ),
+                  },
+                ]}
+                classNames={{
+                  control: styles.shiftControl,
+                  root: styles.shiftControlRoot,
+                  indicator: styles.shiftControlIndicator,
+                }}
+                w={132}
+              />
+            )}
+          />
+        </Group>
 
-            <Controller
-              control={control}
-              name="state"
-              render={({ field }) => (
-                <Select
-                  label="Статус"
-                  placeholder="Выберите статус"
-                  data={STUDENT_STATE_OPTIONS.map((state) => ({
-                    value: state,
-                    label: STUDENT_STATE_LABELS[state],
-                  }))}
-                  value={field.value}
-                  onChange={(value) => field.onChange(value ?? studentFormDefaultValues.state)}
-                  error={errors.state?.message}
-                  rightSection={<Icon name="ChevronDown" size={16} />}
-                  withCheckIcon={false}
-                  allowDeselect={false}
-                  comboboxProps={{
-                    offset: 4,
-                    shadow: 'lg',
-                  }}
-                />
-              )}
-            />
-          </Group>
-          <Group align="center" wrap="nowrap" gap={12} justify="flex-start">
-            <Text fz="sm" fw={700} lh="20px" c="black">
-              Смещение карточек в наборах
-            </Text>
-            <Controller
-              control={control}
-              name="cardsShift"
-              render={({ field }) => (
-                <SegmentedControl
-                  aria-label="Смещение карточек в наборах"
-                  value={field.value ?? studentFormDefaultValues.cardsShift}
-                  onChange={(value) => field.onChange(value as TStudentCardsShift)}
-                  data={[
-                    {
-                      value: 'left',
-                      label: (
-                        <span className={styles.shiftIcon}>
-                          <Icon name="AlignLeft" size={24} color="var(--mantine-color-blue-5)" />
-                        </span>
-                      ),
-                    },
-                    {
-                      value: 'full',
-                      label: (
-                        <span className={styles.shiftIcon}>
-                          <Icon name="AlignJustify" size={24} color="var(--mantine-color-blue-5)" />
-                        </span>
-                      ),
-                    },
-                    {
-                      value: 'right',
-                      label: (
-                        <span className={styles.shiftIcon}>
-                          <Icon name="AlignRight" size={24} color="var(--mantine-color-blue-5)" />
-                        </span>
-                      ),
-                    },
-                  ]}
-                  classNames={{
-                    control: styles.shiftControl,
-                    root: styles.shiftControlRoot,
-                    indicator: styles.shiftControlIndicator,
-                  }}
-                  w={132}
-                />
-              )}
-            />
-          </Group>
-        </Stack>
-        <Button
-          w={334}
-          mx="auto"
-          type="submit"
-          loading={isSubmitting}
-          disabled={(!isDirty && !isAvatarDirty) || !isValid || isLoading}
-        >
-          {submitLabel ?? 'Сохранить'}
+        <Button type="submit" loading={isSubmitting} disabled={!isDirty || !isValid || isLoading}>
+          Сохранить
         </Button>
       </Stack>
     </form>

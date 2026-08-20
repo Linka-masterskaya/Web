@@ -1,13 +1,14 @@
 export const STUDENT_AGE_MIN = 3
 export const STUDENT_AGE_MAX = 18
 
-export const STUDENT_STATE_OPTIONS = ['active', 'paused', 'single', 'archived'] as const
-export type TStudentState = (typeof STUDENT_STATE_OPTIONS)[number]
+// Статусы ученика — соответствуют полю status в API
+export const STUDENT_STATUS_OPTIONS = ['active', 'paused', 'one_time', 'archived'] as const
+export type TStudentStatus = (typeof STUDENT_STATUS_OPTIONS)[number]
 
-export const STUDENT_STATE_LABELS: Record<TStudentState, string> = {
+export const STUDENT_STATUS_LABELS: Record<TStudentStatus, string> = {
   active: 'Активный',
   paused: 'На паузе',
-  single: 'Разовый',
+  one_time: 'Разовый',
   archived: 'Архивный',
 }
 
@@ -19,3 +20,11 @@ export const STUDENT_CARDS_SHIFT_LABELS: Record<TStudentCardsShift, string> = {
   full: 'На весь экран',
   right: 'Справа',
 }
+
+// Sort
+
+export const STUDENT_SORT_FIELDS = ['name', 'email', 'age', 'status'] as const
+export type TStudentSortField = (typeof STUDENT_SORT_FIELDS)[number]
+
+export const STUDENT_DEFAULT_SORT_FIELD: TStudentSortField = 'name'
+export const STUDENT_DEFAULT_SORT_ORDER: 'asc' | 'desc' = 'asc'

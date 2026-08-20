@@ -1,0 +1,50 @@
+.cell {
+  border: 1px solid #EEEFF1;
+}
+
+.numberCell {
+  width: 40px;
+  text-align: center;
+}
+
+.sortableHeader {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.row {
+  cursor: context-menu;
+
+  &[data-status='active'] {
+    background-color: #DEF6D6;
+  }
+
+  &[data-status='paused'] {
+    background-color: #F5F5F5;
+  }
+
+  &[data-status='archived'] {
+    background-color: #FEF4F4;
+  }
+
+  &[data-status='one_time'] {
+    background-color: #EBF3FF;
+  }
+}
+
+.menuContainer {
+  position: fixed;
+  z-index: 1000;
+}
