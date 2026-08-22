@@ -1,12 +1,14 @@
 import type { TRegisterFormValues } from '@entities/auth/model/register-form.schema'
-import { createDemoAccessToken } from '../../lib/create-demo-access-token'
+import { apiClient } from '@shared/lib/api'
 
-type TRegisterResponse = {
-  accessToken: string
-}
+type TRegisterRequest = Pick<TRegisterFormValues, 'name' | 'email' | 'password'>
 
-export const registerApi = async (_values: TRegisterFormValues): Promise<TRegisterResponse> => {
-  await new Promise((resolve) => setTimeout(resolve, 500))
+const toRegisterRequest = ({ name, email, password }: TRegisterFormValues): TRegisterRequest => ({
+  name,
+  email,
+  password,
+})
 
-  return { accessToken: createDemoAccessToken() }
+export const registerApi = async (values: TRegisterFormValues): Promise<void> => {
+  await apiClient.post('auth/register', { json: toRegisterRequest(values) })
 }

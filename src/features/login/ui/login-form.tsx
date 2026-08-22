@@ -2,6 +2,7 @@ import { loginFormDefaultValues, loginFormSchema, type TLoginFormValues } from '
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Anchor, Button, PasswordInput, Text, TextInput } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
+import { isHTTPError } from 'ky'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import styles from './login-form.module.scss'
@@ -22,6 +23,7 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
     register,
     setError,
     clearErrors,
+    getValues,
     formState: { errors, isSubmitting },
   } = form
 
@@ -30,19 +32,40 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
 
     try {
       await onSubmit(values)
-    } catch {
-      setError('root', { message: 'Вы ввели неверные данные. Попробуйте еще раз.' })
+    } catch (error) {
+      if (isHTTPError(error) && error.response.status === 403) {
+        setError('root', {
+          type: 'email-not-verified',
+          message: 'Email не подтверждён. Перейдите по ссылке из письма.',
+        })
+        return
+      }
+
+      setError('root', { message: 'Вы ввели неверные данные. Попробуйте ещё раз.' })
     }
   }
 
   const clearSubmitError = () => clearErrors('root')
+  const isEmailVerificationRequired = errors.root?.type === 'email-not-verified'
 
   return (
     <form noValidate onSubmit={handleSubmit(submit)}>
       <div className={styles.fields}>
         <div className={styles.emailGroup}>
           {errors.root?.message && (
-            <Text className={styles.submitError}>{errors.root.message}</Text>
+            <div className={styles.submitErrorGroup}>
+              <Text className={styles.submitError}>{errors.root.message}</Text>
+              {isEmailVerificationRequired && (
+                <Anchor
+                  component={Link}
+                  to={createUrl(routerPath.authResendVerification)}
+                  state={{ email: getValues('email') }}
+                  className={styles.resendVerification}
+                >
+                  Отправить письмо повторно
+                </Anchor>
+              )}
+            </div>
           )}
 
           <TextInput

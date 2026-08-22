@@ -56,9 +56,24 @@ export const router = createBrowserRouter([
                         path: routeSegments.forgotPassword,
                         lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
                       },
+                      {
+                        path: routeSegments.resendVerification,
+                        lazy: pageLazyLoad(() => import('@pages/resend-verification-page')),
+                      },
                     ],
                   },
                 ],
+              },
+            ],
+          },
+
+          {
+            path: routeSegments.verifyEmail,
+            Component: AuthLayoutRight,
+            children: [
+              {
+                index: true,
+                lazy: pageLazyLoad(() => import('@pages/verify-email-page')),
               },
             ],
           },

@@ -1,9 +1,16 @@
 .content {
+  position: relative;
   width: 100%;
   max-width: 334px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.closeButton {
+  position: fixed;
+  top: 122px;
+  left: 22px;
 }
 
 .title {
