@@ -200,6 +200,14 @@ const user = userSchema.parse({
 
 Для запросов используем только `apiClient` из `@shared/lib/api`.
 
+### Локальная работа с API
+
+Для локальной разработки создайте `.env.local` по примеру `.env.example`. Запросы к
+`/api/v1` будут направлены Vite proxy на backend, поэтому `HttpOnly` cookie с
+`SameSite=Strict` останется first-party для `localhost` и refresh токена можно будет
+проверить в браузере. Proxy также передаёт backend-у его origin для совместимости с
+CSRF-проверкой refresh cookie.
+
 Пример:
 
 ```ts

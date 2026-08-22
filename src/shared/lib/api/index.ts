@@ -1,1 +1,7 @@
-export { apiClient, setApiAccessTokenProvider } from './api-client'
+export {
+  apiClient,
+  sessionApiClient,
+  setApiAccessTokenProvider,
+  setApiAccessTokenUpdateHandler,
+  setApiAuthFailureHandler,
+} from './api-client'

@@ -16,5 +16,7 @@ export const useAuthStore = createStore<TAuthStore, TAuthState>(
 
   login: (accessToken) => set({ isAuth: true, accessToken }, false, 'auth/login'),
 
+  setAccessToken: (accessToken) => set({ accessToken }, false, 'auth/setAccessToken'),
+
   logout: () => set({ isAuth: false, accessToken: null }, false, 'auth/logout'),
 }))

@@ -5,6 +5,19 @@ import { defineConfig } from 'vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    proxy: {
+      '/api/v1': {
+        target: 'https://linka.rassokha.pro',
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (request) => {
+            request.setHeader('Origin', 'https://linka.rassokha.pro')
+          })
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@app': path.resolve(__dirname, './src/app'),
