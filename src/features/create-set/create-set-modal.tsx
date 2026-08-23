@@ -1,6 +1,8 @@
+import { folderQueryKeys } from '@entities/folder'
 import { useCreateSet } from '@entities/set'
 import { Button, Flex, Text, TextInput, Title } from '@mantine/core'
 import { PopupLayout } from '@shared/ui/popup-layout'
+import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, useState } from 'react'
 
 import styles from './create-set-modal.module.scss'
@@ -11,6 +13,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const queryClient = useQueryClient()
   const createSetMutation = useCreateSet()
   const [title, setTitle] = useState('')
 
@@ -30,6 +33,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       },
       {
         onSuccess: () => {
+          void queryClient.invalidateQueries({ queryKey: folderQueryKeys.all })
           onSuccess?.()
           onClose()
         },
