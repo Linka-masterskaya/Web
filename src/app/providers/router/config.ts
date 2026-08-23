@@ -120,7 +120,7 @@ export const router = createBrowserRouter([
                         children: [
                           {
                             index: true,
-                            element: 'Страница в разработке',
+                            lazy: pageLazyLoad(() => import('@pages/set-page')),
                           },
                           {
                             path: routeSegments.edit,
@@ -135,7 +135,7 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: routeSegments.new,
-                                element: 'Страница в разработке',
+                                lazy: pageLazyLoad(() => import('@pages/set-subset-new-page')),
                               },
                               {
                                 path: routeParams.subsetId,

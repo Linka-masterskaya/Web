@@ -1,7 +1,9 @@
 import { useCreateSet } from '@entities/set'
 import { Button, Flex, Text, TextInput, Title } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { PopupLayout } from '@shared/ui/popup-layout'
 import { type FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { z } from 'zod'
 
 import styles from './create-set-modal.module.scss'
@@ -14,6 +16,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
   onClose,
   onSuccess,
 }) => {
+  const navigate = useNavigate()
   const createSetMutation = useCreateSet()
   const [title, setTitle] = useState('')
 
@@ -36,9 +39,10 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
         folderId: resolvedFolderId,
       },
       {
-        onSuccess: () => {
+        onSuccess: (set) => {
           onSuccess?.()
           onClose()
+          navigate(createUrl(routerPath.dashboardSetId, { setId: set.id }))
         },
       },
     )

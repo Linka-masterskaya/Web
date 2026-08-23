@@ -1,9 +1,10 @@
 import { type TContentItem, useSectionContents } from '@entities/folder'
 import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
 import { useMemo } from 'react'
-import { useSearchParams } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import { z } from 'zod'
 
 import styles from './sets-page.module.scss'
@@ -29,6 +30,7 @@ const getLoadErrorMessage = (error: unknown) => {
 }
 
 export const SetsPage: React.FC = () => {
+  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
   const folderIdParam = searchParams.get('folderId')
   const parentId = useMemo(() => {
@@ -65,13 +67,15 @@ export const SetsPage: React.FC = () => {
       <UnstyledButton
         key={item.id}
         className={styles.item}
-        disabled={!isFolder}
         onClick={() => {
           if (isFolder) {
             openFolder(item.id)
+            return
           }
+
+          navigate(createUrl(routerPath.dashboardSetId, { setId: item.id }))
         }}
-        aria-label={isFolder ? `Открыть папку ${item.name}` : `Набор ${item.name}`}
+        aria-label={isFolder ? `Открыть папку ${item.name}` : `Открыть набор ${item.name}`}
       >
         <Icon name={isFolder ? 'Folder' : 'Grid3x3'} size={20} aria-hidden />
         <div className={styles.itemBody}>
