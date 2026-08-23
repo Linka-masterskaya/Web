@@ -1,0 +1,36 @@
+.page {
+  width: 100%;
+}
+
+.list {
+  max-width: 560px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 8px;
+  background: var(--mantine-color-white);
+
+  &:hover:not(:disabled) {
+    border-color: var(--mantine-color-blue-3);
+    background: var(--mantine-color-blue-0);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 1;
+  }
+}
+
+.itemBody {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}

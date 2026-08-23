@@ -10,6 +10,7 @@ export interface IIconProps extends LucideProps {
 }
 
 export const Icon: React.FC<IIconProps> = ({ name, size = 20, className, ...props }) => {
+  // biome-ignore lint/performance/noDynamicNamespaceImportAccess: имя иконки выбирается в runtime
   const LucideIcon = Icons[name] as LucideIcon
 
   return <LucideIcon size={size} className={className} {...props} />

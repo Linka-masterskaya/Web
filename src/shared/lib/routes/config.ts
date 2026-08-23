@@ -36,6 +36,7 @@ export const routeQueryParams = {
   token: 'token',
   age: 'age',
   level: 'level',
+  folderId: 'folderId',
 } as const
 
 // Routes

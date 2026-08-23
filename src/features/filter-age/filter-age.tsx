@@ -10,7 +10,9 @@ export const FilterAge: React.FC = () => {
 
   const [value, setValue] = useState<string | null>(() => {
     const urlValue = queryParams.age
-    if (urlValue === null) return null
+    if (urlValue === null) {
+      return null
+    }
     return FILTER_AGE_OPTIONS.some((opt) => opt.value === urlValue) ? urlValue : null
   })
 

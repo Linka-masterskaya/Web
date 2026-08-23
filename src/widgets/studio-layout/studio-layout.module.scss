@@ -7,11 +7,13 @@
 }
 
 .header {
+  position: relative;
+  z-index: 10;
   padding: 16px;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid #EEEFF1;
+  border: 1px solid #eeeff1;
 }
 
 .logo {
@@ -19,14 +21,24 @@
 }
 
 .title {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
 }
 
-.actions {
+.toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.primaryAction {
+  flex: 0 0 auto;
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 7px;
 }
 
 .content {

@@ -20,15 +20,11 @@ export const getUserProfile = async (): Promise<typeof DEMO_USER_PROFILE> => {
 export const changeUserName = async (name: string): Promise<void> => {
   await delay(500)
 
-  console.log('Имя изменено', name)
-
   useUserStore.getState().setName(name)
 }
 
 export const changeUserPassword = async (
-  values: TEditUserProfilePasswordFormValues,
+  _values: TEditUserProfilePasswordFormValues,
 ): Promise<void> => {
   await delay(500)
-
-  console.log('Пароль изменен', values)
 }

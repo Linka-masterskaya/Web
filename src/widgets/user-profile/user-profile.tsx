@@ -1,3 +1,4 @@
+import { LogoutButton } from '@features/logout'
 import { UserAvatar } from '@features/user-avatar'
 import { UserProfileEdit } from '@features/user-profile-edit'
 import { Box, CloseButton, Flex, Stack } from '@mantine/core'
@@ -18,6 +19,7 @@ export const UserProfile = ({ onClose }: TUserProfileProps) => {
           <UserAvatar />
         </Flex>
         <UserProfileEdit />
+        <LogoutButton onAfterLogout={onClose} />
       </Stack>
     </Box>
   )

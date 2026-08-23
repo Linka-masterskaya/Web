@@ -1,9 +1,6 @@
-import { setResponseSchema, type TSetResponse } from '../model/set.schema'
+import { apiClient } from '@shared/lib/api'
+import { setSchema, type TSet } from '../model/set.schema'
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-export const getSet = async (id: string): Promise<TSetResponse> => {
-  await delay(300)
-
-  return setResponseSchema.parse({ id })
-}
+/** GET /packs/{id} — набор с config (страницы = blocks). */
+export const getSet = async (id: string): Promise<TSet> =>
+  apiClient.get(`packs/${id}`).json(setSchema)

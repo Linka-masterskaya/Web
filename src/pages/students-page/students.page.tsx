@@ -70,7 +70,9 @@ export const StudentsPage = () => {
   }
 
   const handleOpenEdit = () => {
-    if (!editableStudent) return
+    if (!editableStudent) {
+      return
+    }
     open({
       ...STUDENT_EDITOR_MODAL_OPTIONS,
       content: (
