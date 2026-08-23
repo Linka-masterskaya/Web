@@ -2,6 +2,12 @@
   gap: 20px;
 }
 
+.submitError {
+  color: var(--mantine-color-red-6);
+  font-size: var(--mantine-font-size-sm);
+  text-align: center;
+}
+
 .submitButton {
   margin-top: 20px;
 }

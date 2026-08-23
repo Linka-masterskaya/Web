@@ -17,6 +17,18 @@
   line-height: 16px;
 }
 
+.submitErrorGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.resendVerification {
+  align-self: flex-start;
+  font-size: 12px;
+  line-height: 16px;
+}
+
 .forgotPassword {
   text-align: right;
 }
