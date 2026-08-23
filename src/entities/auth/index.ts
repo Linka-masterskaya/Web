@@ -1,5 +1,6 @@
 export type { TAuthActions, TAuthState, TAuthStore } from '../types/types'
 
+export { logoutApi } from './api'
 export { accessLevel, type TAccessLevel } from './config/access-level'
 export { ForgotPasswordForm } from './forms'
 export {

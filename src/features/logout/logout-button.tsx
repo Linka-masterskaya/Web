@@ -1,21 +1,43 @@
-import { useAuthStore } from '@entities/auth'
+import { logoutApi, useAuthStore } from '@entities/auth'
 import { Button } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
-export const LogoutButton: React.FC = () => {
+type TLogoutButtonProps = {
+  onAfterLogout?: () => void
+}
+
+export const LogoutButton: React.FC<TLogoutButtonProps> = ({ onAfterLogout }) => {
   const isAuth = useAuthStore((s) => s.isAuth)
   const logout = useAuthStore((s) => s.logout)
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    setIsLoading(true)
+
+    try {
+      await logoutApi()
+    } catch {
+      // Локальный выход выполняем даже при ошибке API
+    }
+
     logout()
+    onAfterLogout?.()
     navigate(createUrl(routerPath.auth))
   }
 
   return (
-    <Button variant="outline" color="red" disabled={!isAuth} onClick={handleLogout}>
-      Logout
+    <Button
+      variant="outline"
+      color="red"
+      fullWidth
+      loading={isLoading}
+      disabled={!isAuth || isLoading}
+      onClick={handleLogout}
+    >
+      Выйти
     </Button>
   )
 }

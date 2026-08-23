@@ -1,9 +1,14 @@
 import { type TContentItem, useSectionContents } from '@entities/folder'
 import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
+import { isHTTPError } from 'ky'
+import { useMemo } from 'react'
 import { useSearchParams } from 'react-router'
+import { z } from 'zod'
 
 import styles from './sets-page.module.scss'
+
+const folderIdSchema = z.string().uuid()
 
 const formatUpdatedAt = (value: string) => {
   const date = new Date(value)
@@ -15,12 +20,31 @@ const formatUpdatedAt = (value: string) => {
   return date.toLocaleDateString('ru-RU')
 }
 
+const getLoadErrorMessage = (error: unknown) => {
+  if (isHTTPError(error) && error.response.status === 404) {
+    return 'Папка не найдена или недоступна'
+  }
+
+  return 'Не удалось загрузить содержимое'
+}
+
 export const SetsPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
-  const folderId = searchParams.get('folderId')
+  const folderIdParam = searchParams.get('folderId')
+  const parentId = useMemo(() => {
+    if (!folderIdParam) {
+      return undefined
+    }
+
+    const parsed = folderIdSchema.safeParse(folderIdParam)
+
+    return parsed.success ? parsed.data : undefined
+  }, [folderIdParam])
+  const hasInvalidFolderId = Boolean(folderIdParam && !parentId)
+
   const contentsQuery = useSectionContents({
     section: 'my',
-    ...(folderId ? { parentId: folderId } : {}),
+    ...(parentId ? { parentId } : {}),
   })
 
   const items = contentsQuery.data?.items ?? []
@@ -65,7 +89,7 @@ export const SetsPage: React.FC = () => {
       <Stack gap="md">
         <Title order={2}>Мои наборы</Title>
 
-        {folderId && (
+        {parentId && (
           <Button
             variant="subtle"
             w="fit-content"
@@ -77,19 +101,30 @@ export const SetsPage: React.FC = () => {
         )}
 
         <Text size="sm" c="dimmed">
-          {folderId ? 'Содержимое папки' : 'Корень «Мои наборы»'}
+          {parentId ? 'Содержимое папки' : 'Корень «Мои наборы»'}
         </Text>
 
-        {contentsQuery.isLoading && (
+        {hasInvalidFolderId && (
+          <Stack gap="sm" align="flex-start">
+            <Text c="red.6" role="alert">
+              Некорректный идентификатор папки
+            </Text>
+            <Button variant="outline" onClick={goToRoot}>
+              К корню раздела
+            </Button>
+          </Stack>
+        )}
+
+        {!hasInvalidFolderId && contentsQuery.isLoading && (
           <Center h={160}>
             <Loader aria-label="Загрузка содержимого" />
           </Center>
         )}
 
-        {contentsQuery.isError && (
+        {!hasInvalidFolderId && contentsQuery.isError && (
           <Stack gap="sm" align="flex-start">
             <Text c="red.6" role="alert">
-              Не удалось загрузить содержимое
+              {getLoadErrorMessage(contentsQuery.error)}
             </Text>
             <Button variant="outline" onClick={() => contentsQuery.refetch()}>
               Повторить
@@ -97,11 +132,11 @@ export const SetsPage: React.FC = () => {
           </Stack>
         )}
 
-        {contentsQuery.isSuccess && items.length === 0 && (
+        {!hasInvalidFolderId && contentsQuery.isSuccess && items.length === 0 && (
           <Text c="dimmed">Здесь пока пусто</Text>
         )}
 
-        {contentsQuery.isSuccess && items.length > 0 && (
+        {!hasInvalidFolderId && contentsQuery.isSuccess && items.length > 0 && (
           <Stack gap={8} className={styles.list}>
             {items.map(renderItem)}
           </Stack>
