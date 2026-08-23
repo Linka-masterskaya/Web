@@ -1,10 +1,10 @@
 import { type TContentItem, useSectionContents } from '@entities/folder'
 import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
 import { useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import { z } from 'zod'
 
 import styles from './sets-page.module.scss'
@@ -31,8 +31,8 @@ const getLoadErrorMessage = (error: unknown) => {
 
 export const SetsPage: React.FC = () => {
   const navigate = useNavigate()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const folderIdParam = searchParams.get('folderId')
+  const { queryParams, setQueryParams } = useRouteQueryParams()
+  const folderIdParam = queryParams.folderId
   const parentId = useMemo(() => {
     if (!folderIdParam) {
       return undefined
@@ -52,11 +52,11 @@ export const SetsPage: React.FC = () => {
   const items = contentsQuery.data?.items ?? []
 
   const openFolder = (id: string) => {
-    setSearchParams({ folderId: id })
+    setQueryParams({ folderId: id })
   }
 
   const goToRoot = () => {
-    setSearchParams({})
+    setQueryParams({ folderId: null })
   }
 
   const renderItem = (item: TContentItem) => {

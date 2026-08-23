@@ -9,8 +9,6 @@ export { useCreateSetPage } from './hooks/use-create-set-page'
 export { useMoveSet } from './hooks/use-move-set'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
-export { createEmptySetPage } from './lib/create-empty-set-page'
-export { SET_PAGE_TYPE_LABELS, SET_PAGE_TYPE_OPTIONS } from './lib/set-page-options'
 export { setQueryKeys } from './lib/query-keys'
 export {
   createSetParamsSchema,

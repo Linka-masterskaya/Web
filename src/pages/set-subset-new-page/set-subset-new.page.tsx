@@ -1,9 +1,6 @@
-import {
-  SET_PAGE_TYPE_OPTIONS,
-  type TSetPageType,
-  useCreateSetPage,
-} from '@entities/set'
+import { type TSetPageType, useCreateSetPage } from '@entities/set'
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
+import { isSetPageType, SET_PAGE_TYPE_OPTIONS } from '@features/set-page-type-selector'
 import { Button, Group, Stack, Text, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
@@ -16,9 +13,6 @@ import styles from './set-subset-new-page.module.scss'
 
 const setIdSchema = z.string().uuid()
 
-const isSetPageType = (value: string): value is TSetPageType =>
-  SET_PAGE_TYPE_OPTIONS.some((option) => option.id === value)
-
 export const SetSubsetNewPage: React.FC = () => {
   const navigate = useNavigate()
   const { setId } = useParams()
@@ -29,10 +23,12 @@ export const SetSubsetNewPage: React.FC = () => {
   const [selectedType, setSelectedType] = useState<TSetPageType>('grid')
 
   const handleTypeChange = (value: string) => {
-    if (isSetPageType(value)) {
-      setSelectedType(value)
-      createPageMutation.reset()
+    if (!isSetPageType(value)) {
+      return
     }
+
+    setSelectedType(value)
+    createPageMutation.reset()
   }
 
   const handleBack = () => {

@@ -1,4 +1,5 @@
-import { SET_PAGE_TYPE_LABELS, type TSetPage, useSet } from '@entities/set'
+import { type TSetPage, useSet } from '@entities/set'
+import { SET_PAGE_TYPE_ICONS, SET_PAGE_TYPE_LABELS } from '@features/set-page-type-selector'
 import { Button, Center, Group, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
@@ -53,9 +54,30 @@ export const SetPage: React.FC = () => {
 
   const pages = setQuery.data?.pages ?? []
 
+  const handleBackToSets = () => {
+    const folderId = setQuery.data?.folderId
+
+    navigate(
+      createUrl(
+        routerPath.dashboardSets,
+        undefined as never,
+        folderId ? { folderId } : undefined,
+      ),
+    )
+  }
+
   return (
     <section className={styles.page}>
       <Stack gap="md">
+        <Button
+          variant="subtle"
+          w="fit-content"
+          leftSection={<Icon name="ArrowLeft" size={16} />}
+          onClick={handleBackToSets}
+        >
+          К списку наборов
+        </Button>
+
         <Group justify="space-between" align="flex-start" wrap="wrap">
           <Stack gap={4}>
             <Title order={2}>{setQuery.data?.title ?? 'Набор'}</Title>
@@ -105,7 +127,7 @@ export const SetPage: React.FC = () => {
                 disabled
                 aria-label={`${getPageTitle(page, index)}, ${SET_PAGE_TYPE_LABELS[page.type]}`}
               >
-                <Icon name="Grid3x3" size={20} aria-hidden />
+                <Icon name={SET_PAGE_TYPE_ICONS[page.type]} size={20} aria-hidden />
                 <div className={styles.itemBody}>
                   <Text fw={600}>{getPageTitle(page, index)}</Text>
                   <Text size="sm" c="dimmed">
