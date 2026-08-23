@@ -1,4 +1,3 @@
-import type { TSetPageType } from '@entities/set'
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
 import { isSetPageType, SET_PAGE_TYPE_OPTIONS } from '@features/set-page-type-selector'
 import { Button, Group, Stack, Text, Title } from '@mantine/core'
@@ -6,7 +5,7 @@ import { Icon } from '@shared/ui/icon'
 import { SubsetLayout } from '@widgets/subset-layout'
 
 import styles from '../set-page-type-form.module.scss'
-import type { TSetPageTypeFormProps } from './types'
+import type { TSetPageTypeFormProps } from '../types'
 
 export const SetPageTypeForm: React.FC<TSetPageTypeFormProps> = ({
   title,

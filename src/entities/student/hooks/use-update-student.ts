@@ -10,8 +10,6 @@ export const useUpdateStudent = () => {
     mutationFn: ({ id, data }: { id: string; data: Partial<Omit<TStudent, 'id'>> }) =>
       updateStudent(id, data),
     onSuccess: (updated) => {
-      console.log(`[Cache] useUpdateStudent — обновление кеша id=${updated.id}`)
-
       queryClient.setQueryData<TStudent>(studentQueryKeys.detail(updated.id), updated)
 
       queryClient.setQueryData<TStudent[]>(studentQueryKeys.list(), (old) =>

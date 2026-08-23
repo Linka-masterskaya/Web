@@ -9,8 +9,6 @@ export const useDeleteStudent = () => {
   return useMutation({
     mutationFn: deleteStudent,
     onSuccess: (archived) => {
-      console.log(`[Cache] useDeleteStudent — архивация id=${archived.id}`)
-
       queryClient.setQueryData<TStudent>(studentQueryKeys.detail(archived.id), archived)
 
       queryClient.setQueryData<TStudent[]>(studentQueryKeys.list(), (old) =>

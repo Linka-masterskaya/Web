@@ -26,6 +26,12 @@ export {
   type TSendSetResponse,
 } from './model/send-set.schema'
 export {
+  setResponseSchema,
+  setSchema,
+  type TSet,
+  type TSetResponse,
+} from './model/set.schema'
+export {
   setConfigSchema,
   setPageElementSchema,
   setPageSchema,
@@ -35,9 +41,3 @@ export {
   type TSetPageElement,
   type TSetPageType,
 } from './model/set-config.schema'
-export {
-  setResponseSchema,
-  setSchema,
-  type TSet,
-  type TSetResponse,
-} from './model/set.schema'

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateSetPageType } from '../api/update-set-page-type'
-import type { TSetPageType } from '../model/set-config.schema'
 import { setQueryKeys } from '../lib/query-keys'
+import type { TSetPageType } from '../model/set-config.schema'
 
 type TUpdateSetPageTypeVariables = {
   pageId: string

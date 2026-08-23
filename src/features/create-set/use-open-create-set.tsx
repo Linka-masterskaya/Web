@@ -9,9 +9,7 @@ export const useOpenCreateSet = () => {
   return useCallback(
     ({ folderId = null, onSuccess }: TOpenCreateSetParams = {}) => {
       open({
-        content: (
-          <CreateSetModal folderId={folderId} onClose={close} onSuccess={onSuccess} />
-        ),
+        content: <CreateSetModal folderId={folderId} onClose={close} onSuccess={onSuccess} />,
         size: 518,
         padding: 0,
         radius: 20,

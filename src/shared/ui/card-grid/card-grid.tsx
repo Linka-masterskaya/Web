@@ -81,6 +81,7 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
           if (!card) {
             return (
               <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: пустые ячейки сетки позиционные и не переупорядочиваются
                 key={`empty-${index}`}
                 className={clsx(styles.card, styles.cardEmpty)}
                 aria-hidden="true"

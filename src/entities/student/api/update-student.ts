@@ -5,8 +5,6 @@ export const updateStudent = async (
   id: string,
   data: Partial<Omit<TStudent, 'id'>>,
 ): Promise<TStudent> => {
-  console.log(`[API] updateStudent — обновлён ученик id=${id}`, data)
-
   const existing = await getStudent(id)
   const updated = { ...existing, ...data }
 

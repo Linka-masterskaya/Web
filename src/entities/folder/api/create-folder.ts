@@ -7,9 +7,7 @@ import {
 } from '../model/create-folder.schema'
 
 /** POST /folders — создать папку в разделе. */
-export const createFolder = async (
-  params: TCreateFolderParams,
-): Promise<TCreateFolderResponse> => {
+export const createFolder = async (params: TCreateFolderParams): Promise<TCreateFolderResponse> => {
   const data = createFolderParamsSchema.parse(params)
 
   return apiClient

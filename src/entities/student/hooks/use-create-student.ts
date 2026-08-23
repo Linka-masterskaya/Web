@@ -9,8 +9,6 @@ export const useCreateStudent = () => {
   return useMutation({
     mutationFn: createStudent,
     onSuccess: (newStudent) => {
-      console.log('[Cache] useCreateStudent — инвалидация списка учеников')
-
       queryClient.setQueryData<TStudent[]>(studentQueryKeys.list(), (old) =>
         old ? [...old, newStudent] : [newStudent],
       )

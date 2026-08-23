@@ -16,7 +16,9 @@ export const createUrl = <T extends TRouterPathValue>(...args: TCreateUrlArgs<T>
     const searchParams = new URLSearchParams()
 
     for (const [key, value] of Object.entries(queryParams)) {
-      if (value === undefined) continue
+      if (value === undefined) {
+        continue
+      }
 
       const queryKey = routeQueryParams[key as keyof typeof routeQueryParams]
       searchParams.set(queryKey, value)

@@ -12,6 +12,7 @@ export class ErrorBoundary extends Component<TErrorBoundaryProps, TErrorBoundary
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     this.props.onError?.(error, errorInfo)
     if (import.meta.env.DEV) {
+      // biome-ignore lint/suspicious/noConsole: логируем падение в dev для отладки
       console.error(error, errorInfo)
     }
   }

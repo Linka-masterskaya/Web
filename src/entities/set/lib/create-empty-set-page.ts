@@ -7,7 +7,7 @@ const createTextElement = () => ({
 })
 
 /** Минимально валидный block для каждого типа страницы Linka Config 2.0. */
-export const createEmptySetPage = (type: TSetPageType, pageId = crypto.randomUUID()): TSetPage => {
+export const createEmptySetPage = (type: TSetPageType, pageId: string = crypto.randomUUID()): TSetPage => {
   const blockId = pageId
 
   switch (type) {

@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 
-export type TCommonLayoutProps = {
+export type TAppLayoutProps = {
   titleSlot?: ReactNode
+  searchSlot?: ReactNode
   actionsSlot?: ReactNode
   className?: string
 }

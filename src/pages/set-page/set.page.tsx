@@ -20,7 +20,9 @@ const getLoadErrorMessage = (error: unknown) => {
 }
 
 const getPageTitle = (page: TSetPage, index: number) => {
-  const textElement = page.elements.find((element) => element.kind === 'text' && element.value?.trim())
+  const textElement = page.elements.find(
+    (element) => element.kind === 'text' && element.value?.trim(),
+  )
 
   if (textElement?.value?.trim()) {
     return textElement.value.trim()
@@ -57,13 +59,7 @@ export const SetPage: React.FC = () => {
   const handleBackToSets = () => {
     const folderId = setQuery.data?.folderId
 
-    navigate(
-      createUrl(
-        routerPath.dashboardSets,
-        undefined,
-        folderId ? { folderId } : undefined,
-      ),
-    )
+    navigate(createUrl(routerPath.dashboardSets, undefined, folderId ? { folderId } : undefined))
   }
 
   return (
@@ -114,9 +110,7 @@ export const SetPage: React.FC = () => {
           </Stack>
         )}
 
-        {setQuery.isSuccess && pages.length === 0 && (
-          <Text c="dimmed">Здесь пока нет страниц</Text>
-        )}
+        {setQuery.isSuccess && pages.length === 0 && <Text c="dimmed">Здесь пока нет страниц</Text>}
 
         {setQuery.isSuccess && pages.length > 0 && (
           <Stack gap={8} className={styles.list}>

@@ -15,11 +15,15 @@ export const LibraryCards: React.FC<TLibraryCardsProps> = ({
 
   // Прокрутка к карточке, выбранной через поиск: её ряд становится первым видимым.
   useEffect(() => {
+    if (!scrollToCard?.id) {
+      return
+    }
+
     scrollTargetRef.current?.firstElementChild?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
     })
-  }, [scrollToCard])
+  }, [scrollToCard?.id])
 
   if (cards.length === 0) {
     return <Text c="gray.6">В этой категории пока нет карточек</Text>

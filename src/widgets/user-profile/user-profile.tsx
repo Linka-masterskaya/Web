@@ -1,5 +1,5 @@
-import { UserAvatar } from '@features/user-avatar'
 import { LogoutButton } from '@features/logout'
+import { UserAvatar } from '@features/user-avatar'
 import { UserProfileEdit } from '@features/user-profile-edit'
 import { Box, CloseButton, Flex, Stack } from '@mantine/core'
 import type { TUserProfileProps } from './types'

@@ -1,5 +1,5 @@
-import { CreateEntity } from '@features/create-entity'
 import type { TCreateEntityConfig } from '@features/create-entity'
+import { CreateEntity } from '@features/create-entity'
 import { useOpenCreateFolder } from '@features/create-folder'
 import { useOpenCreateSet } from '@features/create-set'
 import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'

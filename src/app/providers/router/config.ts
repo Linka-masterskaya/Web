@@ -1,12 +1,13 @@
 import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
+import { AppLayout } from '@widgets/app-layout'
 import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
-import { CommonLayout } from '@widgets/common-layout'
 import {
   DashboardBreadcrumbs,
   DashboardCreateEntity,
   DashboardLayout,
 } from '@widgets/dashboard-layout'
+import { StudioLayout } from '@widgets/studio-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -19,98 +20,107 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: ModalAppLayout,
+    errorElement: createElement(RouteErrorFallback),
     children: [
       {
-        Component: CommonLayout,
-        errorElement: createElement(RouteErrorFallback),
+        index: true,
+        loader: rootRedirectLoader,
+        element: null,
+      },
+
+      {
+        loader: requireGuestLoader,
         children: [
           {
-            index: true,
-            loader: rootRedirectLoader,
-            element: null,
-          },
-
-          {
-            loader: requireGuestLoader,
+            path: routeSegments.auth,
             children: [
               {
-                path: routeSegments.auth,
+                Component: AuthLayoutRight,
                 children: [
                   {
-                    Component: AuthLayoutRight,
-                    children: [
-                      {
-                        index: true,
-                        lazy: pageLazyLoad(() => import('@pages/login-page')),
-                      },
-                      {
-                        path: routeSegments.register,
-                        lazy: pageLazyLoad(() => import('@pages/register-page')),
-                      },
-                      {
-                        path: routeSegments.restorePassword,
-                        lazy: pageLazyLoad(() => import('@pages/restore-password-page')),
-                      },
-                    ],
+                    index: true,
+                    lazy: pageLazyLoad(() => import('@pages/login-page')),
                   },
                   {
-                    Component: AuthLayoutLeft,
-                    children: [
-                      {
-                        path: routeSegments.forgotPassword,
-                        lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
-                      },
-                      {
-                        path: routeSegments.resendVerification,
-                        lazy: pageLazyLoad(() => import('@pages/resend-verification-page')),
-                      },
-                    ],
+                    path: routeSegments.register,
+                    lazy: pageLazyLoad(() => import('@pages/register-page')),
+                  },
+                  {
+                    path: routeSegments.restorePassword,
+                    lazy: pageLazyLoad(() => import('@pages/restore-password-page')),
+                  },
+                ],
+              },
+              {
+                Component: AuthLayoutLeft,
+                children: [
+                  {
+                    path: routeSegments.forgotPassword,
+                    lazy: pageLazyLoad(() => import('@pages/forgot-password-page')),
+                  },
+                  {
+                    path: routeSegments.resendVerification,
+                    lazy: pageLazyLoad(() => import('@pages/resend-verification-page')),
                   },
                 ],
               },
             ],
           },
+        ],
+      },
 
+      {
+        path: routeSegments.verifyEmail,
+        Component: AuthLayoutRight,
+        children: [
           {
-            path: routeSegments.verifyEmail,
-            Component: AuthLayoutRight,
-            children: [
-              {
-                index: true,
-                lazy: pageLazyLoad(() => import('@pages/verify-email-page')),
-              },
-            ],
+            index: true,
+            lazy: pageLazyLoad(() => import('@pages/verify-email-page')),
           },
+        ],
+      },
 
+      {
+        loader: requireAuthLoader,
+        children: [
           {
-            loader: requireAuthLoader,
+            path: routeSegments.dashboard,
             children: [
               {
-                path: routeSegments.dashboard,
-                element: createElement(DashboardLayout, {
-                  breadcrumbsSlot: createElement(DashboardBreadcrumbs),
-                  actionsSlot: createElement(DashboardCreateEntity),
-                }),
+                Component: AppLayout,
                 children: [
                   {
-                    index: true,
-                    lazy: pageLazyLoad(() => import('@pages/main-page')),
-                  },
-                  {
-                    path: routeSegments.library,
-                    lazy: pageLazyLoad(() => import('@pages/library-page')),
-                  },
-                  {
-                    path: routeSegments.students,
-                    lazy: pageLazyLoad(() => import('@pages/students-page')),
-                  },
-                  {
-                    path: routeSegments.sets,
+                    element: createElement(DashboardLayout, {
+                      breadcrumbsSlot: createElement(DashboardBreadcrumbs),
+                      actionsSlot: createElement(DashboardCreateEntity),
+                    }),
                     children: [
                       {
                         index: true,
+                        lazy: pageLazyLoad(() => import('@pages/main-page')),
+                      },
+                      {
+                        path: routeSegments.library,
+                        lazy: pageLazyLoad(() => import('@pages/library-page')),
+                      },
+                      {
+                        path: routeSegments.students,
+                        lazy: pageLazyLoad(() => import('@pages/students-page')),
+                      },
+                      {
+                        path: routeSegments.sets,
                         lazy: pageLazyLoad(() => import('@pages/sets-page')),
                       },
+                    ],
+                  },
+                ],
+              },
+              {
+                Component: StudioLayout,
+                children: [
+                  {
+                    path: routeSegments.sets,
+                    children: [
                       {
                         path: routeSegments.new,
                         element: 'Страница в разработке',
@@ -163,20 +173,19 @@ export const router = createBrowserRouter([
 
           {
             path: routerPath.studentId,
-            loader: requireAuthLoader,
             element: 'Страница в разработке',
-          },
-
-          {
-            path: routerPath.privacyPolicy,
-            element: 'Страница в разработке',
-          },
-
-          {
-            path: '*',
-            lazy: pageLazyLoad(() => import('@pages/not-found-page')),
           },
         ],
+      },
+
+      {
+        path: routerPath.privacyPolicy,
+        element: 'Страница в разработке',
+      },
+
+      {
+        path: '*',
+        lazy: pageLazyLoad(() => import('@pages/not-found-page')),
       },
     ],
   },

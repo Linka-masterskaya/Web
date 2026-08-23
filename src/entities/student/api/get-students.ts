@@ -43,7 +43,6 @@ const MOCK_STUDENTS: TStudent[] = [
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const getStudents = async (): Promise<TStudent[]> => {
-  console.log('[API] getStudents — запрос списка учеников')
   await delay(300)
   return MOCK_STUDENTS.map((s) => studentSchema.parse(s))
 }
