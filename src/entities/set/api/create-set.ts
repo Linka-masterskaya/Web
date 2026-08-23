@@ -1,19 +1,21 @@
-import { createSetParamsSchema, type TCreateSetParams } from '../model/create-set.schema'
-import type { TSet } from '../model/set.schema'
+import { apiClient } from '@shared/lib/api'
+import {
+  createSetParamsSchema,
+  createSetResponseSchema,
+  type TCreateSetParams,
+  type TCreateSetResponse,
+} from '../model/create-set.schema'
 
-export const createSet = async (params: TCreateSetParams): Promise<TSet> => {
+/** POST /packs — создать пустой набор (черновик) с названием. */
+export const createSet = async (params: TCreateSetParams): Promise<TCreateSetResponse> => {
   const data = createSetParamsSchema.parse(params)
-  const id = `set-${crypto.randomUUID()}`
 
-  // biome-ignore lint/suspicious/noConsole: debug only
-  console.log('[API] createSet', {
-    id,
-    title: data.title,
-    folderId: data.folderId ?? null,
-  })
-
-  return {
-    id,
-    folderId: data.folderId ?? null,
-  }
+  return apiClient
+    .post('packs', {
+      json: {
+        title: data.title,
+        folder_id: data.folderId,
+      },
+    })
+    .json(createSetResponseSchema)
 }

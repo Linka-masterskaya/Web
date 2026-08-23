@@ -1,29 +1,61 @@
 import { CreateEntity } from '@features/create-entity'
 import type { TCreateEntityConfig } from '@features/create-entity'
+import { useOpenCreateFolder } from '@features/create-folder'
 import { useOpenCreateSet } from '@features/create-set'
-import { useSearchParams } from 'react-router'
+import { createUrl, routerPath } from '@shared/lib/routes'
+import { useMemo } from 'react'
+import { useLocation, useSearchParams } from 'react-router'
+import { z } from 'zod'
+
+const folderIdSchema = z.string().uuid()
+const setsPagePath = createUrl(routerPath.dashboardSets)
 
 export const DashboardCreateEntity: React.FC = () => {
+  const location = useLocation()
   const openCreateSet = useOpenCreateSet()
+  const openCreateFolder = useOpenCreateFolder()
   const [searchParams] = useSearchParams()
-  // Пока folderId берём из query (?folderId=...), когда появится навигация по папкам.
-  // Корень раздела — без folderId.
-  const folderId = searchParams.get('folderId')
+  const folderIdParam = searchParams.get('folderId')
 
-  const config = {
-    actions: [
-      {
-        label: 'Новый набор',
-        icon: 'Grid3x3',
-        onClick: () => openCreateSet({ folderId }),
-      },
-      {
-        label: 'Новая папка',
-        link: '#',
-        icon: 'Folder',
-      },
-    ],
-  } satisfies TCreateEntityConfig
+  const folderId = useMemo(() => {
+    const parsed = folderIdSchema.safeParse(folderIdParam ?? undefined)
+
+    return parsed.success ? parsed.data : null
+  }, [folderIdParam])
+
+  const isSetsListPage = location.pathname === setsPagePath
+
+  const config = useMemo((): TCreateEntityConfig | null => {
+    if (!isSetsListPage) {
+      return null
+    }
+
+    if (folderId) {
+      return {
+        actions: [
+          {
+            label: 'Новый набор',
+            icon: 'Grid3x3',
+            onClick: () => openCreateSet({ folderId }),
+          },
+        ],
+      }
+    }
+
+    return {
+      actions: [
+        {
+          label: 'Новая папка',
+          icon: 'Folder',
+          onClick: () => openCreateFolder({ section: 'my', parentId: null }),
+        },
+      ],
+    }
+  }, [folderId, isSetsListPage, openCreateFolder, openCreateSet])
+
+  if (!config) {
+    return null
+  }
 
   return <CreateEntity config={config} />
 }

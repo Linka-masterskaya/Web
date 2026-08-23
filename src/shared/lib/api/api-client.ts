@@ -17,6 +17,42 @@ const normalizeBaseUrl = (domain: string): string => {
   return `${trimmed}/`
 }
 
+const logAuthDebug = (message: string, details?: Record<string, unknown>) => {
+  if (!import.meta.env.DEV) {
+    return
+  }
+
+  // biome-ignore lint/suspicious/noConsole: временный лог для отладки 401/refresh
+  console.warn(`[api-auth] ${message}`, details ?? {})
+}
+
+const serializeHttpError = async (error: unknown) => {
+  if (!(error instanceof HTTPError)) {
+    return {
+      message: error instanceof Error ? error.message : String(error),
+    }
+  }
+
+  let body: unknown = null
+
+  try {
+    body = await error.response.clone().json()
+  } catch {
+    try {
+      body = await error.response.clone().text()
+    } catch {
+      body = null
+    }
+  }
+
+  return {
+    status: error.response.status,
+    url: error.request.url,
+    method: error.request.method,
+    body,
+  }
+}
+
 export const setApiAccessTokenProvider = (provider: TAccessTokenProvider): void => {
   accessTokenProvider = provider
 }
@@ -35,19 +71,31 @@ export const sessionApiClient = ky.create({
 })
 
 const refreshAccessToken = async (): Promise<string> => {
-  const response = await sessionApiClient.post('auth/refresh').json<unknown>()
+  logAuthDebug('refresh: start', {
+    apiDomain: env.apiDomain(),
+    hasAccessToken: Boolean(accessTokenProvider()),
+  })
 
-  if (
-    typeof response !== 'object' ||
-    response === null ||
-    !('access_token' in response) ||
-    typeof response.access_token !== 'string' ||
-    response.access_token.length === 0
-  ) {
-    throw new Error('Сервер вернул некорректный access token')
+  try {
+    const response = await sessionApiClient.post('auth/refresh').json<unknown>()
+
+    if (
+      typeof response !== 'object' ||
+      response === null ||
+      !('access_token' in response) ||
+      typeof response.access_token !== 'string' ||
+      response.access_token.length === 0
+    ) {
+      logAuthDebug('refresh: invalid response body', { response })
+      throw new Error('Сервер вернул некорректный access token')
+    }
+
+    logAuthDebug('refresh: success')
+    return response.access_token
+  } catch (error: unknown) {
+    logAuthDebug('refresh: failed', await serializeHttpError(error))
+    throw error
   }
-
-  return response.access_token
 }
 
 const getAccessTokenFromAuthorization = (authorization: string | null): string | null => {
@@ -63,10 +111,12 @@ const isInvalidRefreshTokenError = (error: unknown): error is HTTPError =>
 
 const getNewAccessToken = (failedAccessToken: string): Promise<string> => {
   if (refreshingPromise) {
+    logAuthDebug('refresh: reuse in-flight promise')
     return refreshingPromise
   }
 
   if (failedRefresh?.accessToken === failedAccessToken) {
+    logAuthDebug('refresh: skip, previous refresh already failed for this access token')
     return Promise.reject(failedRefresh.error)
   }
 
@@ -85,7 +135,14 @@ const getNewAccessToken = (failedAccessToken: string): Promise<string> => {
     .catch((error: unknown) => {
       if (isInvalidRefreshTokenError(error)) {
         failedRefresh = { accessToken: failedAccessToken, error }
+        logAuthDebug('refresh: logout after 401')
         authFailureHandler()
+      } else {
+        // 403 и прочие статусы сейчас не разлогинивают — логируем явно
+        logAuthDebug('refresh: error without logout', {
+          willLogout: false,
+          note: 'logout срабатывает только на HTTP 401 от refresh',
+        })
       }
 
       throw error
@@ -116,17 +173,25 @@ export const apiClient = ky.create({
           return
         }
 
+        logAuthDebug('request: 401, trying refresh', {
+          url: request.url,
+          method: request.method,
+          error: await serializeHttpError(error),
+        })
+
         const failedAccessToken = getAccessTokenFromAuthorization(
           request.headers.get('Authorization'),
         )
 
         if (!failedAccessToken) {
+          logAuthDebug('request: 401 without Bearer token, skip refresh')
           return
         }
 
         const currentAccessToken = accessTokenProvider()
 
         if (currentAccessToken && currentAccessToken !== failedAccessToken) {
+          logAuthDebug('request: access token already rotated, retry with new token')
           request.headers.set('Authorization', `Bearer ${currentAccessToken}`)
           return
         }

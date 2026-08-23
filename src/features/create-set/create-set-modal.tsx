@@ -1,39 +1,42 @@
-import { folderQueryKeys } from '@entities/folder'
 import { useCreateSet } from '@entities/set'
 import { Button, Flex, Text, TextInput, Title } from '@mantine/core'
 import { PopupLayout } from '@shared/ui/popup-layout'
-import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, useState } from 'react'
+import { z } from 'zod'
 
 import styles from './create-set-modal.module.scss'
 import type { TCreateSetModalProps } from './types'
+
+const folderIdSchema = z.string().uuid()
 
 export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
   folderId = null,
   onClose,
   onSuccess,
 }) => {
-  const queryClient = useQueryClient()
   const createSetMutation = useCreateSet()
   const [title, setTitle] = useState('')
+
+  const parsedFolderId = folderIdSchema.safeParse(folderId ?? undefined)
+  const resolvedFolderId = parsedFolderId.success ? parsedFolderId.data : null
+  const canSubmit = Boolean(resolvedFolderId && title.trim() && !createSetMutation.isPending)
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     const trimmedTitle = title.trim()
 
-    if (!trimmedTitle || createSetMutation.isPending) {
+    if (!resolvedFolderId || !trimmedTitle || createSetMutation.isPending) {
       return
     }
 
     createSetMutation.mutate(
       {
         title: trimmedTitle,
-        folderId: folderId || null,
+        folderId: resolvedFolderId,
       },
       {
         onSuccess: () => {
-          void queryClient.invalidateQueries({ queryKey: folderQueryKeys.all })
           onSuccess?.()
           onClose()
         },
@@ -46,6 +49,12 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       <Flex direction="column" className={styles.wrapper}>
         <Title order={2}>Новый набор</Title>
 
+        {!resolvedFolderId && (
+          <Text c="red.6" size="sm" role="alert">
+            Набор можно создать только внутри папки. Откройте папку и попробуйте снова.
+          </Text>
+        )}
+
         <form className={styles.form} onSubmit={handleSubmit}>
           <TextInput
             label="Название набора"
@@ -57,6 +66,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
             }}
             data-autofocus
             required
+            disabled={!resolvedFolderId}
           />
 
           {createSetMutation.isError && (
@@ -69,7 +79,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
             type="submit"
             className={styles.submitButton}
             loading={createSetMutation.isPending}
-            disabled={!title.trim()}
+            disabled={!canSubmit}
           >
             Создать
           </Button>

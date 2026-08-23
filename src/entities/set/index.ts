@@ -9,7 +9,9 @@ export { useSet } from './hooks/use-set'
 export { setQueryKeys } from './lib/query-keys'
 export {
   createSetParamsSchema,
+  createSetResponseSchema,
   type TCreateSetParams,
+  type TCreateSetResponse,
 } from './model/create-set.schema'
 export { moveSetParamsSchema, type TMoveSetParams } from './model/move-set.schema'
 export {
