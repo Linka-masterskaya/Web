@@ -60,7 +60,7 @@ export const SetPage: React.FC = () => {
     navigate(
       createUrl(
         routerPath.dashboardSets,
-        undefined as never,
+        undefined,
         folderId ? { folderId } : undefined,
       ),
     )
@@ -120,22 +120,34 @@ export const SetPage: React.FC = () => {
 
         {setQuery.isSuccess && pages.length > 0 && (
           <Stack gap={8} className={styles.list}>
-            {pages.map((page, index) => (
-              <UnstyledButton
-                key={page.id}
-                className={styles.item}
-                disabled
-                aria-label={`${getPageTitle(page, index)}, ${SET_PAGE_TYPE_LABELS[page.type]}`}
-              >
-                <Icon name={SET_PAGE_TYPE_ICONS[page.type]} size={20} aria-hidden />
-                <div className={styles.itemBody}>
-                  <Text fw={600}>{getPageTitle(page, index)}</Text>
-                  <Text size="sm" c="dimmed">
-                    {SET_PAGE_TYPE_LABELS[page.type]}
-                  </Text>
-                </div>
-              </UnstyledButton>
-            ))}
+            {pages.map((page, index) => {
+              const pageTitle = getPageTitle(page, index)
+              const pageTypeLabel = SET_PAGE_TYPE_LABELS[page.type]
+
+              return (
+                <UnstyledButton
+                  key={page.id}
+                  className={styles.item}
+                  onClick={() =>
+                    navigate(
+                      createUrl(routerPath.dashboardSubsetIdEdit, {
+                        setId: resolvedSetId,
+                        subsetId: page.id,
+                      }),
+                    )
+                  }
+                  aria-label={`Редактировать ${pageTitle}, ${pageTypeLabel}`}
+                >
+                  <Icon name={SET_PAGE_TYPE_ICONS[page.type]} size={20} aria-hidden />
+                  <div className={styles.itemBody}>
+                    <Text fw={600}>{pageTitle}</Text>
+                    <Text size="sm" c="dimmed">
+                      {pageTypeLabel}
+                    </Text>
+                  </div>
+                </UnstyledButton>
+              )
+            })}
           </Stack>
         )}
       </Stack>

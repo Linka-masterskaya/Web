@@ -33,5 +33,5 @@ export type TRouteQueryParamsUpdate = {
 
 export type TCreateUrlArgs<T extends TRouterPathValue> =
   TExtractPathParamName<T> extends never
-    ? [path: T, params?: never, queryParams?: TRouteQueryParamsInput]
+    ? [path: T, params?: undefined, queryParams?: TRouteQueryParamsInput]
     : [path: T, params: TRouteParamsInput<T>, queryParams?: TRouteQueryParamsInput]

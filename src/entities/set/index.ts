@@ -4,11 +4,13 @@ export { getSet } from './api/get-set'
 export { moveSet } from './api/move-set'
 export { sendSet } from './api/send-set'
 export { updateSetConfig } from './api/update-set-config'
+export { updateSetPageType } from './api/update-set-page-type'
 export { useCreateSet } from './hooks/use-create-set'
 export { useCreateSetPage } from './hooks/use-create-set-page'
 export { useMoveSet } from './hooks/use-move-set'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
+export { useUpdateSetPageType } from './hooks/use-update-set-page-type'
 export { setQueryKeys } from './lib/query-keys'
 export {
   createSetParamsSchema,

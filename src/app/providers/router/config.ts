@@ -146,7 +146,7 @@ export const router = createBrowserRouter([
                                   },
                                   {
                                     path: routeSegments.edit,
-                                    element: 'Страница в разработке',
+                                    lazy: pageLazyLoad(() => import('@pages/set-subset-edit-page')),
                                   },
                                 ],
                               },

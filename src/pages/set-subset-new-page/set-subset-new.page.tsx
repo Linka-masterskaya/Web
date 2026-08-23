@@ -1,10 +1,7 @@
 import { type TSetPageType, useCreateSetPage } from '@entities/set'
-import { AssignmentTypeSelector } from '@features/assignment-type-selector'
-import { isSetPageType, SET_PAGE_TYPE_OPTIONS } from '@features/set-page-type-selector'
-import { Button, Group, Stack, Text, Title } from '@mantine/core'
+import { SetPageTypeForm } from '@features/set-page-type-form'
+import { Button, Stack, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
-import { Icon } from '@shared/ui/icon'
-import { SubsetLayout } from '@widgets/subset-layout'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
@@ -22,15 +19,6 @@ export const SetSubsetNewPage: React.FC = () => {
   const createPageMutation = useCreateSetPage(resolvedSetId)
   const [selectedType, setSelectedType] = useState<TSetPageType>('grid')
 
-  const handleTypeChange = (value: string) => {
-    if (!isSetPageType(value)) {
-      return
-    }
-
-    setSelectedType(value)
-    createPageMutation.reset()
-  }
-
   const handleBack = () => {
     if (!parsedSetId.success) {
       navigate(createUrl(routerPath.dashboardSets))
@@ -38,6 +26,11 @@ export const SetSubsetNewPage: React.FC = () => {
     }
 
     navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
+  }
+
+  const handleTypeChange = (value: TSetPageType) => {
+    setSelectedType(value)
+    createPageMutation.reset()
   }
 
   const handleCreate = () => {
@@ -69,47 +62,20 @@ export const SetSubsetNewPage: React.FC = () => {
 
   return (
     <section className={styles.page}>
-      <Stack gap="lg">
-        <Button
-          variant="subtle"
-          w="fit-content"
-          leftSection={<Icon name="ArrowLeft" size={16} />}
-          onClick={handleBack}
-        >
-          К набору
-        </Button>
-
-        <Title order={2}>Новая страница</Title>
-
-        <SubsetLayout
-          leftSlot={
-            <AssignmentTypeSelector
-              value={selectedType}
-              options={[...SET_PAGE_TYPE_OPTIONS]}
-              onChange={handleTypeChange}
-            />
-          }
-        >
-          <Stack gap="md" className={styles.content}>
-            <Text c="dimmed">Выберите тип страницы и создайте её в наборе.</Text>
-
-            {createPageMutation.isError && (
-              <Text c="red.6" size="sm" role="alert">
-                Не удалось создать страницу. Попробуйте ещё раз.
-              </Text>
-            )}
-
-            <Group>
-              <Button variant="default" onClick={handleBack}>
-                Отмена
-              </Button>
-              <Button loading={createPageMutation.isPending} onClick={handleCreate}>
-                Создать
-              </Button>
-            </Group>
-          </Stack>
-        </SubsetLayout>
-      </Stack>
+      <SetPageTypeForm
+        title="Новая страница"
+        description="Выберите тип страницы и создайте её в наборе."
+        value={selectedType}
+        onChange={handleTypeChange}
+        onBack={handleBack}
+        onCancel={handleBack}
+        onSubmit={handleCreate}
+        submitLabel="Создать"
+        isSubmitting={createPageMutation.isPending}
+        errorMessage={
+          createPageMutation.isError ? 'Не удалось создать страницу. Попробуйте ещё раз.' : null
+        }
+      />
     </section>
   )
 }
