@@ -2,7 +2,11 @@ import { ModalAppLayout } from '@shared/lib/modal'
 import { routeParams, routerPath, routeSegments } from '@shared/lib/routes'
 import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
 import { CommonLayout } from '@widgets/common-layout'
-import { DashboardBreadcrumbs, DashboardLayout } from '@widgets/dashboard-layout'
+import {
+  DashboardBreadcrumbs,
+  DashboardCreateEntity,
+  DashboardLayout,
+} from '@widgets/dashboard-layout'
 import { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -85,6 +89,7 @@ export const router = createBrowserRouter([
                 path: routeSegments.dashboard,
                 element: createElement(DashboardLayout, {
                   breadcrumbsSlot: createElement(DashboardBreadcrumbs),
+                  actionsSlot: createElement(DashboardCreateEntity),
                 }),
                 children: [
                   {

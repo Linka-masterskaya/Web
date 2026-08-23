@@ -2,8 +2,9 @@ import type { IIconProps } from '@shared/ui/icon'
 
 export type TCreateEntityAction = {
   label: string
-  link: string
   icon: IIconProps['name']
+  link?: string
+  onClick?: () => void
 }
 
 export type TCreateEntityConfig = {

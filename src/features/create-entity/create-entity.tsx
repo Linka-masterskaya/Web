@@ -35,20 +35,42 @@ export const CreateEntity = ({ config, className }: TCreateEntityProps) => {
       </Popover.Target>
 
       <Popover.Dropdown className={styles.dropdown}>
-        {config.actions.map((action, index) => (
-          <Button
-            key={action.label}
-            component={Link}
-            to={action.link}
-            variant={index === 0 ? 'filled' : 'outline'}
-            fullWidth
-            leftSection={<Icon size={16} name={action.icon} />}
-            className={styles.action}
-            onClick={() => setOpened(false)}
-          >
-            {action.label}
-          </Button>
-        ))}
+        {config.actions.map((action, index) => {
+          const handleActionClick = () => {
+            action.onClick?.()
+            setOpened(false)
+          }
+
+          if (action.link) {
+            return (
+              <Button
+                key={action.label}
+                component={Link}
+                to={action.link}
+                variant={index === 0 ? 'filled' : 'outline'}
+                fullWidth
+                leftSection={<Icon size={16} name={action.icon} />}
+                className={styles.action}
+                onClick={handleActionClick}
+              >
+                {action.label}
+              </Button>
+            )
+          }
+
+          return (
+            <Button
+              key={action.label}
+              variant={index === 0 ? 'filled' : 'outline'}
+              fullWidth
+              leftSection={<Icon size={16} name={action.icon} />}
+              className={styles.action}
+              onClick={handleActionClick}
+            >
+              {action.label}
+            </Button>
+          )
+        })}
       </Popover.Dropdown>
     </Popover>
   )
