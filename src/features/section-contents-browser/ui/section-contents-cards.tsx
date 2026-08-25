@@ -76,7 +76,7 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
             />
           </div>
         )
-      })}{' '}
+      })}
     </div>
 
     {items.length === 0 && <Text mt="md">{emptyText}</Text>}
