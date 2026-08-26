@@ -24,10 +24,8 @@ export const ArchiveStudentPopup: React.FC<TArchiveStudentPopupProps> = ({ stude
   }
 
   return (
-    <PopupLayout title="Архивировать ученика" onClose={onClose}>
-      <Text size="sm">
-        Ученик «{student.name}» будет перемещён в архив. Он исчезнет из списка активных учеников.
-      </Text>
+    <PopupLayout title="Удалить ученика" onClose={onClose}>
+      <Text size="sm">Ученик «{student.name}» будет удален. Он исчезнет из списка учеников.</Text>
 
       {error && (
         <Text c="red.6" size="sm">
@@ -37,7 +35,7 @@ export const ArchiveStudentPopup: React.FC<TArchiveStudentPopupProps> = ({ stude
 
       <Flex direction="column" gap="xs">
         <Button color="red" onClick={handleArchive} loading={isPending}>
-          Архивировать
+          Удалить
         </Button>
         <Button variant="default" onClick={onClose} disabled={isPending}>
           Отмена

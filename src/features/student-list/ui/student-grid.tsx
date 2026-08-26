@@ -68,8 +68,15 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({ students, contextMenu
             onContextMenu={onContextMenu(student)}
             className={styles.card}
           >
-            {student.avatarSrc ? (
-              <Image src={student.avatarSrc} alt={student.name} radius="md" w="auto" h={180} />
+            {student.avatar_url ? (
+              <Image
+                src={student.avatar_url}
+                alt={student.name}
+                radius="md"
+                w="auto"
+                h={180}
+                fit="contain"
+              />
             ) : (
               <Group justify="center" className={styles.avatarPlaceholder}>
                 <Icon name="UserRound" size={60} color="var(--mantine-color-blue-4)" />

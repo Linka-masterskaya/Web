@@ -31,7 +31,7 @@ export const createStudentContextMenuConfig = (handlers: {
   },
   {
     id: 'archive',
-    label: 'Архивировать',
+    label: 'Удалить',
     color: 'red',
     onClick: handlers.onArchive,
   },

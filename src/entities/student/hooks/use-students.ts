@@ -11,7 +11,9 @@ export const useStudents = () =>
     placeholderData: keepPreviousData,
     staleTime: STUDENTS_LIST_STALE_TIME_MS,
     gcTime: STUDENTS_LIST_STALE_TIME_MS * 5,
-    refetchOnMount: false,
+    // Рефетч при повторном монтировании, только если данных нет
+    // (первый заход или предыдущий запрос упал с ошибкой)
+    refetchOnMount: (query) => query.state.data === undefined,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   })

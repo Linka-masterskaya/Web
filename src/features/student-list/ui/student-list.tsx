@@ -5,6 +5,7 @@ import {
   useStudents,
 } from '@entities/student'
 import { Center, Loader, Stack, Text } from '@mantine/core'
+import { getSchemaValidationMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
 import { type TRouteQueryParamsUpdate, useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
@@ -94,6 +95,8 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
         open({
           content: <ArchiveStudentPopup student={student} onClose={close} />,
           size: 'sm',
+          // У контента свой крестик (PopupLayout) — дублирующий скрываем
+          withCloseButton: false,
         })
       },
     })
@@ -110,6 +113,8 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
   }
 
   if (isError) {
+    const schemaMessage = getSchemaValidationMessage(error)
+
     return (
       <Center py={60}>
         <Stack align="center" gap="sm">
@@ -118,7 +123,7 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
             Не удалось загрузить список учеников
           </Text>
           <Text size="sm" c="dimmed" ta="center">
-            {error?.message || 'Попробуйте обновить страницу'}
+            {schemaMessage ?? error?.message ?? 'Попробуйте обновить страницу'}
           </Text>
         </Stack>
       </Center>

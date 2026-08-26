@@ -1,4 +1,4 @@
-import { ActionIcon, Flex, Title } from '@mantine/core'
+import { ActionIcon, Flex, Stack, Title } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import type { TPopupLayoutProps } from './types'
 
@@ -10,20 +10,20 @@ export const PopupLayout: React.FC<TPopupLayoutProps> = ({
 }) => (
   <Flex direction="column" gap={contentGap}>
     {(title || onClose) && (
-      <Flex justify="space-between" align="center" gap="sm">
-        {title && <Title order={2}>{title}</Title>}
+      <Stack gap={0}>
         {onClose && (
-          <ActionIcon
-            variant="subtle"
-            color="gray"
-            onClick={onClose}
-            aria-label="Закрыть"
-            ml="auto"
-          >
-            <Icon name="X" size={24} />
-          </ActionIcon>
+          <Flex justify="flex-end">
+            <ActionIcon variant="subtle" color="gray" onClick={onClose} aria-label="Закрыть">
+              <Icon name="X" size={24} />
+            </ActionIcon>
+          </Flex>
         )}
-      </Flex>
+        {title && (
+          <Title order={2} ta="center">
+            {title}
+          </Title>
+        )}
+      </Stack>
     )}
     {children}
   </Flex>
