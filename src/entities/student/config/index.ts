@@ -21,6 +21,15 @@ export const STUDENT_CARDS_SHIFT_LABELS: Record<TStudentCardsShift, string> = {
   right: 'Справа',
 }
 
+export const STUDENT_LEVEL_OPTIONS = ['easy', 'medium', 'hard'] as const
+export type TStudentLevel = (typeof STUDENT_LEVEL_OPTIONS)[number]
+
+export const STUDENT_LEVEL_LABELS: Record<TStudentLevel, string> = {
+  easy: 'Лёгкий',
+  medium: 'Средний',
+  hard: 'Сложный',
+}
+
 // Sort
 
 export const STUDENT_SORT_FIELDS = ['name', 'email', 'age', 'status'] as const
