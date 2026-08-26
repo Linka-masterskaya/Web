@@ -25,7 +25,7 @@ export type TSectionContentsBrowserProps = {
 
 const DEFAULT_DASHBOARD_HREF = '/'
 
-export const SectionContentsBrowserContent: FC<TSectionContentsBrowserProps> = ({
+export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   section,
   onOpenPack,
   dashboardHref = DEFAULT_DASHBOARD_HREF,

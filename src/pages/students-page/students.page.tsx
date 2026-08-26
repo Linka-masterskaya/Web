@@ -7,6 +7,7 @@ import {
   useStudent,
   useUpdateStudent,
 } from '@entities/student'
+import { SectionContentsBrowser } from '@features/section-contents-browser'
 import { Button, Group, Stack, Text } from '@mantine/core'
 import { useModal } from '@shared/lib/modal'
 import { StudentEditor } from '@widgets/student-editor'
@@ -108,6 +109,7 @@ export const StudentsPage = () => {
   return (
     <Stack>
       <Text c="dimmed">Временная страница для отладки #68</Text>
+      <SectionContentsBrowser section="students" />
       <Group>
         <Button onClick={handleOpenCreate} loading={createStudentMutation.isPending}>
           Создать ученика

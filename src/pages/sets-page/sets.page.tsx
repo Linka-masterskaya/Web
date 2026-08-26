@@ -1,4 +1,5 @@
 import { type TContentItem, useSectionContents } from '@entities/folder'
+import { SectionContentsBrowser } from '@features/section-contents-browser'
 import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
@@ -6,7 +7,6 @@ import { isHTTPError } from 'ky'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
-
 import styles from './sets-page.module.scss'
 
 const folderIdSchema = z.string().uuid()
@@ -92,6 +92,7 @@ export const SetsPage: React.FC = () => {
     <section className={styles.page}>
       <Stack gap="md">
         <Title order={2}>Мои наборы</Title>
+        <SectionContentsBrowser section="my" />
 
         {parentId && (
           <Button

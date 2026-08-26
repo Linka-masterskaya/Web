@@ -1,7 +1,6 @@
 export { getSectionContents } from './api/get-section-content'
 export type {
   TFolderContentItem,
-  TFolderKind,
   TGetSectionContentParams,
   TPackContentItem,
   TSection,

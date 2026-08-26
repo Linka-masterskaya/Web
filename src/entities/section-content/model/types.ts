@@ -7,33 +7,25 @@ export type TSectionContentSort = 'name' | 'updated_at'
 // направление сортировки
 export type TSectionContentOrder = 'asc' | 'desc'
 
-// тип папки в ответе бэка
-// folder - обычная папка
-// student - папка ученика в картотеке
-export type TFolderKind = 'folder' | 'student'
-
-// общие поля папки и набора
-type TSectionContentItemBase = {
+export type TSectionContentItem = {
+  type: 'folder' | 'pack'
   id: string
   name: string
-  updated_at: string
+  kind: 'folder' | 'student' | null
+  studentId: string | null
+  published: boolean | undefined
+  updatedAt: string
 }
 
 // элеммент ответа с type='folder'
-export type TFolderContentItem = TSectionContentItemBase & {
+export type TFolderContentItem = Omit<TSectionContentItem, 'type'> & {
   type: 'folder'
-  kind?: TFolderKind | null
-  student_id?: string | null
 }
 
 // элемент ответа с type='pack'
-export type TPackContentItem = TSectionContentItemBase & {
+export type TPackContentItem = Omit<TSectionContentItem, 'type'> & {
   type: 'pack'
-  published?: boolean
 }
-
-// элемент в items
-export type TSectionContentItem = TFolderContentItem | TPackContentItem
 
 // ответ GET /section/{section}/contents
 export type TSectionContentResponse = {

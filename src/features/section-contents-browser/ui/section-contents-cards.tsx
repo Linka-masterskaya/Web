@@ -27,6 +27,12 @@ type TSectionContentsCardProps = {
   onOpenPack: (pack: TPackContentItem) => void
 }
 
+const isFolderContentItem = (item: TSectionContentItem): item is TFolderContentItem =>
+  item.type === 'folder'
+
+const isPackContentItem = (item: TSectionContentItem): item is TPackContentItem =>
+  item.type === 'pack'
+
 const getSectionContentIconName = (item: TSectionContentItem) => {
   if (item.type === 'pack') {
     return 'Folder'
@@ -55,12 +61,13 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
       />
       {items.map((item) => {
         const handleClick = () => {
-          if (item.type === 'folder') {
+          if (isFolderContentItem(item)) {
             onOpenFolder(item)
             return
           }
-
-          onOpenPack(item)
+          if (isPackContentItem(item)) {
+            onOpenPack(item)
+          }
         }
 
         return (
