@@ -1,35 +1,34 @@
-// Имитация задержки
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+import { apiClient } from '@shared/lib/api'
+import { getApiErrorMessage } from '@shared/lib/error'
+import { z } from 'zod'
 
-/**
- * Заглушка для смены аватара.
- * TODO: заменить на реальный запрос к бэкенду, когда будет готов.
- */
+const changeUserAvatarResponseSchema = z
+  .object({
+    avatar_url: z.string().min(1),
+  })
+  .transform((response) => ({
+    avatarUrl: response.avatar_url,
+  }))
+
+const FALLBACK_ERROR_MESSAGE = 'Что-то пошло не так. Попробуйте ещё раз.'
 
 export const changeUserAvatar = async (file: File): Promise<{ avatarUrl: string }> => {
-  // TODO: убрать, когда появится бэкенд
-  // biome-ignore lint/suspicious/noConsole: debug only
-  console.log('Аватар изменён')
+  const formData = new FormData()
+  formData.append('file', file)
 
-  // Имитация ответа от сервера (задержка 500 мс)
-  // TODO: убрать, когда появится бэкенд
-  await delay(500)
-
-  // Возвращаем временную ссылку на файл (пока нет бэкенда)
-  // TODO: заменить на реальный URL от сервера
-  return { avatarUrl: URL.createObjectURL(file) }
+  try {
+    return await apiClient
+      .put('profile/me/avatar', { body: formData })
+      .json(changeUserAvatarResponseSchema)
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error) ?? FALLBACK_ERROR_MESSAGE)
+  }
 }
 
-/**
- * Заглушка для удаления аватара.
- * TODO: заменить на реальный запрос к бэкенду, когда будет готов.
- */
 export const deleteUserAvatar = async (): Promise<void> => {
-  // TODO: убрать, когда появится бэкенд
-  // biome-ignore lint/suspicious/noConsole: debug only
-  console.log('Аватар удалён')
-
-  // Имитация ответа от сервера (задержка 300 мс)
-  // TODO: убрать, когда появится бэкенд
-  await delay(300)
+  try {
+    await apiClient.delete('profile/me/avatar')
+  } catch (error) {
+    throw new Error(getApiErrorMessage(error) ?? FALLBACK_ERROR_MESSAGE)
+  }
 }
