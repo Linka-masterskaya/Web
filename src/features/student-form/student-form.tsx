@@ -50,6 +50,7 @@ export type TStudentFormProps = {
 export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStudentFormProps) => {
   const [avatarFile, setAvatarFile] = useState<File | null>(() => defaultValues?.avatarFile ?? null)
   const [avatarRemoved, setAvatarRemoved] = useState(false)
+  const [isAvatarDirty, setIsAvatarDirty] = useState(false)
   const [currentAvatarSrc, setCurrentAvatarSrc] = useState<string | null>(initialAvatarUrl ?? null)
   const [previewSrc, setPreviewSrc] = useState<string | null>(() =>
     defaultValues?.avatarFile ? URL.createObjectURL(defaultValues.avatarFile) : null,
@@ -116,6 +117,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
 
     setAvatarFile(file)
     setAvatarRemoved(false)
+    setIsAvatarDirty(true)
   }
 
   const handleDeleteAvatar = () => {
@@ -128,6 +130,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
     setCurrentAvatarSrc(null)
     setAvatarFile(null)
     setAvatarRemoved(true)
+    setIsAvatarDirty(true)
   }
 
   return (
@@ -250,7 +253,11 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
           />
         </Group>
 
-        <Button type="submit" loading={isSubmitting} disabled={!isDirty || !isValid || isLoading}>
+        <Button
+          type="submit"
+          loading={isSubmitting}
+          disabled={(!isDirty && !isAvatarDirty) || !isValid || isLoading}
+        >
           Сохранить
         </Button>
       </Stack>

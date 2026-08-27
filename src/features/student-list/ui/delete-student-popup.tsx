@@ -4,19 +4,19 @@ import { getApiErrorMessage } from '@shared/lib/api'
 import { PopupLayout } from '@shared/ui/popup-layout'
 import { useState } from 'react'
 
-type TArchiveStudentPopupProps = {
+type TDeleteStudentPopupProps = {
   student: TStudent
   onClose: () => void
 }
 
-export const ArchiveStudentPopup: React.FC<TArchiveStudentPopupProps> = ({ student, onClose }) => {
-  const { mutateAsync: archiveStudent, isPending } = useDeleteStudent()
+export const DeleteStudentPopup: React.FC<TDeleteStudentPopupProps> = ({ student, onClose }) => {
+  const { mutateAsync: deleteStudent, isPending } = useDeleteStudent()
   const [error, setError] = useState<string | null>(null)
 
-  const handleArchive = async () => {
+  const handleDelete = async () => {
     try {
       setError(null)
-      await archiveStudent(student.id)
+      await deleteStudent(student.id)
       onClose()
     } catch (err) {
       setError(await getApiErrorMessage(err))
@@ -34,7 +34,7 @@ export const ArchiveStudentPopup: React.FC<TArchiveStudentPopupProps> = ({ stude
       )}
 
       <Flex direction="column" gap="xs">
-        <Button color="red" onClick={handleArchive} loading={isPending}>
+        <Button color="red" onClick={handleDelete} loading={isPending}>
           Удалить
         </Button>
         <Button variant="default" onClick={onClose} disabled={isPending}>

@@ -1,22 +1,16 @@
 import type { TStudent } from '@entities/student'
-import { StudentList } from '@features/student-list'
+import { STUDENT_LIST_DEFAULT_VIEW, StudentList } from '@features/student-list'
 import { ViewToggle } from '@features/view-toggle'
-import { Button, Flex, Group } from '@mantine/core'
+import { Flex, Group } from '@mantine/core'
 import { useModal } from '@shared/lib/modal'
+import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
+import { BackButton } from '@shared/ui/back-button'
 import { useCallback } from 'react'
 import { StudentEditorModal } from './student-editor-modal'
 
 export const StudentsPage: React.FC = () => {
   const { open, close } = useModal()
-
-  const handleCreateStudent = useCallback(() => {
-    open({
-      content: <StudentEditorModal mode="create" onClose={close} />,
-      size: 'md',
-      // У контента свой крестик (PopupLayout) — дублирующий скрываем
-      withCloseButton: false,
-    })
-  }, [open, close])
+  const { queryParams } = useRouteQueryParams()
 
   const handleEditStudent = useCallback(
     (student: TStudent) => {
@@ -29,14 +23,23 @@ export const StudentsPage: React.FC = () => {
     [open, close],
   )
 
+  // Таблица: «Вернуться назад» слева + ViewToggle справа на странице.
+  // Плитка: ViewToggle рендерится внутри StudentGrid (справа), назад — первой карточкой.
+  const viewMode = queryParams.view === 'grid' ? 'grid' : STUDENT_LIST_DEFAULT_VIEW
+
   return (
     <Flex direction="column" gap="md">
-      <Group justify="flex-end">
-        <ViewToggle />
-        <Button onClick={handleCreateStudent}>Добавить ученика</Button>
-      </Group>
+      {viewMode === 'list' && (
+        <Group justify="space-between">
+          {/* Назад = дашборд (явный маршрут надёжнее navigate(-1)) */}
+          <BackButton to={createUrl(routerPath.dashboard)} />
+          <Group justify="flex-end">
+            <ViewToggle />
+          </Group>
+        </Group>
+      )}
 
-      <StudentList onCreateStudent={handleCreateStudent} onEditStudent={handleEditStudent} />
+      <StudentList onEditStudent={handleEditStudent} />
     </Flex>
   )
 }

@@ -17,7 +17,7 @@ export type TContextMenuItem = {
 export const createStudentContextMenuConfig = (handlers: {
   onOpenShelf: (student: TStudent) => void
   onEditProfile: (student: TStudent) => void
-  onArchive: (student: TStudent) => void
+  onDelete: (student: TStudent) => void
 }): TContextMenuItem[] => [
   {
     id: 'open-shelf',
@@ -30,9 +30,9 @@ export const createStudentContextMenuConfig = (handlers: {
     onClick: handlers.onEditProfile,
   },
   {
-    id: 'archive',
+    id: 'delete',
     label: 'Удалить',
     color: 'red',
-    onClick: handlers.onArchive,
+    onClick: handlers.onDelete,
   },
 ]

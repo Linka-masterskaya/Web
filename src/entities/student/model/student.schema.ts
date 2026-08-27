@@ -5,6 +5,7 @@ import {
   STUDENT_LEVEL_OPTIONS,
   STUDENT_STATUS_OPTIONS,
   type TStudentCardsShift,
+  type TStudentLevel,
   type TStudentSortField,
 } from '../config'
 
@@ -66,4 +67,5 @@ export type TStudentsListParams = {
   order?: 'asc' | 'desc'
   query?: string
   age?: number
+  level?: TStudentLevel
 }

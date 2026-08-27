@@ -4,6 +4,12 @@
   gap: 16px;
 }
 
+.gridHeader {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .card {
   cursor: context-menu;
 }

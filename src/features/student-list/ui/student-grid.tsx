@@ -1,6 +1,9 @@
 import type { TStudent } from '@entities/student'
+import { ViewToggle } from '@features/view-toggle'
 import { Card, Group, Image, Menu, Text } from '@mantine/core'
 import { useClickOutside } from '@mantine/hooks'
+import { createUrl, routerPath } from '@shared/lib/routes'
+import { BackButton } from '@shared/ui/back-button'
 import { Icon } from '@shared/ui/icon'
 import React, { useCallback, useState } from 'react'
 import type { TContextMenuItem } from './context-menu-config'
@@ -58,6 +61,11 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({ students, contextMenu
   return (
     <>
       <div className={styles.grid}>
+        <div className={styles.gridHeader}>
+          <ViewToggle />
+        </div>
+        {/* Назад = дашборд (явный маршрут надёжнее navigate(-1)) */}
+        <BackButton variant="tile" to={createUrl(routerPath.dashboard)} />
         {students.map((student) => (
           <Card
             key={student.id}

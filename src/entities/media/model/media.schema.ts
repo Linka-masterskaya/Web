@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-// Ответ POST /media (см. postman_collection.json → media)
+// Ответ POST /media
 export const mediaSchema = z.object({
   id: z.string(),
   uploader_id: z.string(),

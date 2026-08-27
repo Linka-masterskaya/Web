@@ -7,14 +7,20 @@ import {
 import { Center, Loader, Stack, Text } from '@mantine/core'
 import { getSchemaValidationMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
-import { type TRouteQueryParamsUpdate, useRouteQueryParams } from '@shared/lib/routes'
+import {
+  createUrl,
+  routerPath,
+  type TRouteQueryParamsUpdate,
+  useRouteQueryParams,
+} from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router'
 import { STUDENT_LIST_DEFAULT_VIEW } from '../config'
 import styles from '../student-list.module.scss'
 import { parseStudentsListParams } from '../utils/parse-students-list-params'
-import { ArchiveStudentPopup } from './archive-student-popup'
 import { createStudentContextMenuConfig, type TContextMenuItem } from './context-menu-config'
+import { DeleteStudentPopup } from './delete-student-popup'
 import { StudentGrid } from './student-grid'
 import { StudentTable } from './student-table'
 
@@ -33,6 +39,7 @@ const compareValues = (a: string | number, b: string | number): number => {
 export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEditStudent }) => {
   const { queryParams, setQueryParams } = useRouteQueryParams()
   const { open, close } = useModal()
+  const navigate = useNavigate()
 
   const { data: students = [], isPending, isFetching, isError, error } = useStudents()
 
@@ -55,6 +62,10 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
 
     if (listParams.age !== undefined) {
       result = result.filter((student) => student.age === listParams.age)
+    }
+
+    if (listParams.level !== undefined) {
+      result = result.filter((student) => student.level === listParams.level)
     }
 
     const sort = listParams.sort ?? STUDENT_DEFAULT_SORT_FIELD
@@ -85,15 +96,14 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
   const contextMenuItems = useMemo<TContextMenuItem[]>(() => {
     const items = createStudentContextMenuConfig({
       onOpenShelf: (student: TStudent) => {
-        // eslint-disable-next-line no-console
-        console.log('[StudentList] open shelf', student.id)
+        navigate(createUrl(routerPath.studentId, { id: student.id }))
       },
       onEditProfile: (student: TStudent) => {
         onEditStudent?.(student)
       },
-      onArchive: (student: TStudent) => {
+      onDelete: (student: TStudent) => {
         open({
-          content: <ArchiveStudentPopup student={student} onClose={close} />,
+          content: <DeleteStudentPopup student={student} onClose={close} />,
           size: 'sm',
           // У контента свой крестик (PopupLayout) — дублирующий скрываем
           withCloseButton: false,
