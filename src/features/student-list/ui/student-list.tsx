@@ -76,6 +76,14 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
 
   const viewMode = queryParams.view === 'grid' ? 'grid' : STUDENT_LIST_DEFAULT_VIEW
 
+  // Левый клик по строке/карточке — переход на полку ученика
+  const handleOpenShelf = useCallback(
+    (student: TStudent) => {
+      navigate(createUrl(routerPath.studentId, { id: student.id }))
+    },
+    [navigate],
+  )
+
   const handleSortToggle = useCallback(
     (field: string) => {
       const update: TRouteQueryParamsUpdate = {}
@@ -95,9 +103,6 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
 
   const contextMenuItems = useMemo<TContextMenuItem[]>(() => {
     const items = createStudentContextMenuConfig({
-      onOpenShelf: (student: TStudent) => {
-        navigate(createUrl(routerPath.studentId, { id: student.id }))
-      },
       onEditProfile: (student: TStudent) => {
         onEditStudent?.(student)
       },
@@ -163,13 +168,18 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
       {isFetching && !isPending && <Loader size="sm" className={styles.fetchingLoader} />}
 
       {viewMode === 'grid' ? (
-        <StudentGrid students={visibleStudents} contextMenuItems={contextMenuItems} />
+        <StudentGrid
+          students={visibleStudents}
+          contextMenuItems={contextMenuItems}
+          onOpenShelf={handleOpenShelf}
+        />
       ) : (
         <StudentTable
           students={visibleStudents}
           params={listParams}
           contextMenuItems={contextMenuItems}
           onSortToggle={handleSortToggle}
+          onOpenShelf={handleOpenShelf}
         />
       )}
     </Stack>

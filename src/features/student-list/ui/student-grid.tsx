@@ -12,12 +12,22 @@ import styles from './student-grid.module.scss'
 type TStudentGridProps = {
   students: TStudent[]
   contextMenuItems: TContextMenuItem[]
+  onOpenShelf: (student: TStudent) => void
 }
 
-export const StudentGrid: React.FC<TStudentGridProps> = ({ students, contextMenuItems }) => {
+export const StudentGrid: React.FC<TStudentGridProps> = ({
+  students,
+  contextMenuItems,
+  onOpenShelf,
+}) => {
   const [contextMenuStudent, setContextMenuStudent] = useState<TStudent | null>(null)
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
   const [menuOpened, setMenuOpened] = useState(false)
+
+  // Размеры контекстного меню для клампинга в пределах окна
+  const MENU_WIDTH = 235
+  const MENU_ESTIMATED_HEIGHT = 130
+  const MENU_VIEWPORT_MARGIN = 8
 
   const closeContextMenu = useCallback(() => {
     setMenuOpened(false)
@@ -48,7 +58,13 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({ students, contextMenu
   const handleCardContextMenu = useCallback((event: React.MouseEvent, student: TStudent) => {
     event.preventDefault()
     setContextMenuStudent(student)
-    setMenuPosition({ x: event.clientX, y: event.clientY })
+    // Клампинг: меню не должно выезжать за края окна
+    const x = Math.min(event.clientX, window.innerWidth - MENU_WIDTH - MENU_VIEWPORT_MARGIN)
+    const y = Math.min(
+      event.clientY,
+      window.innerHeight - MENU_ESTIMATED_HEIGHT - MENU_VIEWPORT_MARGIN,
+    )
+    setMenuPosition({ x: Math.max(0, x), y: Math.max(0, y) })
     setMenuOpened(true)
   }, [])
 
@@ -74,6 +90,7 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({ students, contextMenu
             radius="md"
             withBorder
             onContextMenu={onContextMenu(student)}
+            onClick={() => onOpenShelf(student)}
             className={styles.card}
           >
             {student.avatar_url ? (

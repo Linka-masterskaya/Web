@@ -19,8 +19,10 @@
   cursor: pointer;
   min-width: 280px;
 
-  &:hover {
-    box-shadow: var(--mantine-shadow-md);
+  &:hover,
+  &:focus-visible {
+    outline: 2px solid rgba(62, 135, 255, 0.75);
+    box-shadow: none;
   }
 }
 

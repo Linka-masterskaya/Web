@@ -15,15 +15,9 @@ export type TContextMenuItem = {
  * Разделители между пунктами проставляются автоматически.
  */
 export const createStudentContextMenuConfig = (handlers: {
-  onOpenShelf: (student: TStudent) => void
   onEditProfile: (student: TStudent) => void
   onDelete: (student: TStudent) => void
 }): TContextMenuItem[] => [
-  {
-    id: 'open-shelf',
-    label: 'Открыть полку ученика',
-    onClick: handlers.onOpenShelf,
-  },
   {
     id: 'edit-profile',
     label: 'Редактировать профиль ученика',

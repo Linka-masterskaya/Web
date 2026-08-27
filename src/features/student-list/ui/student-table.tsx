@@ -12,6 +12,7 @@ type TStudentTableProps = {
   params: TStudentsListParams
   contextMenuItems: TContextMenuItem[]
   onSortToggle: (field: string) => void
+  onOpenShelf: (student: TStudent) => void
 }
 
 export const StudentTable: React.FC<TStudentTableProps> = ({
@@ -19,10 +20,16 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
   params,
   contextMenuItems,
   onSortToggle,
+  onOpenShelf,
 }) => {
   const [contextMenuStudent, setContextMenuStudent] = useState<TStudent | null>(null)
   const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
   const [menuOpened, setMenuOpened] = useState(false)
+
+  // Размеры контекстного меню для клампинга в пределах окна
+  const MENU_WIDTH = 235
+  const MENU_ESTIMATED_HEIGHT = 130
+  const MENU_VIEWPORT_MARGIN = 8
 
   const renderSortIcon = (field: string) => {
     if (params.sort !== field) {
@@ -45,7 +52,13 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
   const handleContextMenu = useCallback((event: React.MouseEvent, student: TStudent) => {
     event.preventDefault()
     setContextMenuStudent(student)
-    setMenuPosition({ x: event.clientX, y: event.clientY })
+    // Клампинг: меню не должно выезжать за края окна
+    const x = Math.min(event.clientX, window.innerWidth - MENU_WIDTH - MENU_VIEWPORT_MARGIN)
+    const y = Math.min(
+      event.clientY,
+      window.innerHeight - MENU_ESTIMATED_HEIGHT - MENU_VIEWPORT_MARGIN,
+    )
+    setMenuPosition({ x: Math.max(0, x), y: Math.max(0, y) })
     setMenuOpened(true)
   }, [])
 
@@ -139,6 +152,7 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
                 key={student.id}
                 data-status={student.status}
                 onContextMenu={handleRowContextMenu(student)}
+                onClick={() => onOpenShelf(student)}
                 className={styles.row}
               >
                 <Table.Td className={clsx(styles.cell, styles.numberCell)}>
