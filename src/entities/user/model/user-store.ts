@@ -25,4 +25,8 @@ export const useUserStore = createStore<TUserStore>('UserStore')((set) => ({
   setEmail: (email) => {
     set({ email })
   },
+
+  resetUser: () => {
+    set(initialState)
+  },
 }))

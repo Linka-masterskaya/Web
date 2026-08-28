@@ -1,3 +1,4 @@
+import { apiClient } from '@shared/lib/api'
 import type { TEditUserProfilePasswordFormValues } from '../model/change-user-password-form.schema'
 import { useUserStore } from '../model/user-store'
 
@@ -24,7 +25,12 @@ export const changeUserName = async (name: string): Promise<void> => {
 }
 
 export const changeUserPassword = async (
-  _values: TEditUserProfilePasswordFormValues,
+  values: TEditUserProfilePasswordFormValues,
 ): Promise<void> => {
-  await delay(500)
+  await apiClient.post('profile/me/password', {
+    json: {
+      current_password: values.oldPassword,
+      new_password: values.newPassword,
+    },
+  })
 }
