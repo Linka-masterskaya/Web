@@ -1,0 +1,33 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.gridHeader {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card {
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    outline: 2px solid rgba(62, 135, 255, 0.75);
+    box-shadow: none;
+  }
+}
+
+.avatarPlaceholder {
+  height: 180px;
+  background-color: var(--mantine-color-lightBlue-0);
+  border-radius: var(--mantine-radius-md);
+}
+
+.menuContainer {
+  position: fixed;
+  z-index: 1000;
+}

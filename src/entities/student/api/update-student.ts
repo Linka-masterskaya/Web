@@ -1,12 +1,11 @@
-import type { TStudent } from '../model/student.schema'
-import { getStudent } from './get-student'
+import { apiClient } from '@shared/lib/api'
+import { studentSchema, type TStudent } from '../model/student.schema'
 
 export const updateStudent = async (
   id: string,
   data: Partial<Omit<TStudent, 'id'>>,
 ): Promise<TStudent> => {
-  const existing = await getStudent(id)
-  const updated = { ...existing, ...data }
+  const updated = await apiClient.patch(`students/${id}`, { json: data }).json(studentSchema)
 
   return updated
 }

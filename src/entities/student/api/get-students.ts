@@ -1,48 +1,8 @@
-import { studentSchema, type TStudent } from '../model/student.schema'
-
-const MOCK_STUDENTS: TStudent[] = [
-  {
-    id: 'student-1',
-    name: 'Иванов Иван',
-    email: 'ivan@example.com',
-    age: 5,
-    state: 'active',
-    cardsShift: 'full',
-    lastLesson: '2026-05-12T14:30:00Z',
-  },
-  {
-    id: 'student-2',
-    name: 'Катюшина Екатерина',
-    email: 'ekaterina@example.com',
-    age: 7,
-    state: 'paused',
-    cardsShift: 'left',
-    lastLesson: '2025-12-30T10:00:00Z',
-    avatarSrc: 'https://i.ibb.co/5gZ10ZC4/ekaterina-student.jpg',
-  },
-  {
-    id: 'student-3',
-    name: 'Сергиев Сергей',
-    email: 'sergey@example.com',
-    age: 9,
-    state: 'archived',
-    cardsShift: 'right',
-    lastLesson: '2026-05-12T16:00:00Z',
-  },
-  {
-    id: 'student-4',
-    name: 'Зайчик Лиза',
-    email: 'liza@example.com',
-    age: 10,
-    state: 'single',
-    cardsShift: 'full',
-    lastLesson: '2024-12-01T09:00:00Z',
-  },
-]
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+import { apiClient } from '@shared/lib/api'
+import { studentsListResponseSchema, type TStudent } from '../model/student.schema'
 
 export const getStudents = async (): Promise<TStudent[]> => {
-  await delay(300)
-  return MOCK_STUDENTS.map((s) => studentSchema.parse(s))
+  const data = await apiClient.get('students').json(studentsListResponseSchema)
+
+  return data.items
 }

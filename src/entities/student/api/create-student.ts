@@ -1,7 +1,8 @@
-import type { TStudent } from '../model/student.schema'
+import { apiClient } from '@shared/lib/api'
+import { studentSchema, type TStudent, type TStudentCreateInput } from '../model/student.schema'
 
-export const createStudent = async (data: Omit<TStudent, 'id'>): Promise<TStudent> => {
-  const id = `student-${crypto.randomUUID()}`
+export const createStudent = async (data: TStudentCreateInput): Promise<TStudent> => {
+  const created = await apiClient.post('students', { json: data }).json(studentSchema)
 
-  return { id, ...data }
+  return created
 }
