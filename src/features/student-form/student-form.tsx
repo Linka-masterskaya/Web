@@ -77,15 +77,26 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
   const form = useForm<TStudentFormFieldsValues>({
     resolver: zodResolver(studentFormFieldsSchema),
     defaultValues: mergedDefaultValues,
-    mode: 'onSubmit',
+    // onTouched: ошибки показываются после ухода с поля и при отправке
+    mode: 'onTouched',
   })
 
   const {
     control,
     handleSubmit,
     register,
-    formState: { errors, isSubmitting, isDirty, isValid, isLoading },
+    watch,
+    formState: { errors, isSubmitting, isDirty, isLoading },
   } = form
+
+  // Валидность считается по текущим значениям формы напрямую через схему:
+  // RHF-овский isValid стартует false и при onTouched обновляется только после blur,
+  // что ломало бы случай «изменён только аватар».
+  const watchedValues = watch()
+  const isValid = useMemo(
+    () => studentFormFieldsSchema.safeParse(watchedValues).success,
+    [watchedValues],
+  )
 
   useEffect(() => {
     if (!previewSrc) {

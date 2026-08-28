@@ -36,7 +36,7 @@ export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', to 
         role="button"
       >
         <Group justify="center" className={styles.tileIconArea}>
-          <Icon name="CornerUpLeft" size={40} color="var(--mantine-color-blue-4)" />
+          <Icon name="CornerUpLeft" size={72} color="var(--mantine-color-blue-4)" />
         </Group>
         <Text ta="left" fw={600} mt="sm">
           Вернуться назад

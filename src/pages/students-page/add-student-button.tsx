@@ -14,6 +14,9 @@ export const AddStudentButton: React.FC = () => {
       size: 'md',
       // У контента свой крестик (PopupLayout) — дублирующий скрываем
       withCloseButton: false,
+      // fade без transform: иначе SegmentedControl меряет индикатор во время
+      // анимации открытия (pop) и активный пункт «прилипает» к левому краю
+      transitionProps: { transition: 'fade' },
     })
   }, [open, close])
 

@@ -104,7 +104,7 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({
               />
             ) : (
               <Group justify="center" className={styles.avatarPlaceholder}>
-                <Icon name="UserRound" size={60} color="var(--mantine-color-blue-4)" />
+                <Icon name="UserRound" size={72} color="var(--mantine-color-blue-4)" />
               </Group>
             )}
 

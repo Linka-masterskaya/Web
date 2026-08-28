@@ -24,23 +24,35 @@ import { rootRedirectLoader } from './loaders/root-redirect.loader'
 import { pageLazyLoad } from './page-lazy-load.util'
 import { RouteErrorFallback } from './route-error-fallback'
 
-// Общий хедер разделов: заголовок, поиск + фильтры, избранное и профиль
-const createDashboardHeader = () =>
+// Общий хедер разделов: заголовок, поиск + фильтры, избранное и профиль.
+// options позволяют переопределить состав под конкретный раздел:
+// - searchSlot: null — скрыть поиск/фильтры
+// - actionsSlot: заменить правую часть (например, только профиль)
+const createDashboardHeader = (options?: {
+  searchSlot?: React.ReactNode
+  actionsSlot?: React.ReactNode
+}) =>
   createElement(AppLayout, {
     titleSlot: 'Библиотека наборов',
-    searchSlot: createElement(
-      React.Fragment,
-      null,
-      createElement(FilterSearch),
-      createElement(FilterAge),
-      createElement(FilterLevel),
-    ),
-    actionsSlot: createElement(
-      React.Fragment,
-      null,
-      createElement(FilterFavorite),
-      createElement(ProfileToggleButton),
-    ),
+    searchSlot:
+      options?.searchSlot === undefined
+        ? createElement(
+            React.Fragment,
+            null,
+            createElement(FilterSearch),
+            createElement(FilterAge),
+            createElement(FilterLevel),
+          )
+        : options.searchSlot,
+    actionsSlot:
+      options?.actionsSlot === undefined
+        ? createElement(
+            React.Fragment,
+            null,
+            createElement(FilterFavorite),
+            createElement(ProfileToggleButton),
+          )
+        : options.actionsSlot,
   })
 
 export const router = createBrowserRouter([
@@ -114,8 +126,11 @@ export const router = createBrowserRouter([
             path: routeSegments.dashboard,
             children: [
               {
-                // Общий хедер дашборда: заголовок, поиск + фильтры, избранное и профиль
-                element: createDashboardHeader(),
+                // Главная: хедер без поиска и фильтров — только профиль
+                element: createDashboardHeader({
+                  searchSlot: null,
+                  actionsSlot: createElement(ProfileToggleButton),
+                }),
                 children: [
                   {
                     element: createElement(DashboardLayout, {
@@ -127,6 +142,20 @@ export const router = createBrowserRouter([
                         index: true,
                         lazy: pageLazyLoad(() => import('@pages/main-page')),
                       },
+                    ],
+                  },
+                ],
+              },
+              {
+                // Библиотека и наборы: полный хедер (поиск, возраст, уровень, избранное)
+                element: createDashboardHeader(),
+                children: [
+                  {
+                    element: createElement(DashboardLayout, {
+                      breadcrumbsSlot: createElement(DashboardBreadcrumbs),
+                      actionsSlot: createElement(DashboardCreateEntity),
+                    }),
+                    children: [
                       {
                         path: routeSegments.library,
                         lazy: pageLazyLoad(() => import('@pages/library-page')),
@@ -137,6 +166,20 @@ export const router = createBrowserRouter([
                       },
                     ],
                   },
+                ],
+              },
+              {
+                // Ученики: поиск + возраст, без уровня и избранного
+                element: createDashboardHeader({
+                  searchSlot: createElement(
+                    React.Fragment,
+                    null,
+                    createElement(FilterSearch),
+                    createElement(FilterAge),
+                  ),
+                  actionsSlot: createElement(ProfileToggleButton),
+                }),
+                children: [
                   {
                     // Ученики: кнопка «Добавить ученика» прижата к правому краю панели
                     element: createElement(DashboardLayout, {

@@ -3,6 +3,7 @@ import { Button, Flex, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
 import { PopupLayout } from '@shared/ui/popup-layout'
 import { useState } from 'react'
+import styles from './delete-student-popup.module.scss'
 
 type TDeleteStudentPopupProps = {
   student: TStudent
@@ -34,7 +35,7 @@ export const DeleteStudentPopup: React.FC<TDeleteStudentPopupProps> = ({ student
       )}
 
       <Flex direction="column" gap="xs">
-        <Button color="red" onClick={handleDelete} loading={isPending}>
+        <Button className={styles.deleteButton} onClick={handleDelete} loading={isPending}>
           Удалить
         </Button>
         <Button variant="default" onClick={onClose} disabled={isPending}>

@@ -18,6 +18,9 @@ export const StudentsPage: React.FC = () => {
         content: <StudentEditorModal mode="edit" student={student} onClose={close} />,
         size: 'md',
         withCloseButton: false,
+        // fade без transform: иначе SegmentedControl меряет индикатор во время
+        // анимации открытия (pop) и активный пункт «прилипает» к левому краю
+        transitionProps: { transition: 'fade' },
       })
     },
     [open, close],
