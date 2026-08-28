@@ -9,6 +9,7 @@ import {
   Switch,
   Text,
   Textarea,
+  TextInput,
   Title,
 } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
@@ -51,16 +52,26 @@ export const SetSettings = ({ defaultValues, onClose, onSave }: TSetSettingsProp
 
   const handleFormSubmit = async (values: TSetSettings) => {
     await onSave?.(values)
-    onClose?.()
   }
 
   return (
     <PopupLayout onClose={onClose} contentGap={0}>
       <form noValidate onSubmit={handleSubmit(handleFormSubmit)}>
-        <Stack gap="xl" className={styles.wrapper}>
+        <Stack gap={16} className={styles.wrapper}>
           <Title order={2} ta="center">
             Настройки
           </Title>
+
+          <Stack gap={12}>
+            <Text className={styles.sectionTitle}>Название набора</Text>
+
+            <TextInput
+              {...register('title')}
+              label="Название"
+              placeholder="Введите название набора"
+              required
+            />
+          </Stack>
 
           <Stack gap={12}>
             <Text className={styles.sectionTitle}>Параметры набора</Text>

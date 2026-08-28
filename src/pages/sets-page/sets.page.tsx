@@ -1,6 +1,7 @@
 import { type TContentItem, useSectionContents } from '@entities/folder'
-import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
+import { Center, Loader, Stack, Text, UnstyledButton } from '@mantine/core'
 import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
+import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
 import { useMemo } from 'react'
@@ -59,6 +60,10 @@ export const SetsPage: React.FC = () => {
     setQueryParams({ folderId: null })
   }
 
+  const goToDashboard = () => {
+    navigate(`/${routerPath.dashboard}`)
+  }
+
   const renderItem = (item: TContentItem) => {
     const isFolder = item.type === 'folder'
     const label = isFolder ? 'Папка' : item.published ? 'Набор · опубликован' : 'Набор · черновик'
@@ -91,31 +96,21 @@ export const SetsPage: React.FC = () => {
   return (
     <section className={styles.page}>
       <Stack gap="md">
-        <Title order={2}>Мои наборы</Title>
-
-        {parentId && (
-          <Button
-            variant="subtle"
-            w="fit-content"
-            onClick={goToRoot}
-            leftSection={<Icon name="ArrowLeft" size={16} />}
-          >
-            К корню раздела
-          </Button>
-        )}
-
-        <Text size="sm" c="dimmed">
-          {parentId ? 'Содержимое папки' : 'Корень «Мои наборы»'}
-        </Text>
-
         {hasInvalidFolderId && (
           <Stack gap="sm" align="flex-start">
             <Text c="red.6" role="alert">
               Некорректный идентификатор папки
             </Text>
-            <Button variant="outline" onClick={goToRoot}>
-              К корню раздела
-            </Button>
+
+            <Card
+              variant="icon"
+              label="Вернуться назад"
+              icon={<Icon name="CornerUpLeft" aria-hidden />}
+              action={{
+                type: 'function',
+                onClick: goToRoot,
+              }}
+            />
           </Stack>
         )}
 
@@ -130,18 +125,31 @@ export const SetsPage: React.FC = () => {
             <Text c="red.6" role="alert">
               {getLoadErrorMessage(contentsQuery.error)}
             </Text>
-            <Button variant="outline" onClick={() => contentsQuery.refetch()}>
-              Повторить
-            </Button>
+
+            <Card
+              variant="icon"
+              label="Повторить"
+              icon={<Icon name="RefreshCw" aria-hidden />}
+              action={{
+                type: 'function',
+                onClick: () => contentsQuery.refetch(),
+              }}
+            />
           </Stack>
         )}
 
-        {!hasInvalidFolderId && contentsQuery.isSuccess && items.length === 0 && (
-          <Text c="dimmed">Здесь пока пусто</Text>
-        )}
-
-        {!hasInvalidFolderId && contentsQuery.isSuccess && items.length > 0 && (
+        {!hasInvalidFolderId && contentsQuery.isSuccess && (
           <Stack gap={8} className={styles.list}>
+            <Card
+              variant="icon"
+              label="Вернуться назад"
+              icon={<Icon name="CornerUpLeft" aria-hidden />}
+              action={{
+                type: 'function',
+                onClick: parentId ? goToRoot : goToDashboard,
+              }}
+            />
+
             {items.map(renderItem)}
           </Stack>
         )}
