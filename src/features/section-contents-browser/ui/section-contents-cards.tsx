@@ -35,11 +35,11 @@ const isPackContentItem = (item: TSectionContentItem): item is TPackContentItem 
 
 const getSectionContentIconName = (item: TSectionContentItem) => {
   if (item.type === 'pack') {
-    return 'Folder'
+    return 'Image'
   } else if (item.kind === 'student') {
     return 'UserRound'
   } else {
-    return 'Image' // в дизайне нет варианта, когда у набора нет картинки, я пока поставила это
+    return 'Folder' // в дизайне нет варианта, когда у набора нет картинки, я пока поставила это
   }
 }
 
@@ -50,42 +50,45 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   onOpenFolder,
   onOpenPack,
 }) => {
-  ;<section className={styles.grid} aria-label="Содержимое папки">
-    <div>
-      <Card
-        className={styles.card}
-        variant="icon"
-        label="Вернуться назад"
-        icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
-        action={backAction}
-      />
-      {items.map((item) => {
-        const handleClick = () => {
-          if (isFolderContentItem(item)) {
-            onOpenFolder(item)
-            return
+  return (
+    <section aria-label="Содержимое папки">
+      <div className={styles.grid}>
+        <Card
+          className={styles.card}
+          variant="icon"
+          label="Вернуться назад"
+          icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
+          action={backAction}
+        />
+        {items.map((item) => {
+          const handleClick = () => {
+            if (isFolderContentItem(item)) {
+              onOpenFolder(item)
+              return
+            }
+            if (isPackContentItem(item)) {
+              onOpenPack(item)
+            }
           }
-          if (isPackContentItem(item)) {
-            onOpenPack(item)
-          }
-        }
 
-        return (
-          <div key={`${item.type}:${item.id}`} className={styles.card}>
-            <Card
-              variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
-              // variant='image'
-              // imageSrc={item.preview_url}
-              // imageAlt={item.name}
-              label={item.name}
-              icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
-              action={{ type: 'function', onClick: handleClick }}
-            />
-          </div>
-        )
-      })}
-    </div>
+          return (
+            <div key={`${item.type}:${item.id}`}>
+              <Card
+                variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
+                // variant='image'
+                // imageSrc={item.preview_url}
+                // imageAlt={item.name}
+                label={item.name}
+                icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
+                action={{ type: 'function', onClick: handleClick }}
+                className={styles.card}
+              />
+            </div>
+          )
+        })}
+      </div>
 
-    {items.length === 0 && <Text mt="md">{emptyText}</Text>}
-  </section>
+      {items.length === 0 && <Text mt="md">{emptyText}</Text>}
+    </section>
+  )
 }

@@ -1,41 +1,31 @@
-import { apiClient } from '@shared/lib/api'
-import {
-  getSectionContentsParamsSchema,
-  sectionContentsResponseSchema,
-  type TGetSectionContentsParams,
-  type TSectionContentsResponse,
+import { env } from '@shared/lib/env'
+
+import type {
+  TGetSectionContentsParams,
+  TSectionContentsResponse,
 } from '../model/content-item.schema'
 
-/** GET /sections/{section}/contents — папки и наборы узла дерева. */
-export const getSectionContents = async (
+import { getSectionContentsMock } from './get-section-contents.mock'
+
+import { getSectionContentsRemote } from './get-section-contents.remote'
+
+/**
+ * Выбирает источник данных.
+ *
+ * В режиме моков HTTP-запрос вообще не выполняется.
+ * В обычном режиме используется настоящий бэкенд.
+ */
+export const getSectionContents = (
   params: TGetSectionContentsParams,
 ): Promise<TSectionContentsResponse> => {
-  const { section, parentId, limit, offset, sort, order } =
-    getSectionContentsParamsSchema.parse(params)
+  if (env.useSectionContentMock()) {
+    // biome-ignore lint/suspicious/noConsole: логируем падение в dev для отладки
+    console.debug('[section contents] mock', params)
 
-  const searchParams: Record<string, string | number> = {}
-
-  if (parentId) {
-    searchParams.parent_id = parentId
+    return getSectionContentsMock(params)
   }
+  // biome-ignore lint/suspicious/noConsole: логируем падение в dev для отладки
+  console.debug('[section contents] remote', params)
 
-  if (limit != null) {
-    searchParams.limit = limit
-  }
-
-  if (offset != null) {
-    searchParams.offset = offset
-  }
-
-  if (sort) {
-    searchParams.sort = sort
-  }
-
-  if (order) {
-    searchParams.order = order
-  }
-
-  return apiClient
-    .get(`sections/${section}/contents`, { searchParams })
-    .json(sectionContentsResponseSchema)
+  return getSectionContentsRemote(params)
 }

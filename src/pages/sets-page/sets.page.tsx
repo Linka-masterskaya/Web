@@ -1,100 +1,100 @@
-import { type TContentItem, useSectionContents } from '@entities/folder'
+// import { type TContentItem, useSectionContents } from '@entities/folder'
 import { SectionContentsBrowser } from '@features/section-contents-browser'
-import { Button, Center, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
-import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
-import { Icon } from '@shared/ui/icon'
-import { isHTTPError } from 'ky'
-import { useMemo } from 'react'
-import { useNavigate } from 'react-router'
-import { z } from 'zod'
+import { Title } from '@mantine/core'
+// import { useRouteQueryParams } from '@shared/lib/routes'
+// import { Icon } from '@shared/ui/icon'
+// import { isHTTPError } from 'ky'
+// import { useMemo } from 'react'
+// import { useNavigate } from 'react-router'
+// import { z } from 'zod'
 import styles from './sets-page.module.scss'
 
-const folderIdSchema = z.string().uuid()
+// const folderIdSchema = z.string().uuid()
 
-const formatUpdatedAt = (value: string) => {
-  const date = new Date(value)
+// const formatUpdatedAt = (value: string) => {
+//   const date = new Date(value)
 
-  if (Number.isNaN(date.getTime())) {
-    return value
-  }
+//   if (Number.isNaN(date.getTime())) {
+//     return value
+//   }
 
-  return date.toLocaleDateString('ru-RU')
-}
+//   return date.toLocaleDateString('ru-RU')
+// }
 
-const getLoadErrorMessage = (error: unknown) => {
-  if (isHTTPError(error) && error.response.status === 404) {
-    return 'Папка не найдена или недоступна'
-  }
+// const getLoadErrorMessage = (error: unknown) => {
+//   if (isHTTPError(error) && error.response.status === 404) {
+//     return 'Папка не найдена или недоступна'
+//   }
 
-  return 'Не удалось загрузить содержимое'
-}
+//   return 'Не удалось загрузить содержимое'
+// }
 
 export const SetsPage: React.FC = () => {
-  const navigate = useNavigate()
-  const { queryParams, setQueryParams } = useRouteQueryParams()
-  const folderIdParam = queryParams.folderId
-  const parentId = useMemo(() => {
-    if (!folderIdParam) {
-      return undefined
-    }
+  // const navigate = useNavigate()
+  // const { queryParams } = useRouteQueryParams()
+  // const folderIdParam = queryParams.folderId
+  // const parentId = useMemo(() => {
+  //   if (!folderIdParam) {
+  //     return undefined
+  //   }
 
-    const parsed = folderIdSchema.safeParse(folderIdParam)
+  //   const parsed = folderIdSchema.safeParse(folderIdParam)
 
-    return parsed.success ? parsed.data : undefined
-  }, [folderIdParam])
-  const hasInvalidFolderId = Boolean(folderIdParam && !parentId)
+  //   return parsed.success ? parsed.data : undefined
+  // }, [folderIdParam])
+  // const hasInvalidFolderId = Boolean(folderIdParam && !parentId)
 
-  const contentsQuery = useSectionContents({
-    section: 'my',
-    ...(parentId ? { parentId } : {}),
-  })
+  // const contentsQuery = useSectionContents({
+  //   section: 'my',
+  //   ...(parentId ? { parentId } : {}),
+  // })
 
-  const items = contentsQuery.data?.items ?? []
+  // const items = contentsQuery.data?.items ?? []
 
-  const openFolder = (id: string) => {
-    setQueryParams({ folderId: id })
-  }
+  // const openFolder = (id: string) => {
+  //   setQueryParams({ folderId: id })
+  // }
 
-  const goToRoot = () => {
-    setQueryParams({ folderId: null })
-  }
+  // const goToRoot = () => {
+  //   setQueryParams({ folderId: null })
+  // }
 
-  const renderItem = (item: TContentItem) => {
-    const isFolder = item.type === 'folder'
-    const label = isFolder ? 'Папка' : item.published ? 'Набор · опубликован' : 'Набор · черновик'
+  // const renderItem = (item: TContentItem) => {
+  //   const isFolder = item.type === 'folder'
+  //   const label = isFolder ? 'Папка' : item.published ? 'Набор · опубликован' : 'Набор · черновик'
 
-    return (
-      <UnstyledButton
-        key={item.id}
-        className={styles.item}
-        onClick={() => {
-          if (isFolder) {
-            openFolder(item.id)
-            return
-          }
+  //   return (
+  //     <UnstyledButton
+  //       key={item.id}
+  //       className={styles.item}
+  //       onClick={() => {
+  //         if (isFolder) {
+  //           openFolder(item.id)
+  //           return
+  //         }
 
-          navigate(createUrl(routerPath.dashboardSetId, { setId: item.id }))
-        }}
-        aria-label={isFolder ? `Открыть папку ${item.name}` : `Открыть набор ${item.name}`}
-      >
-        <Icon name={isFolder ? 'Folder' : 'Grid3x3'} size={20} aria-hidden />
-        <div className={styles.itemBody}>
-          <Text fw={600}>{item.name}</Text>
-          <Text size="sm" c="dimmed">
-            {label} · {formatUpdatedAt(item.updatedAt)}
-          </Text>
-        </div>
-      </UnstyledButton>
-    )
-  }
+  //         navigate(createUrl(routerPath.dashboardSetId, { setId: item.id }))
+  //       }}
+  //       aria-label={isFolder ? `Открыть папку ${item.name}` : `Открыть набор ${item.name}`}
+  //     >
+  //       <Icon name={isFolder ? 'Folder' : 'Grid3x3'} size={20} aria-hidden />
+  //       <div className={styles.itemBody}>
+  //         <Text fw={600}>{item.name}</Text>
+  //         <Text size="sm" c="dimmed">
+  //           {label} · {formatUpdatedAt(item.updatedAt)}
+  //         </Text>
+  //       </div>
+  //     </UnstyledButton>
+  //   )
+  // }
 
   return (
     <section className={styles.page}>
-      <Stack gap="md">
-        <Title order={2}>Мои наборы</Title>
-        <SectionContentsBrowser section="my" />
+      {/* <Stack gap="md"> */}
+      <Title order={2}>Мои наборы</Title>
+      <SectionContentsBrowser section="my" />
 
-        {parentId && (
+      {/* {parentId && (
           <Button
             variant="subtle"
             w="fit-content"
@@ -146,7 +146,7 @@ export const SetsPage: React.FC = () => {
             {items.map(renderItem)}
           </Stack>
         )}
-      </Stack>
+      </Stack> */}
     </section>
   )
 }
