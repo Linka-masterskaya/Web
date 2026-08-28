@@ -52,7 +52,7 @@ export const AvatarUpload = ({
       )}
 
       {hasAvatar && (
-        <Menu position="bottom-start" keepMounted>
+        <Menu position="bottom-start" keepMounted withinPortal={false}>
           <Menu.Target>
             {menuTarget ?? (
               <ActionIcon variant="subtle" size="compact" className={styles.menuButton}>

@@ -20,6 +20,7 @@ export type TUserActions = {
   setAvatarSrc: (avatarSrc: TUserState['avatarSrc']) => void
   setName: (name: TUserState['name']) => void
   setEmail: (email: TUserState['email']) => void
+  resetUser: () => void
 }
 
 export type TAuthStore = TAuthState & TAuthActions
