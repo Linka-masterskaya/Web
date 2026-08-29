@@ -41,6 +41,7 @@ export const SetPageTypeForm: React.FC<TSetPageTypeFormProps> = ({
       <Title order={2}>{title}</Title>
 
       <SubsetLayout
+        collapsible={false}
         leftSlot={
           <AssignmentTypeSelector
             value={value}

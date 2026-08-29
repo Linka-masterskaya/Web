@@ -34,7 +34,7 @@ export const DashboardCreateEntity: React.FC = () => {
       return {
         actions: [
           {
-            label: 'Новый набор',
+            label: 'Создать набор',
             icon: 'Grid3x3',
             onClick: () => openCreateSet({ folderId }),
           },
@@ -45,7 +45,7 @@ export const DashboardCreateEntity: React.FC = () => {
     return {
       actions: [
         {
-          label: 'Новая папка',
+          label: 'Создать папку',
           icon: 'Folder',
           onClick: () => openCreateFolder({ section: 'my', parentId: null }),
         },

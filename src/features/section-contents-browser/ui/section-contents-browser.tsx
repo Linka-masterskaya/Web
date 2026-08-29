@@ -61,8 +61,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   })
 
   const items = data?.items ?? []
+  const visibleItems =
+    section === 'my'
+      ? items.filter((item) => (isRoot ? item.type === 'folder' : item.type === 'pack'))
+      : items
 
   const handleOpenFolder = (folder: TFolderContentItem) => {
+    if (section === 'my' && !isRoot) {
+      return
+    }
+
     openFolder(folder)
   }
 
@@ -120,7 +128,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
 
       {!isLoading && !error && (
         <SectionContentsCards
-          items={items}
+          items={visibleItems}
           backAction={backAction}
           emptyText={config.emptyText}
           onOpenFolder={handleOpenFolder}

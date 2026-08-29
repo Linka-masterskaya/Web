@@ -1,0 +1,111 @@
+.page {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editorLayout {
+  height: 100%;
+}
+
+.feedback {
+  flex: 1;
+  width: 100%;
+  min-height: 240px;
+  padding: 24px;
+}
+
+.saveStatus {
+  min-height: 16px;
+  text-align: center;
+}
+
+.typeHint {
+  line-height: 16px;
+}
+
+.workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  padding: 28px 12px 20px;
+}
+
+.canvas {
+  display: flex;
+  flex: 1;
+  min-height: 480px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--mantine-color-lightBlue-0);
+}
+
+.canvasEmpty {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  padding: 32px;
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 8px;
+  background: var(--mantine-color-white);
+}
+
+.canvasIcon,
+.inspectorIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mantine-color-blue-4);
+  border-radius: 50%;
+  background: var(--mantine-color-lightBlue-0);
+}
+
+.canvasIcon {
+  width: 64px;
+  height: 64px;
+}
+
+.workspaceFooter {
+  display: flex;
+  align-items: center;
+}
+
+.workspaceFooter :global(.mantine-Button-root) {
+  height: 40px;
+  max-height: 40px;
+  padding: 8px 12px;
+  font-size: var(--mantine-font-size-sm);
+}
+
+.overviewButton {
+  justify-self: start;
+}
+
+.inspectorEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.inspectorIcon {
+  width: 48px;
+  height: 48px;
+}
+
+@media (max-width: 720px) {
+  .workspace {
+    padding-top: 20px;
+  }
+
+}

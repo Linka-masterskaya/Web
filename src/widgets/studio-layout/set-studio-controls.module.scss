@@ -1,0 +1,42 @@
+.titleGroup {
+  min-width: 0;
+}
+
+.title {
+  min-width: 0;
+  max-width: min(360px, 30vw);
+}
+
+.titleForm {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.titleInput {
+  width: min(360px, 30vw);
+}
+
+.titleActions {
+  padding-top: 2px;
+}
+
+.exitButton {
+  min-width: 216px;
+}
+
+@media (max-width: 720px) {
+  .title {
+    max-width: 36vw;
+  }
+
+  .titleInput {
+    width: 36vw;
+  }
+
+  .exitButton {
+    min-width: 0;
+    padding-inline: 12px;
+  }
+}

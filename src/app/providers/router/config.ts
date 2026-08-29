@@ -15,7 +15,7 @@ import {
   DashboardLayout,
 } from '@widgets/dashboard-layout'
 import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
-import { StudioLayout } from '@widgets/studio-layout'
+import { SetStudioExitButton, SetStudioTitle, StudioLayout } from '@widgets/studio-layout'
 import React, { createElement } from 'react'
 import { createBrowserRouter } from 'react-router'
 import { requireAuthLoader } from './loaders/require-auth.loader'
@@ -195,7 +195,10 @@ export const router = createBrowserRouter([
                 ],
               },
               {
-                Component: StudioLayout,
+                element: createElement(StudioLayout, {
+                  titleSlot: createElement(SetStudioTitle),
+                  primaryActionSlot: createElement(SetStudioExitButton),
+                }),
                 children: [
                   {
                     path: routeSegments.sets,
@@ -213,7 +216,7 @@ export const router = createBrowserRouter([
                           },
                           {
                             path: routeSegments.edit,
-                            element: 'Страница в разработке',
+                            lazy: pageLazyLoad(() => import('@pages/set-edit-page')),
                           },
                           {
                             path: routeSegments.subset,
@@ -235,7 +238,7 @@ export const router = createBrowserRouter([
                                   },
                                   {
                                     path: routeSegments.edit,
-                                    lazy: pageLazyLoad(() => import('@pages/set-subset-edit-page')),
+                                    lazy: pageLazyLoad(() => import('@pages/set-edit-page')),
                                   },
                                 ],
                               },
