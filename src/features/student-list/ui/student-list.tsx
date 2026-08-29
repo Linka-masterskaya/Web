@@ -13,13 +13,14 @@ import {
   type TRouteQueryParamsUpdate,
   useRouteQueryParams,
 } from '@shared/lib/routes'
+import type { TContextMenuItem } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { STUDENT_LIST_DEFAULT_VIEW } from '../config'
 import styles from '../student-list.module.scss'
 import { parseStudentsListParams } from '../utils/parse-students-list-params'
-import { createStudentContextMenuConfig, type TContextMenuItem } from './context-menu-config'
+import { createStudentContextMenuConfig } from './context-menu-config'
 import { DeleteStudentPopup } from './delete-student-popup'
 import { StudentGrid } from './student-grid'
 import { StudentTable } from './student-table'
@@ -101,7 +102,7 @@ export const StudentList: React.FC<TStudentListProps> = ({ onCreateStudent, onEd
     [listParams.sort, listParams.order, setQueryParams],
   )
 
-  const contextMenuItems = useMemo<TContextMenuItem[]>(() => {
+  const contextMenuItems = useMemo<TContextMenuItem<TStudent>[]>(() => {
     const items = createStudentContextMenuConfig({
       onEditProfile: (student: TStudent) => {
         onEditStudent?.(student)

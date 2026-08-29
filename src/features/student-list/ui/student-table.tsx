@@ -1,16 +1,16 @@
 import { STUDENT_STATUS_LABELS, type TStudent, type TStudentsListParams } from '@entities/student'
-import { Menu, Table, Text } from '@mantine/core'
-import { useClickOutside } from '@mantine/hooks'
+import { Table, Text } from '@mantine/core'
+import type { TContextMenuItem } from '@shared/ui/context-menu'
+import { ContextMenu, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import React, { useCallback, useState } from 'react'
-import type { TContextMenuItem } from './context-menu-config'
+import type React from 'react'
 import styles from './student-table.module.scss'
 
 type TStudentTableProps = {
   students: TStudent[]
   params: TStudentsListParams
-  contextMenuItems: TContextMenuItem[]
+  contextMenuItems: TContextMenuItem<TStudent>[]
   onSortToggle: (field: string) => void
   onOpenShelf: (student: TStudent) => void
 }
@@ -22,14 +22,11 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
   onSortToggle,
   onOpenShelf,
 }) => {
-  const [contextMenuStudent, setContextMenuStudent] = useState<TStudent | null>(null)
-  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 })
-  const [menuOpened, setMenuOpened] = useState(false)
-
-  // Размеры контекстного меню для клампинга в пределах окна
-  const MENU_WIDTH = 235
-  const MENU_ESTIMATED_HEIGHT = 130
-  const MENU_VIEWPORT_MARGIN = 8
+  const contextMenu = useContextMenu<TStudent>({
+    width: 235,
+    estimatedHeight: 130,
+    viewportMargin: 8,
+  })
 
   const renderSortIcon = (field: string) => {
     if (params.sort !== field) {
@@ -42,45 +39,6 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
     )
   }
 
-  const closeContextMenu = useCallback(() => {
-    setMenuOpened(false)
-    setContextMenuStudent(null)
-  }, [])
-
-  const menuRef = useClickOutside(closeContextMenu)
-
-  const handleContextMenu = useCallback((event: React.MouseEvent, student: TStudent) => {
-    event.preventDefault()
-    setContextMenuStudent(student)
-    // Клампинг: меню не должно выезжать за края окна
-    const x = Math.min(event.clientX, window.innerWidth - MENU_WIDTH - MENU_VIEWPORT_MARGIN)
-    const y = Math.min(
-      event.clientY,
-      window.innerHeight - MENU_ESTIMATED_HEIGHT - MENU_VIEWPORT_MARGIN,
-    )
-    setMenuPosition({ x: Math.max(0, x), y: Math.max(0, y) })
-    setMenuOpened(true)
-  }, [])
-
-  const handleContextMenuItemClick = useCallback(
-    (item: TContextMenuItem) => {
-      if (contextMenuStudent) {
-        item.onClick(contextMenuStudent)
-      }
-      closeContextMenu()
-    },
-    [contextMenuStudent, closeContextMenu],
-  )
-
-  const handleMenuChange = useCallback(
-    (opened: boolean) => {
-      if (!opened) {
-        closeContextMenu()
-      }
-    },
-    [closeContextMenu],
-  )
-
   const formatDate = (isoString?: string): string => {
     if (!isoString) return '—'
     const date = new Date(isoString)
@@ -91,14 +49,9 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
     })
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const handleRowContextMenu = useCallback(
-    (student: TStudent) => (event: React.MouseEvent) => handleContextMenu(event, student),
-    [handleContextMenu],
-  )
-
   return (
     <>
+      <ContextMenu<TStudent> items={contextMenuItems} {...contextMenu.menuProps} />
       <Table highlightOnHover>
         <Table.Thead>
           <Table.Tr>
@@ -151,7 +104,9 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
               <Table.Tr
                 key={student.id}
                 data-status={student.status}
-                onContextMenu={handleRowContextMenu(student)}
+                onContextMenu={(event) => {
+                  contextMenu.open(event, student)
+                }}
                 onClick={() => onOpenShelf(student)}
                 className={styles.row}
               >
@@ -182,38 +137,6 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
           })}
         </Table.Tbody>
       </Table>
-
-      {/* Контекстное меню по правому клику на строке */}
-      <div
-        ref={menuOpened ? menuRef : undefined}
-        className={styles.menuContainer}
-        style={{ left: menuPosition.x, top: menuPosition.y }}
-      >
-        <Menu
-          opened={menuOpened}
-          onChange={handleMenuChange}
-          withinPortal={false}
-          keepMounted
-          width={235}
-          position="right-start"
-        >
-          <Menu.Dropdown>
-            {contextMenuItems.map((item, index) => (
-              <React.Fragment key={item.id}>
-                {index > 0 && <Menu.Divider />}
-                <Menu.Item
-                  c={item.color === 'red' ? 'red.6' : 'gray.6'}
-                  disabled={item.disabled}
-                  leftSection={item.icon}
-                  onClick={() => handleContextMenuItemClick(item)}
-                >
-                  {item.label}
-                </Menu.Item>
-              </React.Fragment>
-            ))}
-          </Menu.Dropdown>
-        </Menu>
-      </div>
     </>
   )
 }
