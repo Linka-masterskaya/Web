@@ -53,7 +53,7 @@ export function ContextMenu<TTarget extends object>({
       return item.disabled(target)
     }
 
-    return item.disabled ?? true
+    return item.disabled ?? false
   }
 
   return (
@@ -66,11 +66,6 @@ export function ContextMenu<TTarget extends object>({
       withinPortal={false}
       closeOnItemClick={false}
       keepMounted
-      classNames={{
-        dropdown: styles.menuDropdown,
-        item: styles.menuItem,
-        divider: styles.menuDivider,
-      }}
     >
       {/*
         Невидимая точка, относительно которой Mantine
