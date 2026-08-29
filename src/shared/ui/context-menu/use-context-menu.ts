@@ -31,7 +31,7 @@ export function useContextMenu<TTarget extends object>({
     (event: ReactMouseEvent<HTMLElement>, nextTarget: TTarget) => {
       event.preventDefault()
 
-      const maxX = Math.max(viewportMargin, window.innerHeight - width - viewportMargin)
+      const maxX = Math.max(viewportMargin, window.innerWidth - width - viewportMargin)
 
       const maxY = Math.max(viewportMargin, window.innerHeight - estimatedHeight - viewportMargin)
 
