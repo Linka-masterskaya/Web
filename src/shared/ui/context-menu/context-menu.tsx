@@ -1,6 +1,6 @@
 import { Menu } from '@mantine/core'
-import React, { useCallback, useState } from 'react'
-import styles from './student-grid.module.scss'
+import React, { useCallback } from 'react'
+import styles from './context-menu.module.scss'
 import type { TContextMenuItem, TContextMenuPosition } from './types'
 
 type TContextMenuProps<TTarget extends object> = {
