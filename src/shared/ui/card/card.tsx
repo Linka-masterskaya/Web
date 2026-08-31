@@ -4,7 +4,7 @@ import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
 
 export const Card: React.FC<TCardProps> = (props) => {
-  const { className, fill = false, variant, label, level, action } = props
+  const { className, fill = false, variant, label, level, action, onContextMenu } = props
   const cardClassName = clsx(styles.card, fill && styles.fill, className)
 
   const content = (
@@ -30,14 +30,19 @@ export const Card: React.FC<TCardProps> = (props) => {
 
   if (action.type === 'link') {
     return (
-      <a className={cardClassName} href={action.href}>
+      <a onContextMenu={onContextMenu} className={cardClassName} href={action.href}>
         {content}
       </a>
     )
   }
 
   return (
-    <button className={cardClassName} type="button" onClick={action.onClick}>
+    <button
+      onContextMenu={onContextMenu}
+      className={cardClassName}
+      type="button"
+      onClick={action.onClick}
+    >
       {content}
     </button>
   )

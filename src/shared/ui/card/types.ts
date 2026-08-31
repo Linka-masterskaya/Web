@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import type { MouseEventHandler, ReactElement } from 'react'
 
 export type TCardAction = { type: 'link'; href: string } | { type: 'function'; onClick: () => void }
 
@@ -25,6 +25,7 @@ export type TCardProps = {
   label: string
   level?: TCardLevel
   action: TCardAction
+  onContextMenu?: MouseEventHandler<HTMLElement>
 } & (TCardIconVariant | TCardImageVariant)
 
 export type TCardLevelProps = {
