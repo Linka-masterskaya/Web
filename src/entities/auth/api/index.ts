@@ -1,4 +1,5 @@
-export { requestForgotPassword } from './forgot-password.api'
+export { requestForgotPassword } from './forgot-password/forgot-password.api'
+export { resetPassword } from './forgot-password/reset-password.api'
 export { loginApi } from './login'
 export { logoutApi } from './logout.api'
 export { registerApi } from './register'

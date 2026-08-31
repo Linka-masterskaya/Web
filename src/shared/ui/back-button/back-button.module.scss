@@ -1,0 +1,33 @@
+.inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #787b82;
+  font-family: inherit;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--mantine-color-text);
+  }
+}
+
+.tile {
+  cursor: pointer;
+  min-width: 280px;
+
+  &:hover,
+  &:focus-visible {
+    outline: 2px solid rgba(62, 135, 255, 0.75);
+    box-shadow: none;
+  }
+}
+
+.tileIconArea {
+  height: 180px;
+  background-color: var(--mantine-color-lightBlue-0);
+  border-radius: var(--mantine-radius-md);
+}

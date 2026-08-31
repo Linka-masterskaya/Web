@@ -22,14 +22,17 @@
 
 .title {
   flex: 0 1 auto;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 .search {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: right;
+  justify-content: right;
+  gap: 20px;
 }
 
 .actions {

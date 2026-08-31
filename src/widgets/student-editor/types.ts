@@ -7,6 +7,7 @@ export type TStudentEditorProps = {
   mode: TStudentEditorMode
   defaultValues?: Partial<TStudentFormValues>
   avatarSrc?: string | null
+  error?: string | null
   onClose?: () => void
   onSubmit?: (values: TStudentFormValues, meta: TStudentFormSubmitMeta) => void | Promise<void>
 }

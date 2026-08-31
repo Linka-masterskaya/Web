@@ -1,7 +1,6 @@
-import type { TStudent } from '../model/student.schema'
+import { apiClient } from '@shared/lib/api'
 
-export const deleteStudent = async (student: TStudent): Promise<TStudent> => {
-  const archived = { ...student, state: 'archived' as const }
-
-  return archived
+/** Удаление ученика; 204 — успех, 404 — не найден, 409 — есть student folder */
+export const deleteStudent = async (id: string): Promise<void> => {
+  await apiClient.delete(`students/${id}`)
 }
