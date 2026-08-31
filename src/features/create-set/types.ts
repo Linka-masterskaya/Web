@@ -1,6 +1,10 @@
+export type TCreatedSet = {
+  id: string
+  folderId: string
+}
+
 export type TOpenCreateSetParams = {
   folderId?: string | null
-  onSuccess?: () => void
 }
 
 export type TCreateSetModalProps = TOpenCreateSetParams & {

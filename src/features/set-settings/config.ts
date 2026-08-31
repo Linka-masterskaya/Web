@@ -64,6 +64,7 @@ export const SET_VOICE_OPTIONS = [
 
 // Дефолтные значения параметров набора
 export const SET_SETTINGS_DEFAULT_VALUES: TSetSettings = {
+  title: '',
   age: '5',
   level: 'easy',
   voice: 'alena',
