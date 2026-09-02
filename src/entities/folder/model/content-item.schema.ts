@@ -28,6 +28,8 @@ export const sectionContentsResponseSchema = z.object({
   offset: z.number().int().nonnegative(),
 })
 
+export const sectionContentsDifficultySchema = z.enum(['easy', 'medium', 'hard'])
+
 export const getSectionContentsParamsSchema = z.object({
   section: sectionSchema,
   parentId: z.string().uuid().nullable().optional(),
@@ -35,9 +37,13 @@ export const getSectionContentsParamsSchema = z.object({
   offset: z.number().int().min(0).optional(),
   sort: z.enum(['name', 'updated_at']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
+  search: z.string().trim().min(1).optional(),
+  age: z.number().int().min(3).max(18).optional(),
+  difficulty: sectionContentsDifficultySchema.optional(),
 })
 
 export type TSection = z.infer<typeof sectionSchema>
 export type TContentItem = z.infer<typeof contentItemSchema>
 export type TSectionContentsResponse = z.infer<typeof sectionContentsResponseSchema>
+export type TSectionContentsDifficulty = z.infer<typeof sectionContentsDifficultySchema>
 export type TGetSectionContentsParams = z.infer<typeof getSectionContentsParamsSchema>

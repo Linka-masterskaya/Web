@@ -1,13 +1,3 @@
-.grid {
-  --card-grid-hover-padding: 4px;
-
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-  gap: 16px;
-  width: 100%;
-  padding: var(--card-grid-hover-padding);
-}
-
 .gridHeader {
   grid-column: 1 / -1;
   display: flex;

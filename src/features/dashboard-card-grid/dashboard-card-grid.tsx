@@ -1,6 +1,6 @@
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
-import gridStyles from '@shared/styles/fluid-card-grid.module.scss'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { dashboardCardGridItems } from './config'
 
 export const DashboardCardGrid: React.FC = () => (

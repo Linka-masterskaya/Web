@@ -7,7 +7,7 @@ import { ScrollArea, Text } from '@mantine/core'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { FC } from 'react'
-import gridStyles from '@shared/styles/fluid-card-grid.module.scss'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -53,6 +53,10 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
 }) => {
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
+      {items.length === 0 && (
+        <Text className={styles.emptyText}>{emptyText}</Text>
+      )}
+
       <ScrollArea
         type="auto"
         scrollbars="y"
@@ -96,8 +100,6 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
           })}
         </div>
       </ScrollArea>
-
-      {items.length === 0 && <Text mt="md">{emptyText}</Text>}
     </section>
   )
 }

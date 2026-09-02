@@ -2,10 +2,12 @@ import type { TStudent } from '@entities/student'
 import { ViewToggle } from '@features/view-toggle'
 import { Card, Image, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { BackButton } from '@shared/ui/back-button'
 import type { TContextMenuItem } from '@shared/ui/context-menu'
 import { ContextMenu, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
+import clsx from 'clsx'
 import type React from 'react'
 import styles from './student-grid.module.scss'
 
@@ -34,13 +36,13 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({
   return (
     <>
       <ContextMenu<TStudent> items={contextMenuItems} {...contextMenu.menuProps} />
-      <div className={styles.grid}>
+      <div className={gridStyles.grid}>
         <div className={styles.gridHeader}>
           <ViewToggle />
         </div>
         <BackButton
           variant="tile"
-          className={styles.tile}
+          className={clsx(gridStyles.card, styles.tile)}
           to={createUrl(routerPath.dashboard)}
         />
         {students.map((student) => (
@@ -54,7 +56,7 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({
               contextMenu.open(event, student)
             }}
             onClick={() => onOpenShelf(student)}
-            className={styles.card}
+            className={clsx(gridStyles.card, styles.card)}
           >
             {student.avatar_url ? (
               <Image
