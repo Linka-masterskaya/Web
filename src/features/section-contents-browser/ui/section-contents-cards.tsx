@@ -3,7 +3,7 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
-import { ScrollArea, Text } from '@mantine/core'
+import { Blockquote, ScrollArea } from '@mantine/core'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { FC } from 'react'
@@ -54,7 +54,14 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
       {items.length === 0 && (
-        <Text className={styles.emptyText}>{emptyText}</Text>
+        <Blockquote
+          className={styles.emptyText}
+          color="blue"
+          icon={<Icon name="Info" aria-hidden="true" />}
+          iconSize={32}
+        >
+          {emptyText}
+        </Blockquote>
       )}
 
       <ScrollArea

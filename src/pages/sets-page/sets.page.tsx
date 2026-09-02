@@ -9,7 +9,7 @@ export const SetsPage: React.FC = () => {
 
   return (
     <section className={styles.page}>
-      <Title order={2} className={styles.title}>
+      <Title order={1} ta="left" className={styles.title}>
         Мои наборы
       </Title>
       <SectionContentsBrowser
