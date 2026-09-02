@@ -153,7 +153,6 @@ export const router = createBrowserRouter([
                   {
                     element: createElement(DashboardLayout, {
                       breadcrumbsSlot: createElement(DashboardBreadcrumbs),
-                      actionsSlot: createElement(DashboardCreateEntity),
                     }),
                     children: [
                       {

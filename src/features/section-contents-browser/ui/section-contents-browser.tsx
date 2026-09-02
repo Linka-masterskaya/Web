@@ -2,7 +2,7 @@ import { parseSectionContentsFilters, useSectionContents } from '@entities/folde
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { useRouteQueryParams } from '@shared/lib/routes'
-import { type FC, useMemo } from 'react'
+import { type FC, useEffect, useMemo } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
 import styles from './section-contents-browser.module.scss'
@@ -19,10 +19,16 @@ export type TOpenSectionPackHandler = (
   context: TOpenSectionPackContext,
 ) => void
 
+export type TSectionFolderContext = {
+  isRoot: boolean
+  currentFolderId?: string
+}
+
 export type TSectionContentsBrowserProps = {
   section: TSection
   onOpenPack?: TOpenSectionPackHandler
   dashboardHref?: string
+  onFolderContextChange?: (context: TSectionFolderContext) => void
 }
 
 const DEFAULT_DASHBOARD_HREF = '/'
@@ -31,11 +37,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   section,
   onOpenPack,
   dashboardHref = DEFAULT_DASHBOARD_HREF,
+  onFolderContextChange,
 }) => {
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
 
   const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
+
+  useEffect(() => {
+    onFolderContextChange?.({ isRoot, currentFolderId })
+  }, [currentFolderId, isRoot, onFolderContextChange])
 
   const filters = useMemo(() => parseSectionContentsFilters(queryParams), [queryParams])
 

@@ -7,6 +7,8 @@
 
 .emptyText {
   flex-shrink: 0;
+  margin-top: var(--mantine-spacing-md);
+  margin-left: calc(var(--bq-icon-size, 2rem) / 2);
   margin-bottom: var(--mantine-spacing-md);
 }
 

@@ -7,8 +7,17 @@
   overflow: hidden;
 }
 
-.title {
+.header {
+  display: flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.title {
+  margin-bottom: 0;
 }
 
 .list {
