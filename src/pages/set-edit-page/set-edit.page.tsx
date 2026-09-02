@@ -1,114 +1,44 @@
-import {
-  getSetPageStructure,
-  type TSetPageType,
-  useSet,
-  useUpdateSetPageStructure,
-  useUpdateSetPageType,
-} from '@entities/set'
+import { getSetPageStructure } from '@entities/set'
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
 import {
-  isSetPageType,
   SET_PAGE_TYPE_ICONS,
   SET_PAGE_TYPE_LABELS,
   SET_PAGE_TYPE_OPTIONS,
 } from '@features/set-page-type-selector'
 import { Button, Loader, Text } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { NumberStepper } from '@shared/ui/number-stepper'
 import { SubsetLayout } from '@widgets/subset-layout'
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router'
-import { z } from 'zod'
-
+import { useSetEditor } from './model/use-set-editor'
 import styles from './set-edit-page.module.scss'
-
-const setIdSchema = z.string().uuid()
-const subsetIdSchema = z.string().uuid()
+import { SetEditFeedback } from './ui/set-edit-feedback'
 
 export const SetEditPage: React.FC = () => {
-  const navigate = useNavigate()
-  const { setId, subsetId } = useParams()
-  const parsedSetId = setIdSchema.safeParse(setId)
-  const parsedSubsetId = subsetId == null ? null : subsetIdSchema.safeParse(subsetId)
-  const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
-  const setQuery = useSet(resolvedSetId)
-  const updatePageTypeMutation = useUpdateSetPageType(resolvedSetId)
-  const updatePageStructureMutation = useUpdateSetPageStructure(resolvedSetId)
-  const [typeDraft, setTypeDraft] = useState<{ pageId: string; type: TSetPageType } | null>(null)
-  const [structureDraft, setStructureDraft] = useState<{
-    pageId: string
-    primaryCount: number
-    secondaryCount?: number
-  } | null>(null)
+  const {
+    activePage,
+    activePageIndex,
+    activeStructureDraft,
+    handleBackToSets,
+    handleCreatePage,
+    handleExit,
+    handleStructureChange,
+    handleTypeChange,
+    hasInvalidRoute,
+    hasMissingPage,
+    isSaving,
+    selectedType,
+    setQuery,
+    updatePageStructureMutation,
+    updatePageTypeMutation,
+  } = useSetEditor()
 
-  const pages = setQuery.data?.pages ?? []
-  const activePage = parsedSubsetId?.success
-    ? pages.find((page) => page.id === parsedSubsetId.data)
-    : pages[0]
-  const activePageIndex = activePage ? pages.findIndex((page) => page.id === activePage.id) : -1
-  const selectedType =
-    activePage && typeDraft?.pageId === activePage.id ? typeDraft.type : activePage?.type
-
-  const handleExit = () => {
-    if (!parsedSetId.success) {
-      navigate(createUrl(routerPath.dashboardSets))
-      return
-    }
-
-    navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
-  }
-
-  const handleTypeChange = (nextValue: string) => {
-    if (
-      !activePage ||
-      !isSetPageType(nextValue) ||
-      nextValue === activePage.type ||
-      updatePageTypeMutation.isPending ||
-      updatePageStructureMutation.isPending
-    ) {
-      return
-    }
-
-    setTypeDraft({ pageId: activePage.id, type: nextValue })
-    updatePageTypeMutation.reset()
-    updatePageTypeMutation.mutate(
-      { pageId: activePage.id, type: nextValue },
-      {
-        onError: () => setTypeDraft(null),
-        onSuccess: () => setTypeDraft(null),
-      },
-    )
-  }
-
-  const handleStructureChange = (primaryCount: number, secondaryCount?: number) => {
-    if (!activePage || updatePageTypeMutation.isPending || updatePageStructureMutation.isPending) {
-      return
-    }
-
-    setStructureDraft({ pageId: activePage.id, primaryCount, secondaryCount })
-    updatePageStructureMutation.reset()
-    updatePageStructureMutation.mutate(
-      { pageId: activePage.id, primaryCount, secondaryCount },
-      {
-        onError: () => setStructureDraft(null),
-        onSuccess: () => setStructureDraft(null),
-      },
-    )
-  }
-
-  if (!parsedSetId.success || parsedSubsetId?.success === false) {
+  if (hasInvalidRoute) {
     return (
-      <div className={styles.feedback}>
-        <div className={styles.feedbackContent}>
-          <Text className={styles.feedbackError} role="alert">
-            Некорректный адрес страницы редактора набора
-          </Text>
-          <Button variant="outline" onClick={() => navigate(createUrl(routerPath.dashboardSets))}>
-            К списку наборов
-          </Button>
-        </div>
-      </div>
+      <SetEditFeedback message="Некорректный адрес страницы редактора набора" isError>
+        <Button variant="outline" onClick={handleBackToSets}>
+          К списку наборов
+        </Button>
+      </SetEditFeedback>
     )
   }
 
@@ -122,60 +52,42 @@ export const SetEditPage: React.FC = () => {
 
   if (setQuery.isError) {
     return (
-      <div className={styles.feedback}>
-        <div className={styles.feedbackContent}>
-          <Text className={styles.feedbackError} role="alert">
-            Не удалось загрузить набор
-          </Text>
-          <div className={styles.feedbackActions}>
-            <Button variant="outline" onClick={handleExit}>
-              Назад
-            </Button>
-            <Button onClick={() => setQuery.refetch()}>Повторить</Button>
-          </div>
+      <SetEditFeedback message="Не удалось загрузить набор" isError>
+        <div className={styles.feedbackActions}>
+          <Button variant="outline" onClick={handleExit}>
+            Назад
+          </Button>
+          <Button onClick={() => setQuery.refetch()}>Повторить</Button>
         </div>
-      </div>
+      </SetEditFeedback>
     )
   }
 
-  if (parsedSubsetId?.success && !activePage) {
+  if (hasMissingPage) {
     return (
-      <div className={styles.feedback}>
-        <div className={styles.feedbackContent}>
-          <Text className={styles.feedbackError} role="alert">
-            Страница не найдена в наборе
-          </Text>
-          <Button variant="outline" onClick={handleExit}>
-            К обзору набора
-          </Button>
-        </div>
-      </div>
+      <SetEditFeedback message="Страница не найдена в наборе" isError>
+        <Button variant="outline" onClick={handleExit}>
+          К обзору набора
+        </Button>
+      </SetEditFeedback>
     )
   }
 
   if (!activePage) {
     return (
-      <div className={styles.feedback}>
-        <div className={styles.feedbackContent}>
-          <Text className={styles.feedbackTitle}>В наборе пока нет страниц</Text>
-          <Text className={styles.feedbackDescription}>
-            Создайте страницу, чтобы открыть редактор.
-          </Text>
-          <div className={styles.feedbackActions}>
-            <Button variant="outline" onClick={handleExit}>
-              Назад
-            </Button>
-            <Button
-              leftSection={<Icon name="Plus" size={18} />}
-              onClick={() =>
-                navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
-              }
-            >
-              Создать страницу
-            </Button>
-          </div>
+      <SetEditFeedback
+        message="В наборе пока нет страниц"
+        description="Создайте страницу, чтобы открыть редактор."
+      >
+        <div className={styles.feedbackActions}>
+          <Button variant="outline" onClick={handleExit}>
+            Назад
+          </Button>
+          <Button leftSection={<Icon name="Plus" size={18} />} onClick={handleCreatePage}>
+            Создать страницу
+          </Button>
         </div>
-      </div>
+      </SetEditFeedback>
     )
   }
 
@@ -183,10 +95,8 @@ export const SetEditPage: React.FC = () => {
   const pageTypeLabel = SET_PAGE_TYPE_LABELS[resolvedSelectedType]
   const pageTypeIcon = SET_PAGE_TYPE_ICONS[resolvedSelectedType]
   const pageStructure = getSetPageStructure(activePage)
-  const activeStructureDraft = structureDraft?.pageId === activePage.id ? structureDraft : null
   const primaryCount = activeStructureDraft?.primaryCount ?? pageStructure.primaryCount
   const secondaryCount = activeStructureDraft?.secondaryCount ?? pageStructure.secondaryCount
-  const isSidebarSaving = updatePageTypeMutation.isPending || updatePageStructureMutation.isPending
 
   return (
     <section
@@ -203,7 +113,7 @@ export const SetEditPage: React.FC = () => {
             value={resolvedSelectedType}
             options={[...SET_PAGE_TYPE_OPTIONS]}
             onChange={handleTypeChange}
-            disabled={isSidebarSaving}
+            disabled={isSaving}
           />
         }
         leftSlot={
@@ -212,7 +122,7 @@ export const SetEditPage: React.FC = () => {
               value={resolvedSelectedType}
               options={[...SET_PAGE_TYPE_OPTIONS]}
               onChange={handleTypeChange}
-              disabled={isSidebarSaving}
+              disabled={isSaving}
             />
 
             <div className={styles.structureControls}>
@@ -221,7 +131,7 @@ export const SetEditPage: React.FC = () => {
                 value={primaryCount}
                 min={pageStructure.primaryMin}
                 max={pageStructure.primaryMax}
-                disabled={isSidebarSaving}
+                disabled={isSaving}
                 onChange={(value) => handleStructureChange(value, secondaryCount)}
               />
 
@@ -234,14 +144,14 @@ export const SetEditPage: React.FC = () => {
                     value={secondaryCount}
                     min={pageStructure.secondaryMin}
                     max={pageStructure.secondaryMax}
-                    disabled={isSidebarSaving}
+                    disabled={isSaving}
                     onChange={(value) => handleStructureChange(primaryCount, value)}
                   />
                 )}
             </div>
 
             <div className={styles.saveStatus} aria-live="polite">
-              {isSidebarSaving && <Text className={styles.savePending}>Сохраняем настройки…</Text>}
+              {isSaving && <Text className={styles.savePending}>Сохраняем настройки…</Text>}
 
               {(updatePageTypeMutation.isError || updatePageStructureMutation.isError) && (
                 <Text className={styles.saveError} role="alert">
@@ -281,7 +191,7 @@ export const SetEditPage: React.FC = () => {
               leftSection={<Icon name="Grid2x2" size={16} />}
               className={styles.overviewButton}
               onClick={handleExit}
-              disabled={isSidebarSaving}
+              disabled={isSaving}
             >
               Обзор
             </Button>

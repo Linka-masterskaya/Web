@@ -1,4 +1,3 @@
-import { folderQueryKeys } from '@entities/folder'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateSetTitle } from '../api/update-set-title'
 import { mergeSet } from '../lib/merge-set'
@@ -32,10 +31,7 @@ export const useUpdateSetTitle = (setId: string) => {
         mergeSet(currentSet, set),
       )
 
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: setQueryKeys.lists() }),
-        queryClient.invalidateQueries({ queryKey: folderQueryKeys.all }),
-      ])
+      await queryClient.invalidateQueries({ queryKey: setQueryKeys.lists() })
     },
   })
 }

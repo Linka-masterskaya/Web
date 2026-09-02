@@ -14,23 +14,6 @@ export const CreateEntity = ({ config, className }: TCreateEntityProps) => {
     return null
   }
 
-  if (config.actions.length === 1) {
-    const action = config.actions[0]
-    const buttonProps = {
-      variant: 'filled' as const,
-      className: clsx(styles.button, className),
-      leftSection: <Icon size={16} name="Plus" />,
-      onClick: action.onClick,
-      children: action.label,
-    }
-
-    if (action.link) {
-      return <Button component={Link} to={action.link} {...buttonProps} />
-    }
-
-    return <Button {...buttonProps} />
-  }
-
   return (
     <Popover
       opened={opened}

@@ -1,3 +1,5 @@
-export { SetStudioExitButton, SetStudioTitle, SetStudioToolbar } from './set-studio-controls'
+export { SetStudioExitButton } from './set-studio-exit-button'
+export { SetStudioTitle } from './set-studio-title'
+export { SetStudioToolbar } from './set-studio-toolbar'
 export { StudioLayout } from './studio-layout'
 export type { TStudioLayoutProps } from './types'

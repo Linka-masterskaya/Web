@@ -1,4 +1,3 @@
-import { folderQueryKeys } from '@entities/folder'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateSet } from '../api/update-set'
 import { mergeSet } from '../lib/merge-set'
@@ -25,10 +24,7 @@ export const useUpdateSet = (setId = '') => {
         }
       })
 
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: setQueryKeys.lists() }),
-        queryClient.invalidateQueries({ queryKey: folderQueryKeys.all }),
-      ])
+      await queryClient.invalidateQueries({ queryKey: setQueryKeys.lists() })
     },
   })
 }
