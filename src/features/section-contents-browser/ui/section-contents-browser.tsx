@@ -4,6 +4,7 @@ import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import type { FC } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
+import styles from './section-contents-browser.module.scss'
 import { SectionContentsCards } from './section-contents-cards'
 
 export type TOpenSectionPackContext = {
@@ -71,7 +72,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       } as const)
 
   return (
-    <section>
+    <section className={styles.root}>
       {isLoading && (
         <Group gap="sm">
           <Loader size="sm" />

@@ -3,7 +3,7 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
-import { Text } from '@mantine/core'
+import { ScrollArea, Text } from '@mantine/core'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { FC } from 'react'
@@ -51,42 +51,49 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   onOpenPack,
 }) => {
   return (
-    <section aria-label="Содержимое папки">
-      <div className={styles.grid}>
-        <Card
-          className={styles.card}
-          variant="icon"
-          label="Вернуться назад"
-          icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
-          action={backAction}
-        />
-        {items.map((item) => {
-          const handleClick = () => {
-            if (isFolderContentItem(item)) {
-              onOpenFolder(item)
-              return
+    <section aria-label="Содержимое папки" className={styles.root}>
+      <ScrollArea
+        type="auto"
+        scrollbars="y"
+        className={styles.scrollArea}
+        classNames={{ viewport: styles.viewport }}
+      >
+        <div className={styles.grid}>
+          <Card
+            className={styles.card}
+            variant="icon"
+            label="Вернуться назад"
+            icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
+            action={backAction}
+          />
+          {items.map((item) => {
+            const handleClick = () => {
+              if (isFolderContentItem(item)) {
+                onOpenFolder(item)
+                return
+              }
+              if (isPackContentItem(item)) {
+                onOpenPack(item)
+              }
             }
-            if (isPackContentItem(item)) {
-              onOpenPack(item)
-            }
-          }
 
-          return (
-            <div key={`${item.type}:${item.id}`}>
-              <Card
-                variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
-                // variant='image'
-                // imageSrc={item.preview_url}
-                // imageAlt={item.name}
-                label={item.name}
-                icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
-                action={{ type: 'function', onClick: handleClick }}
-                className={styles.card}
-              />
-            </div>
-          )
-        })}
-      </div>
+            return (
+              <div key={`${item.type}:${item.id}`}>
+                <Card
+                  variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
+                  // variant='image'
+                  // imageSrc={item.preview_url}
+                  // imageAlt={item.name}
+                  label={item.name}
+                  icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
+                  action={{ type: 'function', onClick: handleClick }}
+                  className={styles.card}
+                />
+              </div>
+            )
+          })}
+        </div>
+      </ScrollArea>
 
       {items.length === 0 && <Text mt="md">{emptyText}</Text>}
     </section>

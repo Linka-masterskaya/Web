@@ -9,7 +9,9 @@ export const SetsPage: React.FC = () => {
 
   return (
     <section className={styles.page}>
-      <Title order={2}>Мои наборы</Title>
+      <Title order={2} className={styles.title}>
+        Мои наборы
+      </Title>
       <SectionContentsBrowser
         section="my"
         dashboardHref={createUrl(routerPath.dashboard)}
