@@ -1,9 +1,11 @@
-import { useSectionContents } from '@entities/folder'
+import { parseSectionContentsFilters, useSectionContents } from '@entities/folder'
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
-import type { FC } from 'react'
+import { useRouteQueryParams } from '@shared/lib/routes'
+import { type FC, useMemo } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
+import styles from './section-contents-browser.module.scss'
 import { SectionContentsCards } from './section-contents-cards'
 
 export type TOpenSectionPackContext = {
@@ -31,8 +33,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   dashboardHref = DEFAULT_DASHBOARD_HREF,
 }) => {
   const config = sectionBrowserConfig[section]
+  const { queryParams } = useRouteQueryParams()
 
   const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
+
+  const filters = useMemo(() => parseSectionContentsFilters(queryParams), [queryParams])
 
   const { data, isLoading, error, refetch } = useSectionContents({
     section,
@@ -41,6 +46,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     order: 'asc',
     limit: 50,
     offset: 0,
+    ...filters,
   })
 
   const items = data?.items ?? []
@@ -71,7 +77,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       } as const)
 
   return (
-    <section>
+    <section className={styles.root}>
       {isLoading && (
         <Group gap="sm">
           <Loader size="sm" />

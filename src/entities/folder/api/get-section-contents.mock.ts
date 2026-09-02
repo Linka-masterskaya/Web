@@ -166,13 +166,26 @@ export const getSectionContentsMock = async (
 ): Promise<TSectionContentsResponse> => {
   const parsed = getSectionContentsParamsSchema.parse(params)
 
-  const { section, parentId, limit = 50, offset = 0, sort = 'name', order = 'asc' } = parsed
+  const {
+    section,
+    parentId,
+    limit = 50,
+    offset = 0,
+    sort = 'name',
+    order = 'asc',
+    search,
+  } = parsed
 
   await wait(300)
 
   const parentKey = parentId ?? ROOT_KEY
 
-  const sourceItems = mockTree[section][parentKey] ?? []
+  let sourceItems = mockTree[section][parentKey] ?? []
+
+  if (search) {
+    const normalizedSearch = search.toLowerCase()
+    sourceItems = sourceItems.filter((item) => item.name.toLowerCase().includes(normalizedSearch))
+  }
 
   const sortedItems = [...sourceItems].sort((left, right) => {
     const comparison = compareItems(left, right, sort)

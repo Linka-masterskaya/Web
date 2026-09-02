@@ -3,6 +3,7 @@
   flex-direction: column;
   gap: var(--mantine-spacing-lg);
   width: 334px;
+  max-width: 100%;
   padding: var(--mantine-spacing-md) var(--mantine-spacing-md) var(--mantine-spacing-lg);
   border: none;
   border-radius: 16px;
@@ -17,6 +18,23 @@
   &:focus-visible {
     outline: 2px solid rgba(62, 135, 255, 0.75);
     box-shadow: none;
+  }
+}
+
+.fill {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+
+  .media {
+    flex-shrink: 0;
+    height: auto;
+    aspect-ratio: 302 / 180;
+  }
+
+  .iconTile svg {
+    width: clamp(36px, 21.56%, 72px);
+    height: clamp(36px, 21.56%, 72px);
   }
 }
 
@@ -46,14 +64,18 @@
 
 .nameRow {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: var(--mantine-spacing-sm);
+  min-width: 0;
   min-height: 24px;
 }
 
 .label {
   overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 0;
   color: var(--mantine-color-black);
   font-size: var(--mantine-font-size-md);
   font-weight: 600;

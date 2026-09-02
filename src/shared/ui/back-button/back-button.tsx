@@ -1,4 +1,5 @@
 import { Card, Group, Text } from '@mantine/core'
+import clsx from 'clsx'
 import { Icon } from '@shared/ui/icon'
 import { useNavigate } from 'react-router'
 import styles from './back-button.module.scss'
@@ -6,6 +7,7 @@ import styles from './back-button.module.scss'
 export type TBackButtonProps = {
   /** inline — иконка + текст; tile — плитка в стиле Card */
   variant?: 'inline' | 'tile'
+  className?: string
   /**
    * Куда вести «назад». По умолчанию — предыдущая страница истории (navigate(-1)).
    * Передавайте `to`, если нужен гарантированный переход на конкретный маршрут.
@@ -13,7 +15,7 @@ export type TBackButtonProps = {
   to?: string
 }
 
-export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', to }) => {
+export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', className, to }) => {
   const navigate = useNavigate()
 
   const handleClick = () => {
@@ -31,7 +33,7 @@ export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', to 
         padding="md"
         radius="md"
         withBorder
-        className={styles.tile}
+        className={clsx(styles.tile, className)}
         onClick={handleClick}
         role="button"
       >

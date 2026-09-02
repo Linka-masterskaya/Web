@@ -1,12 +1,23 @@
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 334px), 1fr));
-  align-items: start;
-  gap: 20px 20px;
-  width: 100%;
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
 }
 
-.grid .card {
-  width: min(100%, 334px);
-  max-width: 334px;
+.emptyText {
+  flex-shrink: 0;
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+}
+
+.viewport {
+  --card-grid-hover-padding: 4px;
+
+  padding: var(--card-grid-hover-padding);
+  scroll-padding: var(--card-grid-hover-padding);
 }

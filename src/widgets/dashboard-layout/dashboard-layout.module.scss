@@ -1,14 +1,16 @@
 .layout {
   display: flex;
+  flex: 1;
   flex-direction: column;
   min-width: 0;
-  min-height: 100%;
+  min-height: 0;
   width: 100%;
   background-color: var(--mantine-color-white);
 }
 
 .panel {
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   min-height: 48px;
@@ -28,7 +30,19 @@
 }
 
 .content {
+  display: flex;
   flex: 1;
+  flex-direction: column;
   min-width: 0;
-  padding: 0 22px 50px;
+  min-height: 0;
+  padding: 6px 22px 50px;
+  overflow: hidden;
+}
+
+.pageContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
 }

@@ -6,6 +6,10 @@ export { useFolders } from './hooks/use-folders'
 export { useSectionContents } from './hooks/use-section-contents'
 export { folderQueryKeys } from './lib/query-keys'
 export {
+  parseSectionContentsFilters,
+  type TSectionContentsFilters,
+} from './lib/parse-section-contents-filters'
+export {
   contentItemSchema,
   getSectionContentsParamsSchema,
   sectionContentsResponseSchema,
@@ -13,6 +17,7 @@ export {
   type TContentItem,
   type TGetSectionContentsParams,
   type TSection,
+  type TSectionContentsDifficulty,
   type TSectionContentsResponse,
 } from './model/content-item.schema'
 export {

@@ -3,10 +3,11 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
-import { Text } from '@mantine/core'
+import { ScrollArea, Text } from '@mantine/core'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { FC } from 'react'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -51,29 +52,41 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   onOpenPack,
 }) => {
   return (
-    <section aria-label="Содержимое папки">
-      <div className={styles.grid}>
-        <Card
-          className={styles.card}
-          variant="icon"
-          label="Вернуться назад"
-          icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
-          action={backAction}
-        />
-        {items.map((item) => {
-          const handleClick = () => {
-            if (isFolderContentItem(item)) {
-              onOpenFolder(item)
-              return
-            }
-            if (isPackContentItem(item)) {
-              onOpenPack(item)
-            }
-          }
+    <section aria-label="Содержимое папки" className={styles.root}>
+      {items.length === 0 && (
+        <Text className={styles.emptyText}>{emptyText}</Text>
+      )}
 
-          return (
-            <div key={`${item.type}:${item.id}`}>
+      <ScrollArea
+        type="auto"
+        scrollbars="y"
+        className={styles.scrollArea}
+        classNames={{ viewport: styles.viewport }}
+      >
+        <div className={gridStyles.grid}>
+          <Card
+            fill
+            className={gridStyles.card}
+            variant="icon"
+            label="Вернуться назад"
+            icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
+            action={backAction}
+          />
+          {items.map((item) => {
+            const handleClick = () => {
+              if (isFolderContentItem(item)) {
+                onOpenFolder(item)
+                return
+              }
+              if (isPackContentItem(item)) {
+                onOpenPack(item)
+              }
+            }
+
+            return (
               <Card
+                key={`${item.type}:${item.id}`}
+                fill
                 variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
                 // variant='image'
                 // imageSrc={item.preview_url}
@@ -81,14 +94,12 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                 label={item.name}
                 icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
                 action={{ type: 'function', onClick: handleClick }}
-                className={styles.card}
+                className={gridStyles.card}
               />
-            </div>
-          )
-        })}
-      </div>
-
-      {items.length === 0 && <Text mt="md">{emptyText}</Text>}
+            )
+          })}
+        </div>
+      </ScrollArea>
     </section>
   )
 }

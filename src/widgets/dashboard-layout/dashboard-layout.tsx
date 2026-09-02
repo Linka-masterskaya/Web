@@ -16,7 +16,9 @@ export const DashboardLayout: React.FC<TDashboardLayoutProps> = ({
     </div>
 
     <div className={styles.content}>
-      <Outlet />
+      <div className={styles.pageContainer}>
+        <Outlet />
+      </div>
     </div>
   </div>
 )
