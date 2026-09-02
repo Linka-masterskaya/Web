@@ -7,6 +7,7 @@ import { ScrollArea, Text } from '@mantine/core'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { FC } from 'react'
+import gridStyles from '@shared/styles/fluid-card-grid.module.scss'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -58,9 +59,10 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
         className={styles.scrollArea}
         classNames={{ viewport: styles.viewport }}
       >
-        <div className={styles.grid}>
+        <div className={gridStyles.grid}>
           <Card
-            className={styles.card}
+            fill
+            className={gridStyles.card}
             variant="icon"
             label="Вернуться назад"
             icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
@@ -78,18 +80,18 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
             }
 
             return (
-              <div key={`${item.type}:${item.id}`}>
-                <Card
-                  variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
-                  // variant='image'
-                  // imageSrc={item.preview_url}
-                  // imageAlt={item.name}
-                  label={item.name}
-                  icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
-                  action={{ type: 'function', onClick: handleClick }}
-                  className={styles.card}
-                />
-              </div>
+              <Card
+                key={`${item.type}:${item.id}`}
+                fill
+                variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
+                // variant='image'
+                // imageSrc={item.preview_url}
+                // imageAlt={item.name}
+                label={item.name}
+                icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
+                action={{ type: 'function', onClick: handleClick }}
+                className={gridStyles.card}
+              />
             )
           })}
         </div>

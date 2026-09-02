@@ -11,19 +11,8 @@
 }
 
 .viewport {
-  padding: 6px 12px 6px 6px;
-  scroll-padding: 6px;
-}
+  --card-grid-hover-padding: 4px;
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 334px), 1fr));
-  align-items: start;
-  gap: 20px 20px;
-  width: 100%;
-}
-
-.grid .card {
-  width: min(100%, 334px);
-  max-width: 334px;
+  padding: var(--card-grid-hover-padding);
+  scroll-padding: var(--card-grid-hover-padding);
 }

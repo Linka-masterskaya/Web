@@ -16,8 +16,9 @@
 }
 
 .tile {
+  width: 100%;
+  min-width: 0;
   cursor: pointer;
-  min-width: 280px;
 
   &:hover,
   &:focus-visible {
@@ -27,7 +28,9 @@
 }
 
 .tileIconArea {
-  height: 180px;
+  aspect-ratio: 302 / 180;
+  height: auto;
+  min-height: 0;
   background-color: var(--mantine-color-lightBlue-0);
   border-radius: var(--mantine-radius-md);
 }

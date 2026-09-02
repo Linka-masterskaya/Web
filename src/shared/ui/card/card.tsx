@@ -4,8 +4,8 @@ import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
 
 export const Card: React.FC<TCardProps> = (props) => {
-  const { className, variant, label, level, action } = props
-  const cardClassName = clsx(styles.card, className)
+  const { className, fill = false, variant, label, level, action } = props
+  const cardClassName = clsx(styles.card, fill && styles.fill, className)
 
   const content = (
     <>

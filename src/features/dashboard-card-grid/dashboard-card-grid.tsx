@@ -1,14 +1,15 @@
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
+import gridStyles from '@shared/styles/fluid-card-grid.module.scss'
 import { dashboardCardGridItems } from './config'
-import styles from './dashboard-card-grid.module.scss'
 
 export const DashboardCardGrid: React.FC = () => (
-  <section className={styles.grid} aria-label="Разделы дашборда">
+  <section className={gridStyles.grid} aria-label="Разделы дашборда">
     {dashboardCardGridItems.map((item) => (
       <Card
         key={item.id}
-        className={styles.card}
+        fill
+        className={gridStyles.card}
         variant="icon"
         label={item.label}
         icon={<Icon name={item.iconName} aria-hidden="true" />}
