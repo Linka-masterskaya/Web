@@ -128,3 +128,8 @@
 	max-width: 100%;
 	padding: 8px;
 }
+
+.submitError {
+	color: var(--mantine-color-red-6);
+	font-size: var(--mantine-font-size-sm);
+}

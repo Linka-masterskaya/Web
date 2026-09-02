@@ -7,6 +7,7 @@ export const setQueryKeys = {
 }
 
 export const setMutationKeys = {
+  updateSettings: (id: string) => [...setQueryKeys.detail(id), 'update-settings'] as const,
   updatePageType: (id: string) => [...setQueryKeys.detail(id), 'update-page-type'] as const,
   updatePageStructure: (id: string) =>
     [...setQueryKeys.detail(id), 'update-page-structure'] as const,

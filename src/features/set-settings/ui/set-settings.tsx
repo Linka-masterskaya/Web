@@ -26,7 +26,7 @@ import { setSettingsSchema, type TSetSettings } from '../model/set-settings.sche
 import type { TSetSettingsProps } from '../types'
 import styles from './set-settings.module.scss'
 
-export const SetSettings = ({ defaultValues, onClose, onSave }: TSetSettingsProps) => {
+export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSetSettingsProps) => {
   const form = useForm<TSetSettings>({
     resolver: zodResolver(setSettingsSchema),
     defaultValues: {
@@ -288,6 +288,11 @@ export const SetSettings = ({ defaultValues, onClose, onSave }: TSetSettingsProp
           </Accordion>
 
           <Stack gap="sm" className={styles.footer} align="center">
+            {submitError && (
+              <Text className={styles.submitError} role="alert">
+                {submitError}
+              </Text>
+            )}
             <Button
               className={styles.saveButton}
               type="submit"

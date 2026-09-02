@@ -1,4 +1,4 @@
-import { Group, Radio, Stack, Text } from '@mantine/core'
+import { Radio, Text } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import type { TAssignmentTypeSelectorProps } from '../model/types'
 import styles from './assignment-type-selector.module.scss'
@@ -25,25 +25,23 @@ export const AssignmentTypeSelector: React.FC<TAssignmentTypeSelectorProps> = ({
       className={styles.container}
       data-compact={compact ? 'true' : 'false'}
     >
-      <Stack gap="8px">
+      <div className={styles.options}>
         {options.map((option) => (
           <Radio.Card
             key={option.id}
             value={option.id}
-            radius="8px"
             className={styles.option}
-            c="blue.4"
             disabled={disabled}
             aria-label={compact ? option.title : undefined}
             data-compact={compact ? 'true' : 'false'}
           >
-            <Group gap="8px" wrap="nowrap">
+            <div className={styles.optionContent}>
               <Icon name={option.iconName} aria-hidden />
               <Text className={styles.optionTitle}>{option.title}</Text>
-            </Group>
+            </div>
           </Radio.Card>
         ))}
-      </Stack>
+      </div>
     </Radio.Group>
   )
 }

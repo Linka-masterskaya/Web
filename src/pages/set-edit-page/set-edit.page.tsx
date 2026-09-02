@@ -12,7 +12,7 @@ import {
   SET_PAGE_TYPE_LABELS,
   SET_PAGE_TYPE_OPTIONS,
 } from '@features/set-page-type-selector'
-import { Button, Center, Group, Loader, Stack, Text } from '@mantine/core'
+import { Button, Loader, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { NumberStepper } from '@shared/ui/number-stepper'
@@ -99,69 +99,69 @@ export const SetEditPage: React.FC = () => {
 
   if (!parsedSetId.success || parsedSubsetId?.success === false) {
     return (
-      <Center className={styles.feedback}>
-        <Stack gap="md" align="center">
-          <Text c="red.6" role="alert">
-            Некорректный адрес страницы
+      <div className={styles.feedback}>
+        <div className={styles.feedbackContent}>
+          <Text className={styles.feedbackError} role="alert">
+            Некорректный адрес страницы редактора набора
           </Text>
           <Button variant="outline" onClick={() => navigate(createUrl(routerPath.dashboardSets))}>
             К списку наборов
           </Button>
-        </Stack>
-      </Center>
+        </div>
+      </div>
     )
   }
 
   if (setQuery.isLoading) {
     return (
-      <Center className={styles.feedback}>
+      <div className={styles.feedback}>
         <Loader aria-label="Загрузка редактора" />
-      </Center>
+      </div>
     )
   }
 
   if (setQuery.isError) {
     return (
-      <Center className={styles.feedback}>
-        <Stack gap="md" align="center">
-          <Text c="red.6" role="alert">
+      <div className={styles.feedback}>
+        <div className={styles.feedbackContent}>
+          <Text className={styles.feedbackError} role="alert">
             Не удалось загрузить набор
           </Text>
-          <Group>
+          <div className={styles.feedbackActions}>
             <Button variant="outline" onClick={handleExit}>
               Назад
             </Button>
             <Button onClick={() => setQuery.refetch()}>Повторить</Button>
-          </Group>
-        </Stack>
-      </Center>
+          </div>
+        </div>
+      </div>
     )
   }
 
   if (parsedSubsetId?.success && !activePage) {
     return (
-      <Center className={styles.feedback}>
-        <Stack gap="md" align="center">
-          <Text c="red.6" role="alert">
+      <div className={styles.feedback}>
+        <div className={styles.feedbackContent}>
+          <Text className={styles.feedbackError} role="alert">
             Страница не найдена в наборе
           </Text>
           <Button variant="outline" onClick={handleExit}>
             К обзору набора
           </Button>
-        </Stack>
-      </Center>
+        </div>
+      </div>
     )
   }
 
   if (!activePage) {
     return (
-      <Center className={styles.feedback}>
-        <Stack gap="md" align="center">
-          <Text fw={600}>В наборе пока нет страниц</Text>
-          <Text size="sm" c="dimmed" ta="center">
+      <div className={styles.feedback}>
+        <div className={styles.feedbackContent}>
+          <Text className={styles.feedbackTitle}>В наборе пока нет страниц</Text>
+          <Text className={styles.feedbackDescription}>
             Создайте страницу, чтобы открыть редактор.
           </Text>
-          <Group>
+          <div className={styles.feedbackActions}>
             <Button variant="outline" onClick={handleExit}>
               Назад
             </Button>
@@ -173,9 +173,9 @@ export const SetEditPage: React.FC = () => {
             >
               Создать страницу
             </Button>
-          </Group>
-        </Stack>
-      </Center>
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -207,7 +207,7 @@ export const SetEditPage: React.FC = () => {
           />
         }
         leftSlot={
-          <Stack gap="xl">
+          <div className={styles.sidebarControls}>
             <AssignmentTypeSelector
               value={resolvedSelectedType}
               options={[...SET_PAGE_TYPE_OPTIONS]}
@@ -215,7 +215,7 @@ export const SetEditPage: React.FC = () => {
               disabled={isSidebarSaving}
             />
 
-            <Stack gap="md">
+            <div className={styles.structureControls}>
               <NumberStepper
                 label={pageStructure.primaryLabel}
                 value={primaryCount}
@@ -238,37 +238,29 @@ export const SetEditPage: React.FC = () => {
                     onChange={(value) => handleStructureChange(primaryCount, value)}
                   />
                 )}
-            </Stack>
+            </div>
 
             <div className={styles.saveStatus} aria-live="polite">
-              {isSidebarSaving && (
-                <Text size="xs" c="dimmed">
-                  Сохраняем настройки…
-                </Text>
-              )}
+              {isSidebarSaving && <Text className={styles.savePending}>Сохраняем настройки…</Text>}
 
               {(updatePageTypeMutation.isError || updatePageStructureMutation.isError) && (
-                <Text size="xs" c="red.6" role="alert">
+                <Text className={styles.saveError} role="alert">
                   Не удалось сохранить настройки.
                 </Text>
               )}
             </div>
 
-            <Text size="xs" c="dimmed" ta="center" className={styles.typeHint}>
+            <Text className={styles.typeHint}>
               При смене типа содержимое текущей страницы будет сброшено.
             </Text>
-          </Stack>
+          </div>
         }
         rightSlot={
           <div className={styles.inspectorEmpty}>
             <span className={styles.inspectorIcon} aria-hidden="true">
               <Icon name="MousePointerClick" size={24} />
             </span>
-            <Text size="sm" c="dimmed" ta="center">
-              Выберите карточку
-              <br />
-              для начала работы
-            </Text>
+            <Text className={styles.inspectorText}>Выберите карточку для начала работы</Text>
           </div>
         }
       >
@@ -278,19 +270,15 @@ export const SetEditPage: React.FC = () => {
               <span className={styles.canvasIcon} aria-hidden="true">
                 <Icon name={pageTypeIcon} size={36} />
               </span>
-              <Text fw={700} size="lg">
-                {pageTypeLabel}
-              </Text>
-              <Text size="sm" c="dimmed" ta="center">
-                Страница {activePageIndex + 1}
-              </Text>
+              <Text className={styles.canvasTitle}>{pageTypeLabel}</Text>
+              <Text className={styles.canvasCaption}>Страница {activePageIndex + 1}</Text>
             </div>
           </div>
 
           <div className={styles.workspaceFooter}>
             <Button
               variant="outline"
-              leftSection={<Icon name="Grid2x2" size={18} />}
+              leftSection={<Icon name="Grid2x2" size={16} />}
               className={styles.overviewButton}
               onClick={handleExit}
               disabled={isSidebarSaving}

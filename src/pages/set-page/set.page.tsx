@@ -82,17 +82,15 @@ export const SetPage: React.FC = () => {
             </Text>
           </Stack>
 
-          <Group gap="sm">
-            <Button
-              leftSection={<Icon name="Plus" size={16} />}
-              disabled={setQuery.isLoading || setQuery.isError}
-              onClick={() =>
-                navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
-              }
-            >
-              Создать страницу
-            </Button>
-          </Group>
+          <Button
+            leftSection={<Icon name="Plus" size={16} />}
+            disabled={setQuery.isLoading || setQuery.isError}
+            onClick={() =>
+              navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
+            }
+          >
+            Создать страницу
+          </Button>
         </Group>
 
         {setQuery.isLoading && (

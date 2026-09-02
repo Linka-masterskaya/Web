@@ -1,5 +1,8 @@
-import { setQueryKeys, useSet, useUpdateSetTitle } from '@entities/set'
-import { ActionIcon, Button, Group, Text, TextInput } from '@mantine/core'
+import { setQueryKeys, type TSet, useSet, useUpdateSet, useUpdateSetTitle } from '@entities/set'
+import { SET_SETTINGS_DEFAULT_VALUES, SetSettings } from '@features/set-settings'
+import type { TSetSettings } from '@features/set-settings/model/set-settings.schema'
+import { ActionIcon, Button, Text, TextInput, UnstyledButton } from '@mantine/core'
+import { useModal } from '@shared/lib/modal'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useIsMutating } from '@tanstack/react-query'
@@ -10,6 +13,52 @@ import { z } from 'zod'
 import styles from './set-studio-controls.module.scss'
 
 const setIdSchema = z.string().uuid()
+
+type TEditSetSettingsModalProps = {
+  set: TSet
+  onClose: () => void
+}
+
+const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set, onClose }) => {
+  const updateSetMutation = useUpdateSet(set.id)
+
+  const handleSave = async (values: TSetSettings) => {
+    updateSetMutation.reset()
+
+    try {
+      const age = Number(values.age)
+
+      await updateSetMutation.mutateAsync({
+        id: set.id,
+        title: values.title.trim(),
+        folderId: set.folderId,
+        ageMin: age,
+        ageMax: age,
+        difficulty: values.level,
+        goals: set.goals ?? [],
+        notes: values.notes,
+      })
+
+      onClose()
+    } catch {
+      // Состояние ошибки отображается внутри формы.
+    }
+  }
+
+  return (
+    <SetSettings
+      defaultValues={{
+        title: set.title,
+        age: String(set.ageMin ?? set.ageMax ?? SET_SETTINGS_DEFAULT_VALUES.age),
+        level: set.difficulty ?? SET_SETTINGS_DEFAULT_VALUES.level,
+        notes: set.notes ?? SET_SETTINGS_DEFAULT_VALUES.notes,
+      }}
+      onClose={onClose}
+      onSave={handleSave}
+      submitError={updateSetMutation.isError ? 'Не удалось сохранить настройки.' : undefined}
+    />
+  )
+}
 
 export const SetStudioTitle: React.FC = () => {
   const location = useLocation()
@@ -81,7 +130,7 @@ export const SetStudioTitle: React.FC = () => {
   }
 
   return (
-    <Group gap="sm" wrap="nowrap" className={styles.titleGroup}>
+    <div className={styles.titleGroup}>
       <ActionIcon
         variant="transparent"
         color="dark"
@@ -108,7 +157,7 @@ export const SetStudioTitle: React.FC = () => {
             autoFocus
           />
 
-          <Group gap={2} wrap="nowrap" className={styles.titleActions}>
+          <div className={styles.titleActions}>
             <ActionIcon
               type="submit"
               variant="subtle"
@@ -130,11 +179,11 @@ export const SetStudioTitle: React.FC = () => {
             >
               <Icon name="X" size={18} />
             </ActionIcon>
-          </Group>
+          </div>
         </form>
       ) : (
         <>
-          <Text fw={700} fz="lg" truncate="end" className={styles.title}>
+          <Text className={styles.title}>
             {setQuery.data?.title ?? (parsedSetId.success ? 'Набор' : 'Новый набор')}
           </Text>
 
@@ -151,7 +200,61 @@ export const SetStudioTitle: React.FC = () => {
           )}
         </>
       )}
-    </Group>
+    </div>
+  )
+}
+
+export const SetStudioToolbar: React.FC = () => {
+  const location = useLocation()
+  const { setId, subsetId } = useParams()
+  const { open, close } = useModal()
+  const parsedSetId = setIdSchema.safeParse(setId)
+  const parsedSubsetId = setIdSchema.safeParse(subsetId)
+  const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
+  const setQuery = useSet(resolvedSetId)
+  const setEditorUrl = parsedSetId.success
+    ? createUrl(routerPath.dashboardSetIdEdit, { setId: resolvedSetId })
+    : null
+  const subsetEditorUrl =
+    parsedSetId.success && parsedSubsetId.success
+      ? createUrl(routerPath.dashboardSubsetIdEdit, {
+          setId: resolvedSetId,
+          subsetId: parsedSubsetId.data,
+        })
+      : null
+
+  if (location.pathname !== setEditorUrl && location.pathname !== subsetEditorUrl) {
+    return null
+  }
+
+  const handleOpenSettings = () => {
+    if (!setQuery.data) {
+      return
+    }
+
+    open({
+      content: <EditSetSettingsModal set={setQuery.data} onClose={close} />,
+      size: 518,
+      padding: 24,
+      radius: 20,
+      withCloseButton: false,
+    })
+  }
+
+  return (
+    <div className={styles.toolbarGroup}>
+      <UnstyledButton
+        className={styles.toolbarButton}
+        onClick={handleOpenSettings}
+        disabled={!setQuery.data || setQuery.isLoading}
+        aria-label="Открыть настройки набора"
+      >
+        <Icon name="Settings" size={24} />
+        <Text component="span" className={styles.toolbarLabel}>
+          Настройки
+        </Text>
+      </UnstyledButton>
+    </div>
   )
 }
 

@@ -1,7 +1,8 @@
-import { Center, Loader } from '@mantine/core'
+import { Loader } from '@mantine/core'
+import styles from './set-edit-page.module.scss'
 
 export const SetEditPageSkeleton = () => (
-  <Center h="100%" mih={240}>
-    <Loader aria-label="Загрузка редактора" />
-  </Center>
+  <div className={styles.skeleton}>
+    <Loader aria-label="Загрузка редактора набора" />
+  </div>
 )
