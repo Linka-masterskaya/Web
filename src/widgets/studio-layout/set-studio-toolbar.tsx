@@ -6,11 +6,11 @@ import { useSetStudioRoute } from './model/use-set-studio-route'
 import styles from './set-studio-controls.module.scss'
 
 export const SetStudioToolbar: React.FC = () => {
-  const { isEditorRoute, resolvedSetId } = useSetStudioRoute()
+  const { isSetOverview, resolvedSetId } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
   const openSetSettings = useOpenSetSettings()
 
-  if (!isEditorRoute) {
+  if (!isSetOverview) {
     return null
   }
 

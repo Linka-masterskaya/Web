@@ -1,6 +1,6 @@
 import { Card, Group, Text } from '@mantine/core'
-import clsx from 'clsx'
 import { Icon } from '@shared/ui/icon'
+import clsx from 'clsx'
 import { useNavigate } from 'react-router'
 import styles from './back-button.module.scss'
 

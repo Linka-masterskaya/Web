@@ -1,6 +1,6 @@
-import { setQueryKeys } from '@entities/set'
+import { setQueryKeys, useSet } from '@entities/set'
 import { Button } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { useIsMutating } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetStudioRoute } from './model/use-set-studio-route'
@@ -9,6 +9,7 @@ import styles from './set-studio-controls.module.scss'
 export const SetStudioExitButton: React.FC = () => {
   const navigate = useNavigate()
   const { isEditorRoute, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
+  const setQuery = useSet(resolvedSetId)
   const isSaving =
     useIsMutating({
       mutationKey: setQueryKeys.detail(resolvedSetId),
@@ -24,7 +25,7 @@ export const SetStudioExitButton: React.FC = () => {
       return
     }
 
-    navigate(createUrl(routerPath.dashboardSets))
+    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
   }
 
   return (

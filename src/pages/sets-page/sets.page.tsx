@@ -1,11 +1,12 @@
+import { useOpenCreateFolder } from '@features/create-folder'
+import { useOpenCreateSet } from '@features/create-set'
 import {
   SectionContentsBrowser,
   type TSectionFolderContext,
 } from '@features/section-contents-browser'
-import { useOpenCreateFolder } from '@features/create-folder'
-import { useOpenCreateSet } from '@features/create-set'
 import { Button, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
+import { Icon } from '@shared/ui/icon'
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router'
 import styles from './sets-page.module.scss'
@@ -44,11 +45,21 @@ export const SetsPage: React.FC = () => {
         </Title>
 
         {folderContext.isRoot ? (
-          <Button variant="filled" onClick={handleCreateFolder}>
+          <Button
+            variant="filled"
+            classNames={{ inner: styles.createActionInner }}
+            leftSection={<Icon name="Folder" size={20} />}
+            onClick={handleCreateFolder}
+          >
             Создать папку
           </Button>
         ) : (
-          <Button variant="filled" onClick={handleCreateSet}>
+          <Button
+            variant="filled"
+            classNames={{ inner: styles.createActionInner }}
+            leftSection={<Icon name="Grid3x3" size={20} />}
+            onClick={handleCreateSet}
+          >
             Создать набор
           </Button>
         )}

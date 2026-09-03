@@ -50,8 +50,8 @@ export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSe
 
   const [focused, setFocused] = useState(false)
 
-  const handleFormSubmit = async (values: TSetSettings) => {
-    await onSave?.(values)
+  const handleFormSubmit = (values: TSetSettings) => {
+    onSave?.(values)
   }
 
   return (

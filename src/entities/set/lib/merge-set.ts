@@ -4,9 +4,8 @@ import type { TSet } from '../model/set.schema'
 export const mergeSet = (currentSet: TSet | undefined, updatedSet: TSet): TSet => ({
   ...currentSet,
   ...updatedSet,
-  ageMin: updatedSet.ageMin ?? currentSet?.ageMin,
-  ageMax: updatedSet.ageMax ?? currentSet?.ageMax,
-  difficulty: updatedSet.difficulty ?? currentSet?.difficulty,
+  age: updatedSet.age ?? currentSet?.age ?? null,
+  difficulty: updatedSet.difficulty ?? currentSet?.difficulty ?? null,
   goals: updatedSet.goals ?? currentSet?.goals,
   notes: updatedSet.notes ?? currentSet?.notes,
 })

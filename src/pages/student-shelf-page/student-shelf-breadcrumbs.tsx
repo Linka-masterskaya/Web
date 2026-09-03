@@ -5,7 +5,7 @@ import { useParams } from 'react-router'
 
 const formatStudentName = (name: string): string => {
   const parts = name.trim().split(' ')
-  return `${parts[0]} ${parts[1] ? parts[1][0] + '.' : ''}`.trim()
+  return `${parts[0]} ${parts[1] ? `${parts[1][0]}.` : ''}`.trim()
 }
 
 /** Хлебные крошки полки ученика: Главная / Картотека учеников / Полка ученика (Имя Ф.) */

@@ -4,13 +4,13 @@ import { setConfigSchema } from './set-config.schema'
 
 const setDifficultySchema = z.enum(['easy', 'medium', 'hard'])
 
+/** Pack (OpenAPI) → доменная модель набора */
 export const setSchema = z
   .object({
     id: z.string().uuid(),
     folder_id: z.string().uuid(),
     title: z.string(),
-    age_min: z.number().int().nullable().optional(),
-    age_max: z.number().int().nullable().optional(),
+    age: z.number().int().min(3).max(18).nullable().optional(),
     difficulty: setDifficultySchema.nullable().optional(),
     goals: z.array(z.string()).nullable().optional(),
     notes: z.string().nullable().optional(),
@@ -20,9 +20,8 @@ export const setSchema = z
     id: pack.id,
     folderId: pack.folder_id,
     title: pack.title,
-    ageMin: pack.age_min ?? undefined,
-    ageMax: pack.age_max ?? undefined,
-    difficulty: pack.difficulty ?? undefined,
+    age: pack.age ?? null,
+    difficulty: pack.difficulty ?? null,
     goals: pack.goals ?? undefined,
     notes: pack.notes ?? undefined,
     config: pack.config,

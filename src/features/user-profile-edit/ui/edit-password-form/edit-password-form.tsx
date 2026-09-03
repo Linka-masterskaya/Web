@@ -34,7 +34,7 @@ export const EditPasswordForm: React.FC<TEditPasswordFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleUpdatePasswordSubmit)} noValidate>
+    <form onSubmit={handleSubmit(handleUpdatePasswordSubmit)} noValidate style={{ width: '100%' }}>
       <Stack gap="16px">
         {submitError && (
           <Text c="red.6" size="sm" role="alert">

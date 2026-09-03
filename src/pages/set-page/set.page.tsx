@@ -1,4 +1,4 @@
-import { type TSetPage, useSet } from '@entities/set'
+import { getSetPageTitle, useSet } from '@entities/set'
 import { SET_PAGE_TYPE_ICONS, SET_PAGE_TYPE_LABELS } from '@features/set-page-type-selector'
 import { Button, Center, Group, Loader, Stack, Text, Title, UnstyledButton } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
@@ -17,18 +17,6 @@ const getLoadErrorMessage = (error: unknown) => {
   }
 
   return 'Не удалось загрузить набор'
-}
-
-const getPageTitle = (page: TSetPage, index: number) => {
-  const textElement = page.elements.find(
-    (element) => element.kind === 'text' && element.value?.trim(),
-  )
-
-  if (textElement?.value?.trim()) {
-    return textElement.value.trim()
-  }
-
-  return `Страница ${index + 1}`
 }
 
 export const SetPage: React.FC = () => {
@@ -56,24 +44,9 @@ export const SetPage: React.FC = () => {
 
   const pages = setQuery.data?.pages ?? []
 
-  const handleBackToSets = () => {
-    const folderId = setQuery.data?.folderId
-
-    navigate(createUrl(routerPath.dashboardSets, undefined, folderId ? { folderId } : undefined))
-  }
-
   return (
     <section className={styles.page}>
       <Stack gap="md">
-        <Button
-          variant="subtle"
-          w="fit-content"
-          leftSection={<Icon name="ArrowLeft" size={16} />}
-          onClick={handleBackToSets}
-        >
-          К списку наборов
-        </Button>
-
         <Group justify="space-between" align="flex-start" wrap="wrap">
           <Stack gap={4}>
             <Title order={2}>{setQuery.data?.title ?? 'Набор'}</Title>
@@ -115,7 +88,7 @@ export const SetPage: React.FC = () => {
         {setQuery.isSuccess && pages.length > 0 && (
           <Stack gap={8} className={styles.list}>
             {pages.map((page, index) => {
-              const pageTitle = getPageTitle(page, index)
+              const pageTitle = getSetPageTitle(page, index)
               const pageTypeLabel = SET_PAGE_TYPE_LABELS[page.type]
 
               return (

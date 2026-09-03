@@ -16,11 +16,10 @@ export const useUpdateSet = (setId = '') => {
 
         return {
           ...mergedSet,
-          ageMin: params.ageMin,
-          ageMax: params.ageMax,
+          age: params.age,
           difficulty: params.difficulty,
           goals: params.goals,
-          notes: params.notes,
+          notes: params.notes ?? undefined,
         }
       })
 

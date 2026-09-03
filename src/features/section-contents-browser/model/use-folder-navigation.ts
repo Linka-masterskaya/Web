@@ -1,53 +1,92 @@
 import type { TFolderContentItem } from '@entities/section-content'
-import { useCallback, useState } from 'react'
+import { useRouteQueryParams } from '@shared/lib/routes'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { z } from 'zod'
 
-// минимальная информация о папке, которая нужна для возврата назад и возможно для breadcrumbs
+const folderIdSchema = z.string().uuid()
+
 export type TFolderPathItem = Pick<TFolderContentItem, 'id' | 'name'>
 
-// хук не выполняет HTTP-запросы, он вычисляет id текущей папки
-// useSectionContents реагирует на изменение id и подгружает новые данные
+const parseFolderIdParam = (value: string | null): string | undefined => {
+  const parsed = folderIdSchema.safeParse(value ?? undefined)
+
+  return parsed.success ? parsed.data : undefined
+}
+
 export const useFolderNavigation = () => {
+  const { queryParams, setQueryParams } = useRouteQueryParams()
+  const folderIdParam = queryParams.folderId
+  const currentFolderId = parseFolderIdParam(folderIdParam)
+
+  const folderNamesRef = useRef(new Map<string, string>())
   const [folderPath, setFolderPath] = useState<TFolderPathItem[]>([])
 
-  const currentFolder = folderPath[folderPath.length - 1]
+  useEffect(() => {
+    if (folderIdParam && !currentFolderId) {
+      setQueryParams({ folderId: null }, false, { replace: true })
+    }
+  }, [currentFolderId, folderIdParam, setQueryParams])
 
-  const openFolder = useCallback((folder: TFolderContentItem) => {
+  useEffect(() => {
     setFolderPath((currentPath) => {
-      const lastFolder = currentPath[currentPath.length - 1]
+      if (!currentFolderId) {
+        return []
+      }
 
-      if (lastFolder?.id === folder.id) {
-        return currentPath
+      const existingIndex = currentPath.findIndex((folder) => folder.id === currentFolderId)
+
+      if (existingIndex >= 0) {
+        return currentPath.slice(0, existingIndex + 1)
       }
 
       return [
         ...currentPath,
         {
-          id: folder.id,
-          name: folder.name,
+          id: currentFolderId,
+          name: folderNamesRef.current.get(currentFolderId) ?? '',
         },
       ]
     })
-  }, [])
+  }, [currentFolderId])
 
-  // возвращает на один уровень выше
+  const currentFolder = folderPath[folderPath.length - 1]
+
+  const openFolder = useCallback(
+    (folder: TFolderContentItem) => {
+      if (folder.id === currentFolderId) {
+        return
+      }
+
+      folderNamesRef.current.set(folder.id, folder.name)
+      setQueryParams({ folderId: folder.id })
+    },
+    [currentFolderId, setQueryParams],
+  )
+
   const goBack = useCallback(() => {
-    setFolderPath((currentPath) => currentPath.slice(0, -1))
-  }, [])
+    const parentFolder = folderPath[folderPath.length - 2]
 
-  // возвращает к корню раздела
+    setQueryParams({ folderId: parentFolder?.id ?? null })
+  }, [folderPath, setQueryParams])
+
   const goToRoot = useCallback(() => {
-    setFolderPath([])
-  }, [])
+    setQueryParams({ folderId: null })
+  }, [setQueryParams])
 
-  const goToFolder = useCallback((folderIndex: number) => {
-    setFolderPath((currentPath) => currentPath.slice(0, folderIndex + 1))
-  }, [])
+  const goToFolder = useCallback(
+    (folderIndex: number) => {
+      const folder = folderPath[folderIndex]
+
+      setQueryParams({ folderId: folder?.id ?? null })
+    },
+    [folderPath, setQueryParams],
+  )
 
   return {
     folderPath,
     currentFolder,
-    currentFolderId: currentFolder?.id,
-    isRoot: folderPath.length === 0,
+    currentFolderId,
+    isRoot: currentFolderId === undefined,
     openFolder,
     goBack,
     goToRoot,

@@ -10,6 +10,8 @@ export const contentItemSchema = z
     kind: z.enum(['folder', 'student']).nullable().optional(),
     student_id: z.string().uuid().nullable().optional(),
     published: z.boolean().optional(),
+    age: z.number().int().min(3).max(18).nullable().optional(),
+    difficulty: z.enum(['easy', 'medium', 'hard']).nullable().optional(),
     updated_at: z.string().min(1),
   })
   .transform((item) => ({
@@ -19,6 +21,8 @@ export const contentItemSchema = z
     kind: item.kind ?? null,
     studentId: item.student_id ?? null,
     published: item.published,
+    age: item.age ?? null,
+    difficulty: item.difficulty ?? null,
     updatedAt: item.updated_at,
   }))
 
@@ -26,6 +30,7 @@ export const sectionContentsResponseSchema = z.object({
   items: z.array(contentItemSchema),
   limit: z.number().int().nonnegative(),
   offset: z.number().int().nonnegative(),
+  total: z.number().int().nonnegative(),
 })
 
 export const sectionContentsDifficultySchema = z.enum(['easy', 'medium', 'hard'])
@@ -37,7 +42,7 @@ export const getSectionContentsParamsSchema = z.object({
   offset: z.number().int().min(0).optional(),
   sort: z.enum(['name', 'updated_at']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
-  search: z.string().trim().min(1).optional(),
+  query: z.string().trim().min(1).optional(),
   age: z.number().int().min(3).max(18).optional(),
   difficulty: sectionContentsDifficultySchema.optional(),
 })

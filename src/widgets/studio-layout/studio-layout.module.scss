@@ -8,25 +8,6 @@
   box-sizing: border-box;
 }
 
-.header {
-  position: relative;
-  z-index: 10;
-  min-height: 80px;
-  padding: 16px 24px;
-  display: flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid var(--mantine-color-gray-2);
-  background: var(--mantine-color-white);
-}
-
-.logo {
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-}
-
 .title {
   flex: 1 1 auto;
   min-width: 0;
@@ -54,17 +35,4 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-@media (max-width: 720px) {
-  .header {
-    min-height: 72px;
-    padding: 12px;
-    gap: 8px;
-  }
-
-  .logo {
-    width: 36px;
-    height: 36px;
-  }
 }

@@ -1,10 +1,10 @@
 import { folderQueryKeys } from '@entities/folder'
-import { useSet, useUpdateSetTitle } from '@entities/set'
+import { getSetPageTitle, useSet, useUpdateSetTitle } from '@entities/set'
 import { ActionIcon, Text, TextInput } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useQueryClient } from '@tanstack/react-query'
-import { type FormEvent, type KeyboardEvent, useState } from 'react'
+import { type FormEvent, type KeyboardEvent, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useSetStudioRoute } from './model/use-set-studio-route'
 import styles from './set-studio-controls.module.scss'
@@ -12,11 +12,41 @@ import styles from './set-studio-controls.module.scss'
 export const SetStudioTitle: React.FC = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
-  const { hasValidSetId, isSetOverview, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
+  const {
+    hasValidSetId,
+    isSetEditor,
+    isSetOverview,
+    isSubsetEditor,
+    isSubsetNew,
+    resolvedSetId,
+    resolvedSubsetId,
+    setOverviewUrl,
+  } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
-  const updateTitleMutation = useUpdateSetTitle(resolvedSetId)
+  const updateSetTitleMutation = useUpdateSetTitle(resolvedSetId)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [titleDraft, setTitleDraft] = useState('')
+
+  const pages = setQuery.data?.pages ?? []
+  const activePageIndex = isSubsetEditor
+    ? pages.findIndex((page) => page.id === resolvedSubsetId)
+    : isSetEditor
+      ? 0
+      : -1
+  const activePage = activePageIndex >= 0 ? pages[activePageIndex] : undefined
+  const currentTitle = isSubsetNew
+    ? 'Новая страница'
+    : activePage
+      ? getSetPageTitle(activePage, activePageIndex)
+      : (setQuery.data?.title ?? (hasValidSetId ? 'Набор' : 'Новый набор'))
+  const canEditTitle = isSetOverview && Boolean(setQuery.data?.title)
+
+  useEffect(() => {
+    void resolvedSetId
+    setIsEditingTitle(false)
+    setTitleDraft('')
+    updateSetTitleMutation.reset()
+  }, [resolvedSetId, updateSetTitleMutation.reset])
 
   const handleBack = () => {
     if (setOverviewUrl && !isSetOverview) {
@@ -24,25 +54,25 @@ export const SetStudioTitle: React.FC = () => {
       return
     }
 
-    navigate(createUrl(routerPath.dashboardSets))
+    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
   }
 
   const handleStartEditing = () => {
-    if (!setQuery.data?.title || updateTitleMutation.isPending) {
+    if (!canEditTitle || updateSetTitleMutation.isPending) {
       return
     }
 
-    updateTitleMutation.reset()
-    setTitleDraft(setQuery.data.title)
+    updateSetTitleMutation.reset()
+    setTitleDraft(currentTitle)
     setIsEditingTitle(true)
   }
 
   const handleCancelEditing = () => {
-    if (updateTitleMutation.isPending) {
+    if (updateSetTitleMutation.isPending) {
       return
     }
 
-    updateTitleMutation.reset()
+    updateSetTitleMutation.reset()
     setIsEditingTitle(false)
   }
 
@@ -51,7 +81,7 @@ export const SetStudioTitle: React.FC = () => {
 
     const title = titleDraft.trim()
 
-    if (!title || !setQuery.data || updateTitleMutation.isPending) {
+    if (!title || !setQuery.data || updateSetTitleMutation.isPending) {
       return
     }
 
@@ -60,7 +90,7 @@ export const SetStudioTitle: React.FC = () => {
       return
     }
 
-    updateTitleMutation.mutate(title, {
+    updateSetTitleMutation.mutate(title, {
       onSuccess: () => {
         setIsEditingTitle(false)
         void queryClient.invalidateQueries({ queryKey: folderQueryKeys.all })
@@ -94,12 +124,12 @@ export const SetStudioTitle: React.FC = () => {
             value={titleDraft}
             onChange={(event) => {
               setTitleDraft(event.currentTarget.value)
-              updateTitleMutation.reset()
+              updateSetTitleMutation.reset()
             }}
             onKeyDown={handleTitleKeyDown}
             aria-label="Название набора"
-            error={updateTitleMutation.isError ? 'Не удалось сохранить название' : undefined}
-            disabled={updateTitleMutation.isPending}
+            error={updateSetTitleMutation.isError ? 'Не удалось сохранить название' : undefined}
+            disabled={updateSetTitleMutation.isPending}
             autoFocus
           />
 
@@ -108,7 +138,7 @@ export const SetStudioTitle: React.FC = () => {
               type="submit"
               variant="subtle"
               size={32}
-              loading={updateTitleMutation.isPending}
+              loading={updateSetTitleMutation.isPending}
               disabled={!titleDraft.trim()}
               aria-label="Сохранить название"
             >
@@ -120,7 +150,7 @@ export const SetStudioTitle: React.FC = () => {
               color="gray"
               size={32}
               onClick={handleCancelEditing}
-              disabled={updateTitleMutation.isPending}
+              disabled={updateSetTitleMutation.isPending}
               aria-label="Отменить изменение названия"
             >
               <Icon name="X" size={18} />
@@ -129,11 +159,9 @@ export const SetStudioTitle: React.FC = () => {
         </form>
       ) : (
         <>
-          <Text className={styles.title}>
-            {setQuery.data?.title ?? (hasValidSetId ? 'Набор' : 'Новый набор')}
-          </Text>
+          <Text className={styles.title}>{currentTitle}</Text>
 
-          {setQuery.data?.title && (
+          {canEditTitle && (
             <ActionIcon
               variant="transparent"
               color="gray"

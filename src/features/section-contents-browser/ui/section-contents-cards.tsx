@@ -4,11 +4,11 @@ import type {
   TSectionContentItem,
 } from '@entities/section-content'
 import { Blockquote, ScrollArea } from '@mantine/core'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { Card } from '@shared/ui/card'
 import { ContextMenu, type TContextMenuItem, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
 import type { FC, MouseEvent as ReactMouseEvent } from 'react'
-import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -59,6 +59,7 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
     estimatedHeight: 130,
     viewportMargin: 8,
   })
+
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
       {items.length === 0 && (
@@ -99,11 +100,11 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
             }
 
             const onContextMenu =
-            isPackContentItem(item) && packContextMenuItems.length > 0
-              ? (event: ReactMouseEvent<HTMLElement>) => {
-                  contextMenu.open(event, item)
-                }
-              : undefined
+              isPackContentItem(item) && packContextMenuItems.length > 0
+                ? (event: ReactMouseEvent<HTMLElement>) => {
+                    contextMenu.open(event, item)
+                  }
+                : undefined
 
             return (
               <Card
@@ -119,10 +120,8 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
             )
           })}
         </div>
-         
       </ScrollArea>
       <ContextMenu<TPackContentItem> items={packContextMenuItems} {...contextMenu.menuProps} />
-
     </section>
   )
 }

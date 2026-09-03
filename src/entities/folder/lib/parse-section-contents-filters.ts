@@ -9,19 +9,19 @@ const SECTION_CONTENTS_AGE_MIN = 3
 const SECTION_CONTENTS_AGE_MAX = 18
 
 export type TSectionContentsFilters = {
-  search?: string
+  query?: string
   age?: number
   difficulty?: TSectionContentsDifficulty
 }
 
 /**
  * Разбирает query-параметры URL в фильтры списка папок и наборов.
- * URL использует `level`, бэкенд — `difficulty`.
+ * URL использует `search` и `level`, бэкенд — `query` и `difficulty`.
  */
 export const parseSectionContentsFilters = (
   queryParams: TRouteQueryParamsState,
 ): TSectionContentsFilters => {
-  const search = queryParams.search?.trim() || undefined
+  const query = queryParams.search?.trim() || undefined
 
   const age = parseAge(queryParams.age)
 
@@ -29,7 +29,7 @@ export const parseSectionContentsFilters = (
   const difficulty = parsedDifficulty.success ? parsedDifficulty.data : undefined
 
   return {
-    search,
+    query,
     age,
     difficulty,
   }

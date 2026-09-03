@@ -1,5 +1,6 @@
 import { Anchor, Text } from '@mantine/core'
 import React from 'react'
+import { Link } from 'react-router'
 import { Icon } from '../icon'
 import styles from './bread-crumbs.module.scss'
 import type { TBreadCrumbsProps } from './types'
@@ -17,7 +18,7 @@ export const BreadCrumbs: React.FC<TBreadCrumbsProps> = ({ items }) => {
             <React.Fragment key={item.id}>
               <li>
                 {isClickable ? (
-                  <Anchor href={item.href} size="sm" className={styles.link}>
+                  <Anchor component={Link} to={item.href} size="sm" className={styles.link}>
                     {item.label}
                   </Anchor>
                 ) : (

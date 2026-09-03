@@ -1,11 +1,14 @@
 import { parseSectionContentsFilters, useSectionContents } from '@entities/folder'
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
-import { useDuplicateSet } from '@entities/set'
+import { useDeleteSet, useDuplicateSet } from '@entities/set'
+import { ConfirmDelete } from '@features/confirm-delete'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
-import { useRouteQueryParams } from '@shared/lib/routes'
-import { type FC, useEffect, useMemo, useState } from 'react'
 import { getApiErrorMessage } from '@shared/lib/api'
+import { useModal } from '@shared/lib/modal'
+import { useRouteQueryParams } from '@shared/lib/routes'
 import type { TContextMenuItem } from '@shared/ui/context-menu'
+import { Icon } from '@shared/ui/icon'
+import { type FC, useEffect, useMemo, useState } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
 import styles from './section-contents-browser.module.scss'
@@ -44,9 +47,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
 }) => {
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
+  const { open } = useModal()
 
   const [actionError, setActionError] = useState<string | null>(null)
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
+  const { mutateAsync: deleteSet, isPending: isDeletePending } = useDeleteSet()
 
   const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
 
@@ -95,6 +100,28 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     }
   }
 
+  const handleDeletePack = (pack: TPackContentItem) => {
+    open({
+      size: 361,
+      radius: 20,
+      withCloseButton: false,
+      content: (
+        <ConfirmDelete
+          title={`Удалить набор «${pack.name}»?`}
+          description="Вы уверены?"
+          onConfirm={async () => {
+            try {
+              setActionError(null)
+              await deleteSet({ setId: pack.id })
+            } catch (error) {
+              setActionError(await getApiErrorMessage(error))
+            }
+          }}
+        />
+      ),
+    })
+  }
+
   const backAction = isRoot
     ? ({
         type: 'link',
@@ -112,10 +139,18 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           {
             id: 'duplicate',
             label: 'Дублировать',
-            disabled: isDuplicatePending,
+            disabled: isDuplicatePending || isDeletePending,
             onClick: (pack) => {
               void handleDuplicatePack(pack)
             },
+          },
+          {
+            id: 'delete',
+            label: 'Удалить',
+            color: 'red',
+            icon: <Icon name="Trash" aria-hidden="true" />,
+            disabled: isDuplicatePending || isDeletePending,
+            onClick: handleDeletePack,
           },
         ]
 
@@ -129,7 +164,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       )}
 
       {!isLoading && !error && (
-        <Stack gap="sm">
+        <>
           {actionError && (
             <Text c="red.6" role="alert">
               {actionError}
@@ -144,7 +179,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             onOpenPack={handleOpenPack}
             packContextMenuItems={packContextMenuItems}
           />
-        </Stack>
+        </>
       )}
 
       {!isLoading && error && (

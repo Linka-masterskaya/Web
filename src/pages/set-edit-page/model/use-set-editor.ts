@@ -5,7 +5,7 @@ import {
   useUpdateSetPageStructure,
   useUpdateSetPageType,
 } from '@entities/set'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
@@ -43,12 +43,12 @@ export const useSetEditor = () => {
     navigate(
       parsedSetId.success
         ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId })
-        : createUrl(routerPath.dashboardSets),
+        : createDashboardSetsUrl(setQuery.data?.folderId),
     )
   }
 
   const handleBackToSets = () => {
-    navigate(createUrl(routerPath.dashboardSets))
+    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
   }
 
   const handleCreatePage = () => {

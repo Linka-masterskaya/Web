@@ -7,21 +7,6 @@
   overflow: hidden;
 }
 
-.header {
-  position: relative;
-  z-index: 10;
-  flex-shrink: 0;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  border: 1px solid #eeeff1;
-}
-
-.logo {
-  flex: 0 0 auto;
-}
-
 .title {
   flex: 0 1 auto;
   font-size: 20px;
