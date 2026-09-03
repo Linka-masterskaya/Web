@@ -5,8 +5,9 @@ import type {
 } from '@entities/section-content'
 import { Blockquote, ScrollArea } from '@mantine/core'
 import { Card } from '@shared/ui/card'
+import { ContextMenu, type TContextMenuItem, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
-import type { FC } from 'react'
+import type { FC, MouseEvent as ReactMouseEvent } from 'react'
 import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import styles from './section-contents-cards.module.scss'
 
@@ -26,6 +27,7 @@ type TSectionContentsCardProps = {
   emptyText: string
   onOpenFolder: (folder: TFolderContentItem) => void
   onOpenPack: (pack: TPackContentItem) => void
+  packContextMenuItems?: readonly TContextMenuItem<TPackContentItem>[]
 }
 
 const isFolderContentItem = (item: TSectionContentItem): item is TFolderContentItem =>
@@ -50,7 +52,13 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   emptyText,
   onOpenFolder,
   onOpenPack,
+  packContextMenuItems = [],
 }) => {
+  const contextMenu = useContextMenu<TPackContentItem>({
+    width: 235,
+    estimatedHeight: 130,
+    viewportMargin: 8,
+  })
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
       {items.length === 0 && (
@@ -90,23 +98,31 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
               }
             }
 
+            const onContextMenu =
+            isPackContentItem(item) && packContextMenuItems.length > 0
+              ? (event: ReactMouseEvent<HTMLElement>) => {
+                  contextMenu.open(event, item)
+                }
+              : undefined
+
             return (
               <Card
                 key={`${item.type}:${item.id}`}
                 fill
-                variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
-                // variant='image'
-                // imageSrc={item.preview_url}
-                // imageAlt={item.name}
+                variant="icon"
                 label={item.name}
                 icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
                 action={{ type: 'function', onClick: handleClick }}
                 className={gridStyles.card}
+                onContextMenu={onContextMenu}
               />
             )
           })}
         </div>
+         
       </ScrollArea>
+      <ContextMenu<TPackContentItem> items={packContextMenuItems} {...contextMenu.menuProps} />
+
     </section>
   )
 }

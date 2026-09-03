@@ -1,8 +1,11 @@
 import { parseSectionContentsFilters, useSectionContents } from '@entities/folder'
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
+import { useDuplicateSet } from '@entities/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { useRouteQueryParams } from '@shared/lib/routes'
-import { type FC, useEffect, useMemo } from 'react'
+import { type FC, useEffect, useMemo, useState } from 'react'
+import { getApiErrorMessage } from '@shared/lib/api'
+import type { TContextMenuItem } from '@shared/ui/context-menu'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
 import styles from './section-contents-browser.module.scss'
@@ -42,6 +45,9 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
 
+  const [actionError, setActionError] = useState<string | null>(null)
+  const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
+
   const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
 
   useEffect(() => {
@@ -77,6 +83,18 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     goToRoot()
   }
 
+  const handleDuplicatePack = async (pack: TPackContentItem) => {
+    try {
+      setActionError(null)
+      await duplicateSet({
+        setId: pack.id,
+        ...(currentFolderId ? { folderId: currentFolderId } : {}),
+      })
+    } catch (error) {
+      setActionError(await getApiErrorMessage(error))
+    }
+  }
+
   const backAction = isRoot
     ? ({
         type: 'link',
@@ -87,6 +105,20 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
         onClick: goBack,
       } as const)
 
+  const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
+    section === 'library'
+      ? []
+      : [
+          {
+            id: 'duplicate',
+            label: 'Дублировать',
+            disabled: isDuplicatePending,
+            onClick: (pack) => {
+              void handleDuplicatePack(pack)
+            },
+          },
+        ]
+
   return (
     <section className={styles.root}>
       {isLoading && (
@@ -94,6 +126,25 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           <Loader size="sm" />
           <Text> Загружаем содержимое папки... </Text>
         </Group>
+      )}
+
+      {!isLoading && !error && (
+        <Stack gap="sm">
+          {actionError && (
+            <Text c="red.6" role="alert">
+              {actionError}
+            </Text>
+          )}
+
+          <SectionContentsCards
+            items={items}
+            backAction={backAction}
+            emptyText={config.emptyText}
+            onOpenFolder={handleOpenFolder}
+            onOpenPack={handleOpenPack}
+            packContextMenuItems={packContextMenuItems}
+          />
+        </Stack>
       )}
 
       {!isLoading && error && (
@@ -116,16 +167,6 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             )}
           </Group>
         </Stack>
-      )}
-
-      {!isLoading && !error && (
-        <SectionContentsCards
-          items={items}
-          backAction={backAction}
-          emptyText={config.emptyText}
-          onOpenFolder={handleOpenFolder}
-          onOpenPack={handleOpenPack}
-        />
       )}
     </section>
   )
