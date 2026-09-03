@@ -1,0 +1,95 @@
+.titleGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.title {
+  min-width: 0;
+  max-width: min(360px, 30vw);
+  overflow: hidden;
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.titleForm {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+}
+
+.titleInput {
+  width: min(360px, 30vw);
+}
+
+.titleActions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-top: 2px;
+}
+
+.exitButton {
+  min-width: 216px;
+  margin-left: 24px;
+}
+
+.toolbarGroup {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.toolbarButton {
+  width: 72px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--mantine-color-black);
+  transition: background-color 120ms ease;
+
+  &:hover:not(:disabled) {
+    background: var(--mantine-color-gray-0);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-blue-5);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.toolbarLabel {
+  color: #787b82;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+@media (max-width: 720px) {
+  .title {
+    max-width: 36vw;
+  }
+
+  .titleInput {
+    width: 36vw;
+  }
+
+  .exitButton {
+    min-width: 0;
+    margin-left: 0;
+    padding-inline: 12px;
+  }
+}

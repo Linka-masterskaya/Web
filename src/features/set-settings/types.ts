@@ -4,4 +4,5 @@ export type TSetSettingsProps = {
   defaultValues?: Partial<TSetSettings>
   onClose?: () => void
   onSave?: (values: TSetSettings) => void | Promise<void>
+  submitError?: string
 }

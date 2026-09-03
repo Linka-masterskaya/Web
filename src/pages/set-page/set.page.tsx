@@ -89,7 +89,7 @@ export const SetPage: React.FC = () => {
               navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
             }
           >
-            Новая страница
+            Создать страницу
           </Button>
         </Group>
 

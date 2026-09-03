@@ -5,3 +5,11 @@ export const setQueryKeys = {
   details: () => [...setQueryKeys.all, 'detail'] as const,
   detail: (id: string) => [...setQueryKeys.details(), id] as const,
 }
+
+export const setMutationKeys = {
+  updateSettings: (id: string) => [...setQueryKeys.detail(id), 'update-settings'] as const,
+  updatePageType: (id: string) => [...setQueryKeys.detail(id), 'update-page-type'] as const,
+  updatePageStructure: (id: string) =>
+    [...setQueryKeys.detail(id), 'update-page-structure'] as const,
+  updateTitle: (id: string) => [...setQueryKeys.detail(id), 'update-title'] as const,
+}

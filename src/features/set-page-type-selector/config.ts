@@ -11,7 +11,7 @@ export const SET_PAGE_TYPE_LABELS: Record<TSetPageType, string> = {
   single_choice: 'Один ответ',
   multi_choice: 'Несколько ответов',
   matching: 'Сопоставление',
-  categories: 'Категории',
+  categories: 'Распределение',
   sequence: 'Последовательность',
 }
 
