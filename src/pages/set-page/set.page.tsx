@@ -56,24 +56,9 @@ export const SetPage: React.FC = () => {
 
   const pages = setQuery.data?.pages ?? []
 
-  const handleBackToSets = () => {
-    const folderId = setQuery.data?.folderId
-
-    navigate(createUrl(routerPath.dashboardSets, undefined, folderId ? { folderId } : undefined))
-  }
-
   return (
     <section className={styles.page}>
       <Stack gap="md">
-        <Button
-          variant="subtle"
-          w="fit-content"
-          leftSection={<Icon name="ArrowLeft" size={16} />}
-          onClick={handleBackToSets}
-        >
-          К списку наборов
-        </Button>
-
         <Group justify="space-between" align="flex-start" wrap="wrap">
           <Stack gap={4}>
             <Title order={2}>{setQuery.data?.title ?? 'Набор'}</Title>
