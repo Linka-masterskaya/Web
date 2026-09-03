@@ -1,7 +1,7 @@
 import { folderQueryKeys } from '@entities/folder'
 import { useSet, useUpdateSetTitle } from '@entities/set'
 import { ActionIcon, Text, TextInput } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, type KeyboardEvent, useState } from 'react'
@@ -24,7 +24,7 @@ export const SetStudioTitle: React.FC = () => {
       return
     }
 
-    navigate(createUrl(routerPath.dashboardSets))
+    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
   }
 
   const handleStartEditing = () => {
