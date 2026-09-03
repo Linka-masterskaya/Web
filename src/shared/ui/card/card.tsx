@@ -30,7 +30,7 @@ export const Card: React.FC<TCardProps> = (props) => {
 
   if (action.type === 'link') {
     return (
-      <a onContextMenu={onContextMenu} className={cardClassName} href={action.href}>
+      <a className={cardClassName} href={action.href} onContextMenu={onContextMenu}>
         {content}
       </a>
     )
@@ -38,10 +38,10 @@ export const Card: React.FC<TCardProps> = (props) => {
 
   return (
     <button
-      onContextMenu={onContextMenu}
       className={cardClassName}
       type="button"
       onClick={action.onClick}
+      onContextMenu={onContextMenu}
     >
       {content}
     </button>

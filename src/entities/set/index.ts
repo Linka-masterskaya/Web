@@ -1,5 +1,6 @@
 export { createSet } from './api/create-set'
 export { createSetPage } from './api/create-set-page'
+export { deleteSet } from './api/delete-set'
 export { duplicateSet } from './api/duplicate-set'
 export { getSet } from './api/get-set'
 export { moveSet } from './api/move-set'
@@ -11,6 +12,7 @@ export { updateSetPageType } from './api/update-set-page-type'
 export { updateSetTitle } from './api/update-set-title'
 export { useCreateSet } from './hooks/use-create-set'
 export { useCreateSetPage } from './hooks/use-create-set-page'
+export { useDeleteSet } from './hooks/use-delete-set'
 export { useDuplicateSet } from './hooks/use-duplicate-set'
 export { useMoveSet } from './hooks/use-move-set'
 export { useSendSet } from './hooks/use-send-set'
@@ -31,6 +33,10 @@ export {
   type TCreateSetParams,
   type TCreateSetResponse,
 } from './model/create-set.schema'
+export {
+  deleteSetSchema,
+  type TDeleteSetParams,
+} from './model/delete-set.schema'
 export {
   moveSetParamsSchema,
   type TMoveSetParams,

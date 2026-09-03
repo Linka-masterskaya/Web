@@ -9,8 +9,8 @@ import type { TConfirmDeleteParams } from './types'
 export const ConfirmDelete = ({ title, description, onConfirm }: TConfirmDeleteParams) => {
   const { close } = useModal()
 
-  const handleConfirm = () => {
-    onConfirm()
+  const handleConfirm = async () => {
+    await onConfirm()
     close()
   }
 

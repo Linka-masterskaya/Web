@@ -18,14 +18,13 @@ export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set
     updateSetMutation.reset()
 
     try {
-      const age = Number(values.age)
+      const age = Number.parseInt(values.age, 10)
 
       await updateSetMutation.mutateAsync({
         id: set.id,
         title: values.title.trim(),
         folderId: set.folderId,
-        ageMin: age,
-        ageMax: age,
+        age,
         difficulty: values.level,
         goals: set.goals ?? [],
         notes: values.notes,
