@@ -19,7 +19,7 @@ type TStudentGridProps = {
 
 const formatStudentName = (name: string) => {
   const parts = name.trim().split(' ')
-  return `${parts[0]} ${parts[1] ? parts[1][0] + '.' : ''}`.trim()
+  return `${parts[0]} ${parts[1] ? `${parts[1][0]}.` : ''}`.trim()
 }
 
 export const StudentGrid: React.FC<TStudentGridProps> = ({

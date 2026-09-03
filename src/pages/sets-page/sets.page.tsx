@@ -1,9 +1,9 @@
+import { useOpenCreateFolder } from '@features/create-folder'
+import { useOpenCreateSet } from '@features/create-set'
 import {
   SectionContentsBrowser,
   type TSectionFolderContext,
 } from '@features/section-contents-browser'
-import { useOpenCreateFolder } from '@features/create-folder'
-import { useOpenCreateSet } from '@features/create-set'
 import { Button, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useCallback, useState } from 'react'

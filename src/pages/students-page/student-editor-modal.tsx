@@ -1,5 +1,6 @@
 import { uploadMedia } from '@entities/media'
 import {
+  STUDENT_AGE_MIN,
   type TStudent,
   type TStudentCreateInput,
   type TStudentFormValues,
@@ -9,7 +10,7 @@ import {
 import type { TStudentFormSubmitMeta } from '@features/student-form'
 import { getApiErrorMessage } from '@shared/lib/api'
 import { StudentEditor } from '@widgets/student-editor'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 type TStudentEditorModalProps = {
   mode: 'create' | 'edit'
@@ -17,9 +18,7 @@ type TStudentEditorModalProps = {
   onClose: () => void
 }
 
-type TStudentPayload = TStudentCreateInput & {
-  avatar_media_id?: string | null
-}
+type TStudentPayload = TStudentCreateInput
 
 export const StudentEditorModal: React.FC<TStudentEditorModalProps> = ({
   mode,
@@ -30,6 +29,21 @@ export const StudentEditorModal: React.FC<TStudentEditorModalProps> = ({
   const { mutateAsync: updateStudent } = useUpdateStudent()
   const [error, setError] = useState<string | null>(null)
 
+  const formDefaultValues = useMemo<Partial<TStudentFormValues> | undefined>(() => {
+    if (!student) {
+      return undefined
+    }
+
+    return {
+      name: student.name,
+      email: student.email,
+      age: student.age ?? STUDENT_AGE_MIN,
+      status: student.status,
+      cardsShift: student.cards_shift,
+      avatarFile: null,
+    }
+  }, [student])
+
   const handleSubmit = useCallback(
     async (values: TStudentFormValues, meta: TStudentFormSubmitMeta) => {
       const payload: TStudentPayload = {
@@ -37,6 +51,7 @@ export const StudentEditorModal: React.FC<TStudentEditorModalProps> = ({
         email: values.email,
         age: values.age,
         status: values.status,
+        cards_shift: values.cardsShift,
       }
 
       try {
@@ -68,8 +83,8 @@ export const StudentEditorModal: React.FC<TStudentEditorModalProps> = ({
   return (
     <StudentEditor
       mode={mode}
-      defaultValues={student}
-      avatarSrc={student?.avatar_url ?? student?.avatarSrc ?? null}
+      defaultValues={formDefaultValues}
+      avatarSrc={student?.avatar_url ?? null}
       error={error}
       onClose={onClose}
       onSubmit={handleSubmit}

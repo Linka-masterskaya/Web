@@ -41,7 +41,7 @@ export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set
     <SetSettings
       defaultValues={{
         title: set.title,
-        age: String(set.ageMin ?? set.ageMax ?? SET_SETTINGS_DEFAULT_VALUES.age),
+        age: String(set.age ?? SET_SETTINGS_DEFAULT_VALUES.age),
         level: set.difficulty ?? SET_SETTINGS_DEFAULT_VALUES.level,
         notes: set.notes ?? SET_SETTINGS_DEFAULT_VALUES.notes,
       }}

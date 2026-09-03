@@ -55,6 +55,8 @@ const createFolder = (
   kind: options.kind ?? 'folder',
   studentId: options.studentId ?? null,
   published: undefined,
+  age: null,
+  difficulty: null,
   updatedAt: options.updatedAt ?? DEFAULT_UPDATED_AT,
 })
 
@@ -68,6 +70,8 @@ const createPack = (id: string, name: string, published = false): TContentItem =
   kind: null,
   studentId: null,
   published,
+  age: null,
+  difficulty: null,
   updatedAt: DEFAULT_UPDATED_AT,
 })
 
@@ -166,15 +170,7 @@ export const getSectionContentsMock = async (
 ): Promise<TSectionContentsResponse> => {
   const parsed = getSectionContentsParamsSchema.parse(params)
 
-  const {
-    section,
-    parentId,
-    limit = 50,
-    offset = 0,
-    sort = 'name',
-    order = 'asc',
-    search,
-  } = parsed
+  const { section, parentId, limit = 50, offset = 0, sort = 'name', order = 'asc', search } = parsed
 
   await wait(300)
 
@@ -197,9 +193,12 @@ export const getSectionContentsMock = async (
     return left.id.localeCompare(right.id)
   })
 
+  const items = sortedItems.slice(offset, offset + limit)
+
   return {
-    items: sortedItems.slice(offset, offset + limit),
+    items,
     limit,
     offset,
+    total: sortedItems.length,
   }
 }

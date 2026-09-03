@@ -37,11 +37,11 @@ export {
   deleteSetSchema,
   type TDeleteSetParams,
 } from './model/delete-set.schema'
+export { duplicateSetParamsSchema, type TDuplicateSetParams } from './model/duplicate-set.schema'
 export {
   moveSetParamsSchema,
   type TMoveSetParams,
 } from './model/move-set.schema'
-export { duplicateSetParamsSchema, type TDuplicateSetParams } from './model/duplicate-set.schema'
 export {
   sendSetParamsSchema,
   sendSetResponseSchema,

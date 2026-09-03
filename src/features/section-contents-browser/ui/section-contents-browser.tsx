@@ -164,7 +164,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       )}
 
       {!isLoading && !error && (
-        <Stack gap="sm">
+        <>
           {actionError && (
             <Text c="red.6" role="alert">
               {actionError}
@@ -179,7 +179,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             onOpenPack={handleOpenPack}
             packContextMenuItems={packContextMenuItems}
           />
-        </Stack>
+        </>
       )}
 
       {!isLoading && error && (

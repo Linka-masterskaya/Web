@@ -32,7 +32,7 @@ export const getSectionContents = async (
   const searchParams = buildSectionContentSearchParams(params)
 
   return apiClient
-    .get(`section/${params.section}/contents`, {
+    .get(`sections/${params.section}/contents`, {
       searchParams,
       signal: params.signal,
     })
