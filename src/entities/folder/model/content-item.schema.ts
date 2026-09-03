@@ -42,7 +42,7 @@ export const getSectionContentsParamsSchema = z.object({
   offset: z.number().int().min(0).optional(),
   sort: z.enum(['name', 'updated_at']).optional(),
   order: z.enum(['asc', 'desc']).optional(),
-  search: z.string().trim().min(1).optional(),
+  query: z.string().trim().min(1).optional(),
   age: z.number().int().min(3).max(18).optional(),
   difficulty: sectionContentsDifficultySchema.optional(),
 })

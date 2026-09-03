@@ -11,7 +11,7 @@ export const folderQueryKeys = {
     offset,
     sort,
     order,
-    search,
+    query,
     age,
     difficulty,
   }: TGetSectionContentsParams) =>
@@ -24,7 +24,7 @@ export const folderQueryKeys = {
       offset,
       sort,
       order,
-      search ?? null,
+      query ?? null,
       age ?? null,
       difficulty ?? null,
     ] as const,
