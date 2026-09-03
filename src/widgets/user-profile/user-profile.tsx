@@ -14,7 +14,7 @@ export const UserProfile = ({ onClose }: TUserProfileProps) => {
         size="md"
         aria-label="Закрыть профиль"
       />
-      <Stack gap="40px" align="stretch">
+      <Stack gap="40px" align="stretch" className={styles.content}>
         <Flex justify="center">
           <UserAvatar />
         </Flex>

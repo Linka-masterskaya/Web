@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { Link } from 'react-router'
 import styles from './card.module.scss'
 import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
@@ -30,9 +31,9 @@ export const Card: React.FC<TCardProps> = (props) => {
 
   if (action.type === 'link') {
     return (
-      <a className={cardClassName} href={action.href} onContextMenu={onContextMenu}>
+      <Link className={cardClassName} to={action.href} onContextMenu={onContextMenu}>
         {content}
-      </a>
+      </Link>
     )
   }
 
