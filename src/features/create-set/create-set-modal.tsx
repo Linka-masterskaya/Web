@@ -30,14 +30,13 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({ folderId = null
       folderId: resolvedFolderId,
     })
 
-    const age = Number(values.age)
+    const age = Number.parseInt(values.age, 10)
 
     await updateSetMutation.mutateAsync({
       id: set.id,
       title: values.title.trim(),
       folderId: resolvedFolderId,
-      ageMin: age,
-      ageMax: age,
+      age,
       difficulty: values.level,
       goals: [],
       notes: values.notes,

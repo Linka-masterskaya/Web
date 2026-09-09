@@ -12,8 +12,7 @@ export const updateSet = async (params: TUpdateSetParams): Promise<TSet> => {
       json: {
         title: data.title,
         folder_id: data.folderId,
-        age_min: data.ageMin,
-        age_max: data.ageMax,
+        age: data.age,
         difficulty: data.difficulty,
         goals: data.goals,
         notes: data.notes,

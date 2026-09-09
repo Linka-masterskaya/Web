@@ -1,11 +1,12 @@
 import clsx from 'clsx'
+import { Link } from 'react-router'
 import styles from './card.module.scss'
 import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
 
 export const Card: React.FC<TCardProps> = (props) => {
-  const { className, variant, label, level, action } = props
-  const cardClassName = clsx(styles.card, className)
+  const { className, fill = false, variant, label, level, action, onContextMenu } = props
+  const cardClassName = clsx(styles.card, fill && styles.fill, className)
 
   const content = (
     <>
@@ -30,14 +31,19 @@ export const Card: React.FC<TCardProps> = (props) => {
 
   if (action.type === 'link') {
     return (
-      <a className={cardClassName} href={action.href}>
+      <Link className={cardClassName} to={action.href} onContextMenu={onContextMenu}>
         {content}
-      </a>
+      </Link>
     )
   }
 
   return (
-    <button className={cardClassName} type="button" onClick={action.onClick}>
+    <button
+      className={cardClassName}
+      type="button"
+      onClick={action.onClick}
+      onContextMenu={onContextMenu}
+    >
       {content}
     </button>
   )

@@ -60,7 +60,7 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ className }) 
   }
 
   return (
-    <Box className={className}>
+    <Box className={className} w="100%">
       {view === 'profile' ? (
         <EditNameForm
           name={name ?? ''}

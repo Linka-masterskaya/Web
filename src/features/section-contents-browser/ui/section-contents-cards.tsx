@@ -3,10 +3,12 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
-import { Text } from '@mantine/core'
+import { Blockquote, ScrollArea } from '@mantine/core'
+import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { Card } from '@shared/ui/card'
+import { ContextMenu, type TContextMenuItem, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
-import type { FC } from 'react'
+import type { FC, MouseEvent as ReactMouseEvent } from 'react'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -25,6 +27,7 @@ type TSectionContentsCardProps = {
   emptyText: string
   onOpenFolder: (folder: TFolderContentItem) => void
   onOpenPack: (pack: TPackContentItem) => void
+  packContextMenuItems?: readonly TContextMenuItem<TPackContentItem>[]
 }
 
 const isFolderContentItem = (item: TSectionContentItem): item is TFolderContentItem =>
@@ -49,46 +52,76 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   emptyText,
   onOpenFolder,
   onOpenPack,
+  packContextMenuItems = [],
 }) => {
-  return (
-    <section aria-label="Содержимое папки">
-      <div className={styles.grid}>
-        <Card
-          className={styles.card}
-          variant="icon"
-          label="Вернуться назад"
-          icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
-          action={backAction}
-        />
-        {items.map((item) => {
-          const handleClick = () => {
-            if (isFolderContentItem(item)) {
-              onOpenFolder(item)
-              return
-            }
-            if (isPackContentItem(item)) {
-              onOpenPack(item)
-            }
-          }
+  const contextMenu = useContextMenu<TPackContentItem>({
+    width: 235,
+    estimatedHeight: 130,
+    viewportMargin: 8,
+  })
 
-          return (
-            <div key={`${item.type}:${item.id}`}>
+  return (
+    <section aria-label="Содержимое папки" className={styles.root}>
+      {items.length === 0 && (
+        <Blockquote
+          className={styles.emptyText}
+          color="blue"
+          icon={<Icon name="Info" aria-hidden="true" />}
+          iconSize={32}
+        >
+          {emptyText}
+        </Blockquote>
+      )}
+
+      <ScrollArea
+        type="auto"
+        scrollbars="y"
+        className={styles.scrollArea}
+        classNames={{ viewport: styles.viewport }}
+      >
+        <div className={gridStyles.grid}>
+          <Card
+            fill
+            className={gridStyles.card}
+            variant="icon"
+            label="Вернуться назад"
+            icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
+            action={backAction}
+          />
+          {items.map((item) => {
+            const handleClick = () => {
+              if (isFolderContentItem(item)) {
+                onOpenFolder(item)
+                return
+              }
+              if (isPackContentItem(item)) {
+                onOpenPack(item)
+              }
+            }
+
+            const onContextMenu =
+              isPackContentItem(item) && packContextMenuItems.length > 0
+                ? (event: ReactMouseEvent<HTMLElement>) => {
+                    contextMenu.open(event, item)
+                  }
+                : undefined
+
+            return (
               <Card
-                variant="icon" //сейчас в ответе api нет информации про image, когда появится, можно будет заменить на:
-                // variant='image'
-                // imageSrc={item.preview_url}
-                // imageAlt={item.name}
+                key={`${item.type}:${item.id}`}
+                fill
+                variant="icon"
                 label={item.name}
                 icon={<Icon name={getSectionContentIconName(item)} aria-hidden="true" />}
                 action={{ type: 'function', onClick: handleClick }}
-                className={styles.card}
+                className={gridStyles.card}
+                onContextMenu={onContextMenu}
               />
-            </div>
-          )
-        })}
-      </div>
-
-      {items.length === 0 && <Text mt="md">{emptyText}</Text>}
+            )
+          })}
+        </div>
+      </ScrollArea>
+      <ContextMenu<TPackContentItem> items={packContextMenuItems} {...contextMenu.menuProps} />
     </section>
   )
 }

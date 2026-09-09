@@ -4,6 +4,10 @@ export { getSectionContents } from './api/get-section-contents'
 export { useCreateFolder } from './hooks/use-create-folder'
 export { useFolders } from './hooks/use-folders'
 export { useSectionContents } from './hooks/use-section-contents'
+export {
+  parseSectionContentsFilters,
+  type TSectionContentsFilters,
+} from './lib/parse-section-contents-filters'
 export { folderQueryKeys } from './lib/query-keys'
 export {
   contentItemSchema,
@@ -13,6 +17,7 @@ export {
   type TContentItem,
   type TGetSectionContentsParams,
   type TSection,
+  type TSectionContentsDifficulty,
   type TSectionContentsResponse,
 } from './model/content-item.schema'
 export {

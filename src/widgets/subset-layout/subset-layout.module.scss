@@ -1,18 +1,47 @@
 .subsetLayout {
-    height: 100%;
+  --side-panel-open-width: 258px;
+  --side-panel-closed-width: 64px;
+  --left-panel-width: var(--side-panel-open-width);
+  --right-panel-width: var(--side-panel-open-width);
 
-    display: flex;
-    align-items: center;
-    width: 100%;
+  display: grid;
+  grid-template-columns:
+    var(--left-panel-width)
+    minmax(0, 1fr)
+    var(--right-panel-width);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--mantine-color-white);
+  transition: grid-template-columns 180ms ease;
+}
+
+.subsetLayout[data-left-opened='false'] {
+  --left-panel-width: var(--side-panel-closed-width);
+}
+
+.subsetLayout[data-right-opened='false'] {
+  --right-panel-width: var(--side-panel-closed-width);
+}
+
+.subsetLayout[data-has-left-panel='false'] {
+  --left-panel-width: 0px;
+}
+
+.subsetLayout[data-has-right-panel='false'] {
+  --right-panel-width: 0px;
 }
 
 .content {
-  flex-grow: 1;
+  position: relative;
   min-width: 0;
+  min-height: 0;
+  overflow: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .subsetLayout {
-        transition: none;
-    }
+  .subsetLayout {
+    transition: none;
+  }
 }

@@ -10,13 +10,10 @@ export {
   STUDENT_CARDS_SHIFT_OPTIONS,
   STUDENT_DEFAULT_SORT_FIELD,
   STUDENT_DEFAULT_SORT_ORDER,
-  STUDENT_LEVEL_LABELS,
-  STUDENT_LEVEL_OPTIONS,
   STUDENT_SORT_FIELDS,
   STUDENT_STATUS_LABELS,
   STUDENT_STATUS_OPTIONS,
   type TStudentCardsShift,
-  type TStudentLevel,
   type TStudentSortField,
   type TStudentStatus,
 } from './config'
@@ -32,9 +29,11 @@ export type {
   TStudentFormValues,
   TStudentsListParams,
   TStudentsListResponse,
+  TStudentUpdateInput,
 } from './model/student.schema'
 export {
   studentFormDefaultValues,
+  studentFormFieldsSchema,
   studentSchema,
   studentsListResponseSchema,
 } from './model/student.schema'

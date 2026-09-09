@@ -1,12 +1,13 @@
 import { z } from 'zod'
 
-// Ответ POST /media
 export const mediaSchema = z.object({
-  id: z.string(),
-  uploader_id: z.string(),
+  id: z.string().uuid(),
+  uploader_id: z.string().uuid(),
+  name: z.string(),
   sha256: z.string(),
+  media_type: z.string(),
   mime_type: z.string(),
-  size_bytes: z.number(),
+  size_bytes: z.number().int(),
   created_at: z.string(),
   url: z.string(),
 })

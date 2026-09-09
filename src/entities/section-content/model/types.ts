@@ -14,6 +14,8 @@ export type TSectionContentItem = {
   kind: 'folder' | 'student' | null
   studentId: string | null
   published: boolean | undefined
+  age: number | null
+  difficulty: 'easy' | 'medium' | 'hard' | null
   updatedAt: string
 }
 
@@ -27,11 +29,12 @@ export type TPackContentItem = Omit<TSectionContentItem, 'type'> & {
   type: 'pack'
 }
 
-// ответ GET /section/{section}/contents
+// ответ GET /sections/{section}/contents
 export type TSectionContentResponse = {
   items: TSectionContentItem[]
   limit: number
   offset: number
+  total?: number
 }
 
 // параметры функции получения содержимого раздела или папки

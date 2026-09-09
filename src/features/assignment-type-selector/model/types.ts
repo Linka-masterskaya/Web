@@ -17,4 +17,6 @@ export type TAssignmentTypeSelectorProps = {
   value: string
   options: TAssignmentTypeOption[]
   onChange: (id: string) => void
+  disabled?: boolean
+  compact?: boolean
 }

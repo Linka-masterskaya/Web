@@ -1,31 +1,53 @@
-import { env } from '@shared/lib/env'
-
-import type {
-  TGetSectionContentsParams,
-  TSectionContentsResponse,
+import { apiClient } from '@shared/lib/api'
+import {
+  getSectionContentsParamsSchema,
+  sectionContentsResponseSchema,
+  type TGetSectionContentsParams,
+  type TSectionContentsResponse,
 } from '../model/content-item.schema'
 
-import { getSectionContentsMock } from './get-section-contents.mock'
-
-import { getSectionContentsRemote } from './get-section-contents.remote'
-
-/**
- * Выбирает источник данных.
- *
- * В режиме моков HTTP-запрос вообще не выполняется.
- * В обычном режиме используется настоящий бэкенд.
- */
-export const getSectionContents = (
+/** GET /sections/{section}/contents — папки и наборы узла дерева. Фильтры: query, age, difficulty. */
+export const getSectionContents = async (
   params: TGetSectionContentsParams,
 ): Promise<TSectionContentsResponse> => {
-  if (env.useSectionContentMock()) {
-    // biome-ignore lint/suspicious/noConsole: логируем падение в dev для отладки
-    console.debug('[section contents] mock', params)
+  const { section, parentId, limit, offset, sort, order, query, age, difficulty } =
+    getSectionContentsParamsSchema.parse(params)
 
-    return getSectionContentsMock(params)
+  const searchParams: Record<string, string | number> = {}
+
+  if (parentId) {
+    searchParams.parent_id = parentId
   }
-  // biome-ignore lint/suspicious/noConsole: логируем падение в dev для отладки
-  console.debug('[section contents] remote', params)
 
-  return getSectionContentsRemote(params)
+  if (limit != null) {
+    searchParams.limit = limit
+  }
+
+  if (offset != null) {
+    searchParams.offset = offset
+  }
+
+  if (sort) {
+    searchParams.sort = sort
+  }
+
+  if (order) {
+    searchParams.order = order
+  }
+
+  if (query) {
+    searchParams.query = query
+  }
+
+  if (age != null) {
+    searchParams.age = age
+  }
+
+  if (difficulty) {
+    searchParams.difficulty = difficulty
+  }
+
+  return apiClient
+    .get(`sections/${section}/contents`, { searchParams })
+    .json(sectionContentsResponseSchema)
 }

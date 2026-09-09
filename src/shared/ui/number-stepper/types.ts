@@ -3,6 +3,7 @@ export type TNumberStepperProps = {
   onChange: (value: number) => void
   min: number
   max: number
+  disabled?: boolean
   label?: string
   /** Доступное имя контрола для ассистивных технологий. Игнорируется, если задан label */
   'aria-label'?: string

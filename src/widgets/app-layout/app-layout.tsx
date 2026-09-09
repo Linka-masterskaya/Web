@@ -1,3 +1,4 @@
+import chromeStyles from '@shared/styles/chrome-header.module.scss'
 import { Logo } from '@shared/ui/logo'
 import clsx from 'clsx'
 import { Outlet } from 'react-router'
@@ -11,8 +12,8 @@ export const AppLayout: React.FC<TAppLayoutProps> = ({
   className,
 }) => (
   <div className={clsx(styles.layout, className)}>
-    <header className={styles.header}>
-      <Logo className={styles.logo} />
+    <header className={chromeStyles.header}>
+      <Logo className={chromeStyles.logo} />
       <div className={styles.title}>{titleSlot}</div>
       <div className={styles.search}>{searchSlot}</div>
       <div className={styles.actions}>{actionsSlot}</div>

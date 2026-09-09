@@ -39,8 +39,10 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
     )
   }
 
-  const formatDate = (isoString?: string): string => {
-    if (!isoString) return '—'
+  const formatDate = (isoString?: string | null): string => {
+    if (!isoString) {
+      return '—'
+    }
     const date = new Date(isoString)
     return date.toLocaleDateString('ru-RU', {
       day: '2-digit',
@@ -124,7 +126,7 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
                   <Text size="sm">{student.email}</Text>
                 </Table.Td>
                 <Table.Td className={styles.cell}>
-                  <Text size="sm">{student.age}</Text>
+                  <Text size="sm">{student.age ?? '—'}</Text>
                 </Table.Td>
                 <Table.Td className={styles.cell}>
                   <Text size="sm">{STUDENT_STATUS_LABELS[student.status]}</Text>

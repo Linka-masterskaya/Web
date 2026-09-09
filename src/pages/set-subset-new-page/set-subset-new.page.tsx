@@ -39,8 +39,20 @@ export const SetSubsetNewPage: React.FC = () => {
     }
 
     createPageMutation.mutate(selectedType, {
-      onSuccess: () => {
-        navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
+      onSuccess: (set) => {
+        const createdPage = set.pages.at(-1)
+
+        if (!createdPage) {
+          navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
+          return
+        }
+
+        navigate(
+          createUrl(routerPath.dashboardSubsetIdEdit, {
+            setId: resolvedSetId,
+            subsetId: createdPage.id,
+          }),
+        )
       },
     })
   }

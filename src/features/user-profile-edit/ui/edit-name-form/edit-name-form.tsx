@@ -48,7 +48,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
   }
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+    <form onSubmit={handleSubmit(handleFormSubmit)} noValidate style={{ width: '100%' }}>
       <Stack gap="16px">
         <TextInput
           {...register('name')}
@@ -75,6 +75,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
           type="button"
           onClick={openPasswordForm}
           variant="outline"
+          fullWidth
           disabled={!isViewMode || isLoading}
         >
           Сменить пароль

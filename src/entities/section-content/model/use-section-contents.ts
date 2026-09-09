@@ -82,6 +82,9 @@ export const useSectionContents = ({
   const [reloadVersion, setReloadVersion] = useState(0)
 
   useEffect(() => {
+    // reloadVersion намеренно в deps: refetch() инкрементирует версию и перезапускает эффект
+    void reloadVersion
+
     const controller = new AbortController()
 
     setState({

@@ -21,18 +21,8 @@ export const STUDENT_CARDS_SHIFT_LABELS: Record<TStudentCardsShift, string> = {
   right: 'Справа',
 }
 
-export const STUDENT_LEVEL_OPTIONS = ['easy', 'medium', 'hard'] as const
-export type TStudentLevel = (typeof STUDENT_LEVEL_OPTIONS)[number]
-
-export const STUDENT_LEVEL_LABELS: Record<TStudentLevel, string> = {
-  easy: 'Лёгкий',
-  medium: 'Средний',
-  hard: 'Сложный',
-}
-
-// Sort
-
-export const STUDENT_SORT_FIELDS = ['name', 'email', 'age', 'status'] as const
+// Sort — клиентская сортировка; API sort_by: name | age | status | last_lesson_at
+export const STUDENT_SORT_FIELDS = ['name', 'email', 'age', 'status', 'last_lesson_at'] as const
 export type TStudentSortField = (typeof STUDENT_SORT_FIELDS)[number]
 
 export const STUDENT_DEFAULT_SORT_FIELD: TStudentSortField = 'name'

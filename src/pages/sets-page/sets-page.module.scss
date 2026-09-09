@@ -1,5 +1,27 @@
 .page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
   width: 100%;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+  margin-bottom: var(--mantine-spacing-lg);
+}
+
+.title {
+  margin-bottom: 0;
+}
+
+.createActionInner {
+  gap: 8px;
 }
 
 .list {

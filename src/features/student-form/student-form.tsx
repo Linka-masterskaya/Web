@@ -4,7 +4,7 @@ import {
   STUDENT_STATUS_LABELS,
   STUDENT_STATUS_OPTIONS,
   studentFormDefaultValues,
-  studentSchema,
+  studentFormFieldsSchema,
   type TStudentCardsShift,
   type TStudentFormValues,
 } from '@entities/student'
@@ -25,14 +25,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import type { z } from 'zod'
 import styles from './student-form.module.scss'
-
-const studentFormFieldsSchema = studentSchema.pick({
-  name: true,
-  email: true,
-  age: true,
-  status: true,
-  cardsShift: true,
-})
 
 type TStudentFormFieldsValues = z.infer<typeof studentFormFieldsSchema>
 

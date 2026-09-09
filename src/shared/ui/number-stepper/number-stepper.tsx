@@ -12,6 +12,7 @@ export const NumberStepper: React.FC<TNumberStepperProps> = ({
   onChange,
   min,
   max,
+  disabled = false,
   label,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledBy,
@@ -19,8 +20,8 @@ export const NumberStepper: React.FC<TNumberStepperProps> = ({
   const generatedLabelId = useId()
   const labelId = label ? generatedLabelId : undefined
 
-  const isDecrementDisabled = value <= min
-  const isIncrementDisabled = value >= max
+  const isDecrementDisabled = disabled || value <= min
+  const isIncrementDisabled = disabled || value >= max
 
   const handleDecrement = () => {
     if (!isDecrementDisabled) {

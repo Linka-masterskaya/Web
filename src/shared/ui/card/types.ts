@@ -1,4 +1,4 @@
-import type { ReactElement } from 'react'
+import type { MouseEventHandler, ReactElement } from 'react'
 
 export type TCardAction = { type: 'link'; href: string } | { type: 'function'; onClick: () => void }
 
@@ -20,9 +20,12 @@ type TCardImageVariant = {
 
 export type TCardProps = {
   className?: string
+  /** Растягивает карточку на ширину колонки с сохранением пропорций медиа-блока */
+  fill?: boolean
   label: string
   level?: TCardLevel
   action: TCardAction
+  onContextMenu?: MouseEventHandler<HTMLElement>
 } & (TCardIconVariant | TCardImageVariant)
 
 export type TCardLevelProps = {

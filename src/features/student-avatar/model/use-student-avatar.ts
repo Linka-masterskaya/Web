@@ -1,3 +1,4 @@
+import { uploadMedia } from '@entities/media'
 import { useStudent, useUpdateStudent } from '@entities/student'
 import { useEffect, useRef, useState } from 'react'
 
@@ -11,7 +12,7 @@ export const useStudentAvatar = ({ studentId }: TUseStudentAvatarOptions) => {
 
   const [localError, setLocalError] = useState<string | null>(null)
 
-  // Храним ссылку на временный URL для отзыва при размонтировании/ошибке
+  // Храним ссылку на временный URL для отмены при размонтировании/ошибке
   const tempUrlRef = useRef<string | null>(null)
 
   // Отзываем blob URL при размонтировании, если handleFileChange ещё в полёте
@@ -23,7 +24,7 @@ export const useStudentAvatar = ({ studentId }: TUseStudentAvatarOptions) => {
     }
   }, [])
 
-  const avatarSrc = student?.avatarSrc ?? null
+  const avatarSrc = student?.avatar_url ?? null
   const isLoading = isStudentLoading || isMutationLoading
   const error = localError ?? studentError?.message ?? null
 
@@ -33,7 +34,8 @@ export const useStudentAvatar = ({ studentId }: TUseStudentAvatarOptions) => {
     setLocalError(null)
 
     try {
-      await updateStudent({ id: studentId, data: { avatarSrc: tempUrl } })
+      const media = await uploadMedia(file)
+      await updateStudent({ id: studentId, data: { avatar_media_id: media.id } })
     } catch (err) {
       setLocalError('Не удалось обновить фото')
       // biome-ignore lint/suspicious/noConsole: debug only
@@ -48,8 +50,7 @@ export const useStudentAvatar = ({ studentId }: TUseStudentAvatarOptions) => {
     setLocalError(null)
 
     try {
-      // Устанавливаем undefined — поле avatarSrc опционально в схеме
-      await updateStudent({ id: studentId, data: { avatarSrc: undefined } })
+      await updateStudent({ id: studentId, data: { avatar_media_id: null } })
     } catch (err) {
       setLocalError('Не удалось удалить фото')
       // biome-ignore lint/suspicious/noConsole: debug only
