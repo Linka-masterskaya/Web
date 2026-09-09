@@ -21,8 +21,8 @@ export { useUpdateSet } from './hooks/use-update-set'
 export { useUpdateSetPageStructure } from './hooks/use-update-set-page-structure'
 export { useUpdateSetPageType } from './hooks/use-update-set-page-type'
 export { useUpdateSetTitle } from './hooks/use-update-set-title'
-export { setMutationKeys, setQueryKeys } from './lib/query-keys'
 export { getSetPageTitle } from './lib/get-set-page-title'
+export { setMutationKeys, setQueryKeys } from './lib/query-keys'
 export {
   getSetPageStructure,
   resizeSetPageStructure,
