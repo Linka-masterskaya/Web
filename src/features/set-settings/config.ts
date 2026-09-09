@@ -46,22 +46,6 @@ export const SET_LEVEL_OPTIONS = [
   },
 ] satisfies { value: TSetLevel; label: string }[]
 
-// Голос озвучки
-export const SET_VOICE_VALUES = ['alena', 'ivan'] as const
-
-export type TSetVoice = (typeof SET_VOICE_VALUES)[number]
-
-export const SET_VOICE_OPTIONS = [
-  {
-    value: 'alena',
-    label: 'Алена (ru-RU)',
-  },
-  {
-    value: 'ivan',
-    label: 'Иван (ru-RU)',
-  },
-] satisfies { value: TSetVoice; label: string }[]
-
 // Дефолтные значения параметров набора
 export const SET_SETTINGS_DEFAULT_VALUES: TSetSettings = {
   title: '',

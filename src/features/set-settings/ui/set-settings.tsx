@@ -1,3 +1,5 @@
+import { useSpeakTts, useTtsStore } from '@entities/tts'
+import { SpeechButton } from '@features/speak-text'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Accordion,
@@ -12,16 +14,12 @@ import {
   TextInput,
   Title,
 } from '@mantine/core'
+import { env } from '@shared/lib/env'
 import { Icon } from '@shared/ui/icon'
 import { PopupLayout } from '@shared/ui/popup-layout'
 import { useState } from 'react'
 import { Controller, useForm, useWatch } from 'react-hook-form'
-import {
-  SET_AGE_OPTIONS,
-  SET_LEVEL_OPTIONS,
-  SET_SETTINGS_DEFAULT_VALUES,
-  SET_VOICE_OPTIONS,
-} from '../config'
+import { SET_AGE_OPTIONS, SET_LEVEL_OPTIONS, SET_SETTINGS_DEFAULT_VALUES } from '../config'
 import { setSettingsSchema, type TSetSettings } from '../model/set-settings.schema'
 import type { TSetSettingsProps } from '../types'
 import styles from './set-settings.module.scss'
@@ -49,6 +47,21 @@ export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSe
   })
 
   const [focused, setFocused] = useState(false)
+
+  const voice = useWatch({
+    control,
+    name: 'voice',
+  })
+
+  const voices = useTtsStore((state) => state.voices)
+
+  const { speak, isSpeaking, error } = useSpeakTts()
+
+  // Преобразование голоса с бэкенда в формат, который ожидает Select
+  const voiceOptions = voices.map((voice) => ({
+    value: voice.id,
+    label: voice.name,
+  }))
 
   const handleFormSubmit = (values: TSetSettings) => {
     onSave?.(values)
@@ -128,44 +141,46 @@ export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSe
 
           <Stack gap={12}>
             <Text className={styles.sectionTitle}>Голос озвучки</Text>
-            <Flex align="flex-end" gap="sm">
-              <Controller
-                control={control}
-                name="voice"
-                render={({ field }) => (
-                  <Select
-                    flex={1}
-                    data={SET_VOICE_OPTIONS}
-                    value={field.value}
-                    onChange={(value) => {
-                      if (value !== null) {
-                        field.onChange(value)
-                      }
-                    }}
-                    withCheckIcon={false}
-                    rightSection={<Icon name="ChevronDown" size={16} />}
-                    rightSectionPointerEvents="none"
-                    classNames={{
-                      option: styles.selectOption,
-                      dropdown: styles.selectDropdown,
-                    }}
-                  />
-                )}
-              />
+            <Stack gap={4}>
+              <Flex align="flex-end" gap="sm">
+                <Controller
+                  control={control}
+                  name="voice"
+                  render={({ field }) => (
+                    <Select
+                      flex={1}
+                      data={voiceOptions}
+                      value={field.value}
+                      onChange={(value) => {
+                        if (value !== null) {
+                          field.onChange(value)
+                        }
+                      }}
+                      withCheckIcon={false}
+                      rightSection={<Icon name="ChevronDown" size={16} />}
+                      rightSectionPointerEvents="none"
+                      classNames={{
+                        option: styles.selectOption,
+                        dropdown: styles.selectDropdown,
+                      }}
+                    />
+                  )}
+                />
 
-              {/* TODO: подключить воспроизведение выбранного голоса после интеграции с API */}
-              <Button
-                variant="outline"
-                leftSection={<Icon name="Play" size={16} />}
-                classNames={{
-                  root: styles.listenButton,
-                  section: styles.listenButtonSection,
-                  label: styles.listenButtonLabel,
-                }}
-              >
-                Слушать
-              </Button>
-            </Flex>
+                <SpeechButton
+                  isSpeaking={isSpeaking}
+                  onClick={() => {
+                    void speak(env.ttsDefaultText(), voice)
+                  }}
+                />
+              </Flex>
+
+              {error && (
+                <Text className={styles.ttsError} role="alert">
+                  Не удалось воспроизвести озвучку
+                </Text>
+              )}
+            </Stack>
           </Stack>
 
           <Stack gap={12}>

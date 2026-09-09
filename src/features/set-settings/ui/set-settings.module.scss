@@ -28,22 +28,6 @@
 	box-shadow: var(--mantine-shadow-lg);
 }
 
-.listenButton {
-	width: 110px;
-	height: 40px;
-	padding: 8px;
-	border-radius: 8px;
-}
-
-.listenButtonSection {
-	margin-right: 4px;
-}
-
-.listenButtonLabel {
-	font-size: 14px;
-	font-weight: 400;
-}
-
 .notesInput {
 	padding: 10px 12px;
 	border-radius: 8px;
@@ -130,6 +114,11 @@
 }
 
 .submitError {
+	color: var(--mantine-color-red-6);
+	font-size: var(--mantine-font-size-sm);
+}
+
+.ttsError {
 	color: var(--mantine-color-red-6);
 	font-size: var(--mantine-font-size-sm);
 }
