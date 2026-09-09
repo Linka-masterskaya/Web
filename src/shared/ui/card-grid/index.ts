@@ -1,2 +1,9 @@
 export { CardGrid } from './card-grid'
-export type { TCardGridItem, TCardGridProps, TCardGridSize } from './types'
+export { CardGridCard } from './card-grid-card'
+export type {
+  TCardGridCardIndicator,
+  TCardGridCardProps,
+  TCardGridItem,
+  TCardGridProps,
+  TCardGridSize,
+} from './types'
