@@ -39,6 +39,7 @@ export type TCardGridCardProps = {
   indicator?: TCardGridCardIndicator
   onClick?: () => void
   onFocus?: () => void
+  onBlur?: () => void
 }
 
 export type TCardGridCardIndicator =
