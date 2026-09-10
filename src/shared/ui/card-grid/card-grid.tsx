@@ -1,16 +1,10 @@
 import { Box, Stack, Title } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import { type CSSProperties, useState } from 'react'
+import { useState } from 'react'
 import styles from './card-grid.module.scss'
 import { CardGridCard } from './card-grid-card'
 import type { TCardGridCardIndicator, TCardGridProps } from './types'
-
-type TGridStyle = CSSProperties & {
-  '--card-grid-cols': string
-  '--card-grid-rows': string
-  '--card-grid-title-height': string
-}
 
 export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const capacity = props.size.rows * props.size.cols
@@ -18,12 +12,6 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
 
   const [focusedId, setFocusedId] = useState<string | null>(null)
   const highlightedId = props.mode === 'single' ? props.value : focusedId
-
-  const gridStyle: TGridStyle = {
-    '--card-grid-cols': String(props.size.cols),
-    '--card-grid-rows': String(props.size.rows),
-    '--card-grid-title-height': '188px',
-  }
 
   const handleCardClick = (id: string) => {
     switch (props.mode) {
@@ -70,14 +58,20 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   }
 
   return (
-    <Stack className={clsx(styles.container, props.className)} style={gridStyle}>
+    <Stack className={clsx(styles.container, props.className)}>
       {props.title && (
         <Title className={styles.title} order={1}>
           {props.title}
         </Title>
       )}
 
-      <Box className={styles.grid}>
+      <Box
+        className={styles.grid}
+        style={{
+          gridTemplateColumns: `repeat(${props.size.cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${props.size.rows}, minmax(0, 1fr))`,
+        }}
+      >
         {slots.map((card, index) => {
           if (!card) {
             return (
