@@ -25,12 +25,18 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   }
 
   const isSelected = (id: string) => {
-    if (props.mode !== undefined) {
-      return false
+    if (props.mode === 'single') {
+      return props.value === id
     }
 
-    return props.isMultiselect ? props.value.includes(id) : props.value === id
+    if (props.mode === 'multi') {
+      return props.value.includes(id)
+    }
+
+    return false
   }
+
+  const singleValue = props.mode === 'single' ? props.value : null
 
   useEffect(() => {
     if (!activeId) {
@@ -45,33 +51,35 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   }, [activeId, props.cards])
 
   useEffect(() => {
-    if (props.mode !== undefined || props.isMultiselect) {
+    if (props.mode !== 'single') {
       return
     }
 
-    setActiveId(props.value || null)
-  }, [props.mode, props.isMultiselect, props.value])
+    setActiveId(singleValue || null)
+  }, [props.mode, singleValue])
 
   const handleCardClick = (id: string) => {
-    if (props.mode === 'plain' || props.mode === 'order') {
-      setActiveId(id)
-      props.onCardClick?.(id)
-      return
+    switch (props.mode) {
+      case 'plain':
+      case 'order':
+        setActiveId(id)
+        props.onCardClick?.(id)
+        return
+      case 'multi': {
+        const wasSelected = props.value.includes(id)
+
+        props.onChange(
+          wasSelected
+            ? props.value.filter((selectedId) => selectedId !== id)
+            : [...props.value, id],
+        )
+        setActiveId(id)
+        return
+      }
+      case 'single':
+        props.onChange(id)
+        setActiveId(id)
     }
-
-    if (props.isMultiselect) {
-      const wasSelected = props.value.includes(id)
-
-      props.onChange(
-        wasSelected ? props.value.filter((selectedId) => selectedId !== id) : [...props.value, id],
-      )
-
-      setActiveId(id)
-      return
-    }
-
-    props.onChange(id)
-    setActiveId(id)
   }
 
   const getCardIndicator = (id: string, index: number): TCardGridCardIndicator | undefined => {
@@ -89,12 +97,12 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
     return {
       type: 'check',
       selected: isSelected(id),
-      selectedActive: props.isMultiselect && activeId === id,
+      selectedActive: props.mode === 'multi' && activeId === id,
     }
   }
 
   return (
-    <Stack className={styles.container} style={gridStyle}>
+    <Stack className={clsx(styles.container, props.className)} style={gridStyle}>
       {props.title && (
         <Title className={styles.title} order={1}>
           {props.title}
