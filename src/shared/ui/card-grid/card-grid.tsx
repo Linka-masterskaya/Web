@@ -10,10 +10,12 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const capacity = props.size.rows * props.size.cols
   const slots = Array.from({ length: capacity }, (_, index) => props.cards[index] ?? null)
 
-  const [focusedId, setFocusedId] = useState<string | null>(null)
-  const highlightedId = props.mode === 'single' ? props.value : focusedId
+  const [activeId, setActiveId] = useState<string | null>(null)
+  const highlightedId = activeId ?? (props.mode === 'single' ? props.value : null)
 
   const handleCardClick = (id: string) => {
+    setActiveId(id)
+
     switch (props.mode) {
       case 'plain':
       case 'order':
@@ -47,7 +49,7 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
         return {
           type: 'check',
           selected: props.value.includes(id),
-          selectedActive: focusedId === id,
+          selectedActive: activeId === id,
         }
       case 'single':
         return {
@@ -94,8 +96,6 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
               active={highlightedId === card.id}
               indicator={getCardIndicator(card.id, index)}
               onClick={() => handleCardClick(card.id)}
-              onFocus={() => setFocusedId(card.id)}
-              onBlur={() => setFocusedId(null)}
             />
           )
         })}

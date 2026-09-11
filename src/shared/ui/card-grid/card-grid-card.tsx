@@ -9,8 +9,6 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
   active = false,
   indicator,
   onClick,
-  onFocus,
-  onBlur,
 }) => {
   const isCheckSelected = indicator?.type === 'check' && indicator.selected
 
@@ -19,8 +17,6 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
       type="button"
       className={clsx(styles.card, active && styles.cardActive)}
       onClick={onClick}
-      onFocus={onFocus}
-      onBlur={onBlur}
       aria-pressed={indicator?.type === 'check' ? indicator.selected : undefined}
       aria-label={title ?? 'Карточка'}
     >
