@@ -334,7 +334,7 @@ export const CopySetModal: React.FC<TCopySetModalProps> = ({
                 return (
                   <div className={styles.folderRow} key={folder.id}>
                     <button
-                      className={clsx(styles.recipient, styles.folderChoise)}
+                      className={clsx(styles.recipient, styles.folderChoice)}
                       type="button"
                       aria-pressed={isSelected}
                       disabled={copySetMutation.isPending}
@@ -419,7 +419,7 @@ export const CopySetModal: React.FC<TCopySetModalProps> = ({
           )}
 
           <Button
-            className={styles.sunmitButton}
+            className={styles.submitButton}
             type="submit"
             disabled={selectedFolders.length === 0}
             loading={copySetMutation.isPending}
