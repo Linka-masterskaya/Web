@@ -1,0 +1,115 @@
+.grid {
+  display: flex;
+  /* 100px между колонками, на узких экранах промежуток адаптивно сжимается. */
+  gap: clamp(16px, 8vw, 100px);
+  width: 100%;
+  /*
+    Высоту задаёт родитель: компонент растягивается на неё целиком, чтобы карточки
+    всегда помещались на экран. От этой высоты считается размер карточки, поэтому
+    родитель обязан иметь определённую высоту (flex/grid с заданной высотой).
+  */
+  height: 100%;
+  min-height: 0;
+  padding: 12px;
+  border-radius: 16px;
+  background-color: var(--mantine-color-lightBlue-0);
+}
+
+/*
+  Колонки остались разметкой: они держат распределение вариантов по категориям, но
+  визуально их не видно — ни заливки, ни рамки, ни внутренних отступов, поэтому фон
+  колонки совпадает с фоном между колонками.
+*/
+.column {
+  display: grid;
+  flex: 1 1 0;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/*
+  Всё в колонке — карточки: верхняя карточка это категория, нижние — варианты ответов.
+  Общая «обвязка» карточки вынесена в одно правило, чтобы вид не расходился.
+*/
+.categoryName,
+.cardImage {
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: var(--mantine-radius-default);
+  background-color: var(--mantine-color-white);
+}
+
+/*
+  Размер карточки задают ряды колонки — `grid-template-rows`, их ставит инлайном
+  `DistributionGrid`. Поэтому высота карточки считается от максимума карточек в
+  колонке, а не от их текущего количества: при переносе карточка просто занимает
+  такой же ряд в другой колонке и не расширяется и не сжимается.
+*/
+.categoryName {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 8px 12px;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  color: var(--mantine-color-black);
+  font-family: var(--mantine-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+  text-align: center;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+    border-color: rgba(62, 135, 255, 0.75);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+/* Карточка варианта — только картинка; название живёт в `alt` и в подсказке `title`. */
+.card {
+  display: flex;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  /* Пока отмечена другая карточка, остальные недоступны для выбора. */
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
+}
+
+.cardImage {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Подсветка внутри рамки, чтобы её не срезал `overflow: hidden` карточки. */
+.cardHighlighted .cardImage {
+  border-color: rgba(62, 135, 255, 0.75);
+  box-shadow: inset 0 0 0 1px rgba(62, 135, 255, 0.75);
+}
