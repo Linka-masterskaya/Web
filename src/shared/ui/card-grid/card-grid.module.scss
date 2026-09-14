@@ -11,7 +11,7 @@
   
   .title {
     margin: 0;
-    height: var(--card-grid-title-height, 188px);
+    height: 188px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,8 +28,6 @@
     flex: 1;
     min-height: 0;
     display: grid;
-    grid-template-columns: repeat(var(--card-grid-cols), minmax(0, 1fr));
-    grid-template-rows: repeat(var(--card-grid-rows), minmax(0, 1fr));
     gap: 12px;
   }
   

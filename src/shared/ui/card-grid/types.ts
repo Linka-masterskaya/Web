@@ -13,33 +13,22 @@ type TCardGridBaseProps = {
   title?: string
   size: TCardGridSize
   cards: TCardGridItem[]
+  className?: string
 }
 
 export type TCardGridProps =
   | (TCardGridBaseProps & {
-      mode?: never
-      isMultiselect: false
+      mode: 'single'
       value: string
       onChange: (id: string) => void
     })
   | (TCardGridBaseProps & {
-      mode?: never
-      isMultiselect: true
+      mode: 'multi'
       value: string[]
       onChange: (ids: string[]) => void
     })
   | (TCardGridBaseProps & {
-      mode: 'plain'
-      isMultiselect?: never
-      value?: never
-      onChange?: never
-      onCardClick?: (id: string) => void
-    })
-  | (TCardGridBaseProps & {
-      mode: 'order'
-      isMultiselect?: never
-      value?: never
-      onChange?: never
+      mode: 'plain' | 'order'
       onCardClick?: (id: string) => void
     })
 
@@ -49,7 +38,6 @@ export type TCardGridCardProps = {
   active?: boolean
   indicator?: TCardGridCardIndicator
   onClick?: () => void
-  onFocus?: () => void
 }
 
 export type TCardGridCardIndicator =

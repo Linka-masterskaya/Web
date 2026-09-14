@@ -1,107 +1,79 @@
 import { Box, Stack, Title } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import { type CSSProperties, useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './card-grid.module.scss'
 import { CardGridCard } from './card-grid-card'
 import type { TCardGridCardIndicator, TCardGridProps } from './types'
-
-type TGridStyle = CSSProperties & {
-  '--card-grid-cols': string
-  '--card-grid-rows': string
-  '--card-grid-title-height': string
-}
 
 export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const capacity = props.size.rows * props.size.cols
   const slots = Array.from({ length: capacity }, (_, index) => props.cards[index] ?? null)
 
   const [activeId, setActiveId] = useState<string | null>(null)
-
-  const gridStyle: TGridStyle = {
-    '--card-grid-cols': String(props.size.cols),
-    '--card-grid-rows': String(props.size.rows),
-    '--card-grid-title-height': '188px',
-  }
-
-  const isSelected = (id: string) => {
-    if (props.mode !== undefined) {
-      return false
-    }
-
-    return props.isMultiselect ? props.value.includes(id) : props.value === id
-  }
-
-  useEffect(() => {
-    if (!activeId) {
-      return
-    }
-
-    const existsInCards = props.cards.some((card) => card.id === activeId)
-
-    if (!existsInCards) {
-      setActiveId(null)
-    }
-  }, [activeId, props.cards])
-
-  useEffect(() => {
-    if (props.mode !== undefined || props.isMultiselect) {
-      return
-    }
-
-    setActiveId(props.value || null)
-  }, [props.mode, props.isMultiselect, props.value])
+  const highlightedId = activeId ?? (props.mode === 'single' ? props.value : null)
 
   const handleCardClick = (id: string) => {
-    if (props.mode === 'plain' || props.mode === 'order') {
-      setActiveId(id)
-      props.onCardClick?.(id)
-      return
-    }
-
-    if (props.isMultiselect) {
-      const wasSelected = props.value.includes(id)
-
-      props.onChange(
-        wasSelected ? props.value.filter((selectedId) => selectedId !== id) : [...props.value, id],
-      )
-
-      setActiveId(id)
-      return
-    }
-
-    props.onChange(id)
     setActiveId(id)
+
+    switch (props.mode) {
+      case 'plain':
+      case 'order':
+        props.onCardClick?.(id)
+        return
+      case 'multi': {
+        const wasSelected = props.value.includes(id)
+
+        props.onChange(
+          wasSelected
+            ? props.value.filter((selectedId) => selectedId !== id)
+            : [...props.value, id],
+        )
+        return
+      }
+      case 'single':
+        props.onChange(id)
+    }
   }
 
   const getCardIndicator = (id: string, index: number): TCardGridCardIndicator | undefined => {
-    if (props.mode === 'plain') {
-      return undefined
-    }
-
-    if (props.mode === 'order') {
-      return {
-        type: 'order',
-        value: index + 1,
-      }
-    }
-
-    return {
-      type: 'check',
-      selected: isSelected(id),
-      selectedActive: props.isMultiselect && activeId === id,
+    switch (props.mode) {
+      case 'plain':
+        return undefined
+      case 'order':
+        return {
+          type: 'order',
+          value: index + 1,
+        }
+      case 'multi':
+        return {
+          type: 'check',
+          selected: props.value.includes(id),
+          selectedActive: activeId === id,
+        }
+      case 'single':
+        return {
+          type: 'check',
+          selected: props.value === id,
+        }
     }
   }
 
   return (
-    <Stack className={styles.container} style={gridStyle}>
+    <Stack className={clsx(styles.container, props.className)}>
       {props.title && (
         <Title className={styles.title} order={1}>
           {props.title}
         </Title>
       )}
 
-      <Box className={styles.grid}>
+      <Box
+        className={styles.grid}
+        style={{
+          gridTemplateColumns: `repeat(${props.size.cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${props.size.rows}, minmax(0, 1fr))`,
+        }}
+      >
         {slots.map((card, index) => {
           if (!card) {
             return (
@@ -121,10 +93,9 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
               key={card.id}
               imageSrc={card.imageSrc}
               title={card.title}
-              active={activeId === card.id}
+              active={highlightedId === card.id}
               indicator={getCardIndicator(card.id, index)}
               onClick={() => handleCardClick(card.id)}
-              onFocus={() => setActiveId(card.id)}
             />
           )
         })}
