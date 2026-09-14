@@ -1,5 +1,5 @@
-import type { TLibraryCard } from '@entities/library'
+import type { TLibraryCard, TLibraryPictureImport } from '@entities/library'
 
 export type TLibrarySettingsProps = {
-  onSelect: (cards: TLibraryCard[]) => void
+  onSelect: (cards: TLibraryCard[], imports: TLibraryPictureImport[]) => void
 }

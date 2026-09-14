@@ -4,6 +4,11 @@ export type TLibraryCardsProps = {
   cards: TLibraryCard[]
   selectedCards: TLibraryCard[]
   onSelect: (card: TLibraryCard) => void
-  /** Карточка, к ряду которой нужно прокрутить сетку (выбор через поиск) */
   scrollToCard?: TLibraryCard | null
+}
+
+export type TLibraryCardThumbnailProps = {
+  card: TLibraryCard
+  isSelected: boolean
+  onSelect: (card: TLibraryCard) => void
 }
