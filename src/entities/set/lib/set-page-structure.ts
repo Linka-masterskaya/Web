@@ -1,8 +1,9 @@
 import type { TSetPage, TSetPageElement } from '../model/set-config.schema'
 
-type TPageAnswer = { element_id: string; is_correct: boolean }
-type TPagePair = { left_id: string; right_id: string }
-type TPageCategory = { id: string; name: string; items: string[] }
+export type TPageAnswer = { element_id: string; is_correct: boolean }
+export type TPagePair = { left_id: string; right_id: string }
+export type TPageCategory = { id: string; name: string; items: string[] }
+export type TPageSequenceItem = { element_id: string; order: number }
 
 export type TSetPageStructure = {
   primaryLabel: string
@@ -31,7 +32,11 @@ const resizeElements = (elements: TSetPageElement[], count: number) => {
   return nextElements
 }
 
-const readAnswers = (page: TSetPage): TPageAnswer[] =>
+/**
+ * Читает варианты ответа страницы. Схема пропускает поля через passthrough,
+ * поэтому тип недоступен статически и массив проверяется вручную.
+ */
+export const readSetPageAnswers = (page: TSetPage): TPageAnswer[] =>
   Array.isArray(page.answers)
     ? page.answers.filter(
         (answer): answer is TPageAnswer =>
@@ -42,7 +47,8 @@ const readAnswers = (page: TSetPage): TPageAnswer[] =>
       )
     : []
 
-const readPairs = (page: TSetPage): TPagePair[] =>
+/** Читает пары страницы сопоставления (passthrough-поле `pairs`). */
+export const readSetPagePairs = (page: TSetPage): TPagePair[] =>
   Array.isArray(page.pairs)
     ? page.pairs.filter(
         (pair): pair is TPagePair =>
@@ -53,7 +59,8 @@ const readPairs = (page: TSetPage): TPagePair[] =>
       )
     : []
 
-const readCategories = (page: TSetPage): TPageCategory[] =>
+/** Читает категории страницы распределения (passthrough-поле `categories`). */
+export const readSetPageCategories = (page: TSetPage): TPageCategory[] =>
   Array.isArray(page.categories)
     ? page.categories.filter(
         (category): category is TPageCategory =>
@@ -66,12 +73,27 @@ const readCategories = (page: TSetPage): TPageCategory[] =>
       )
     : []
 
+/** Читает порядок страницы последовательности (passthrough-поле `sequence`). */
+export const readSetPageSequence = (page: TSetPage): TPageSequenceItem[] =>
+  Array.isArray(page.sequence)
+    ? page.sequence.filter(
+        (item): item is TPageSequenceItem =>
+          typeof item === 'object' &&
+          item !== null &&
+          typeof item.element_id === 'string' &&
+          typeof item.order === 'number',
+      )
+    : []
+
 export const getSetPageStructure = (page: TSetPage): TSetPageStructure => {
   switch (page.type) {
     case 'matching':
       return {
         primaryLabel: 'Количество пар',
-        primaryCount: Math.max(1, readPairs(page).length || Math.ceil(page.elements.length / 2)),
+        primaryCount: Math.max(
+          1,
+          readSetPagePairs(page).length || Math.ceil(page.elements.length / 2),
+        ),
         primaryMin: 1,
         primaryMax: 12,
       }
@@ -85,7 +107,7 @@ export const getSetPageStructure = (page: TSetPage): TSetPageStructure => {
       }
 
     case 'categories': {
-      const categories = readCategories(page)
+      const categories = readSetPageCategories(page)
       const categoryCount = Math.max(1, categories.length)
       const itemCount = Math.max(
         1,
@@ -117,7 +139,7 @@ export const getSetPageStructure = (page: TSetPage): TSetPageStructure => {
 const resizeChoicePage = (page: TSetPage, count: number): TSetPage => {
   const elements = resizeElements(page.elements, count)
   const answerByElementId = new Map(
-    readAnswers(page).map((answer) => [answer.element_id, answer.is_correct]),
+    readSetPageAnswers(page).map((answer) => [answer.element_id, answer.is_correct]),
   )
   const answers = elements.map((element, index) => ({
     element_id: element.id,
@@ -142,7 +164,7 @@ const resizeChoicePage = (page: TSetPage, count: number): TSetPage => {
 
 const resizeMatchingPage = (page: TSetPage, pairCount: number): TSetPage => {
   const elementById = new Map(page.elements.map((element) => [element.id, element]))
-  const currentPairs = readPairs(page)
+  const currentPairs = readSetPagePairs(page)
   const elements: TSetPageElement[] = []
   const pairs: TPagePair[] = []
 
@@ -164,7 +186,7 @@ const resizeCategoriesPage = (
   itemCount: number,
 ): TSetPage => {
   const elementById = new Map(page.elements.map((element) => [element.id, element]))
-  const currentCategories = readCategories(page)
+  const currentCategories = readSetPageCategories(page)
   const elements: TSetPageElement[] = []
   const categories: TPageCategory[] = []
 

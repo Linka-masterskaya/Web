@@ -1,0 +1,176 @@
+.preview {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  overflow: hidden;
+  background: var(--mantine-color-lightBlue-0);
+}
+
+.tile {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2px 4px;
+  color: var(--mantine-color-black);
+  font-size: 10px;
+  line-height: 12px;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 4px;
+}
+
+.tileEmpty {
+  color: var(--mantine-color-gray-4);
+}
+
+.tileText {
+  overflow: hidden;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tileImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.gridLayout {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+}
+
+.listLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+}
+
+.listRow {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  padding: 2px 8px;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-2);
+  border-radius: 4px;
+}
+
+.marker {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  background: var(--mantine-color-white);
+  border: 1px solid var(--mantine-color-gray-4);
+  border-radius: 50%;
+}
+
+.markerSquare {
+  border-radius: 2px;
+}
+
+.markerCorrect {
+  background: var(--mantine-color-blue-4);
+  border-color: var(--mantine-color-blue-4);
+}
+
+.listText {
+  overflow: hidden;
+  min-width: 0;
+  color: var(--mantine-color-black);
+  font-size: 10px;
+  line-height: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.orderBadge {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--mantine-color-white);
+  font-size: 9px;
+  line-height: 14px;
+  background: var(--mantine-color-blue-4);
+  border-radius: 50%;
+}
+
+.matchingLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+}
+
+.matchingRow {
+  display: grid;
+  flex: 1 1 0;
+  min-height: 0;
+  grid-template-columns: minmax(0, 1fr) 12px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 4px;
+}
+
+.matchingLink {
+  align-self: center;
+  height: 1px;
+  background: var(--mantine-color-gray-4);
+}
+
+.categoriesLayout {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+}
+
+.categoryColumn {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.categoryTitle {
+  flex-shrink: 0;
+  overflow: hidden;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 14px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.categoryItems {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.categoryItems > .tile {
+  flex: 1 1 0;
+  min-height: 0;
+}

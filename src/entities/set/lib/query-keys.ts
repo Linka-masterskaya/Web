@@ -12,4 +12,7 @@ export const setMutationKeys = {
   updatePageStructure: (id: string) =>
     [...setQueryKeys.detail(id), 'update-page-structure'] as const,
   updateTitle: (id: string) => [...setQueryKeys.detail(id), 'update-title'] as const,
+  duplicatePage: (id: string) => [...setQueryKeys.detail(id), 'duplicate-page'] as const,
+  deletePage: (id: string) => [...setQueryKeys.detail(id), 'delete-page'] as const,
+  insertPage: (id: string) => [...setQueryKeys.detail(id), 'insert-page'] as const,
 }

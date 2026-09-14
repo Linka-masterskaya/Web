@@ -1,82 +1,79 @@
 import { Box, Stack, Title } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import { type CSSProperties, useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './card-grid.module.scss'
-import type { TCardGridProps } from './types'
-
-type TGridStyle = CSSProperties & {
-  '--card-grid-cols': string
-  '--card-grid-rows': string
-  '--card-grid-title-height': string
-}
+import { CardGridCard } from './card-grid-card'
+import type { TCardGridCardIndicator, TCardGridProps } from './types'
 
 export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const capacity = props.size.rows * props.size.cols
   const slots = Array.from({ length: capacity }, (_, index) => props.cards[index] ?? null)
 
-  const gridStyle: TGridStyle = {
-    '--card-grid-cols': String(props.size.cols),
-    '--card-grid-rows': String(props.size.rows),
-    '--card-grid-title-height': '188px',
-  }
-
   const [activeId, setActiveId] = useState<string | null>(null)
-
-  const isSelected = (id: string) =>
-    props.isMultiselect ? props.value.includes(id) : props.value === id
-
-  useEffect(() => {
-    if (!activeId) {
-      return
-    }
-
-    const existsInCards = props.cards.some((card) => card.id === activeId)
-    if (!existsInCards) {
-      setActiveId(null)
-    }
-  }, [activeId, props.cards])
-
-  useEffect(() => {
-    if (props.isMultiselect) {
-      return
-    }
-
-    setActiveId(props.value || null)
-  }, [props.isMultiselect, props.value])
+  const highlightedId = activeId ?? (props.mode === 'single' ? props.value : null)
 
   const handleCardClick = (id: string) => {
-    if (props.isMultiselect) {
-      const wasSelected = props.value.includes(id)
+    setActiveId(id)
 
-      if (wasSelected) {
-        props.onChange(props.value.filter((selectedId) => selectedId !== id))
-        setActiveId(id)
+    switch (props.mode) {
+      case 'plain':
+      case 'order':
+        props.onCardClick?.(id)
+        return
+      case 'multi': {
+        const wasSelected = props.value.includes(id)
+
+        props.onChange(
+          wasSelected
+            ? props.value.filter((selectedId) => selectedId !== id)
+            : [...props.value, id],
+        )
         return
       }
-
-      props.onChange([...props.value, id])
-      setActiveId(id)
-      return
+      case 'single':
+        props.onChange(id)
     }
-
-    props.onChange(id)
-    setActiveId(id)
   }
 
-  const handleCardFocus = (event: React.FocusEvent<HTMLButtonElement>, id: string) => {
-    if (event.currentTarget.matches(':focus-visible')) {
-      setActiveId(id)
+  const getCardIndicator = (id: string, index: number): TCardGridCardIndicator | undefined => {
+    switch (props.mode) {
+      case 'plain':
+        return undefined
+      case 'order':
+        return {
+          type: 'order',
+          value: index + 1,
+        }
+      case 'multi':
+        return {
+          type: 'check',
+          selected: props.value.includes(id),
+          selectedActive: activeId === id,
+        }
+      case 'single':
+        return {
+          type: 'check',
+          selected: props.value === id,
+        }
     }
   }
 
   return (
-    <Stack className={styles.container} style={gridStyle}>
-      <Title className={styles.title} order={1}>
-        {props.title}
-      </Title>
+    <Stack className={clsx(styles.container, props.className)}>
+      {props.title && (
+        <Title className={styles.title} order={1}>
+          {props.title}
+        </Title>
+      )}
 
-      <Box className={styles.grid}>
+      <Box
+        className={styles.grid}
+        style={{
+          gridTemplateColumns: `repeat(${props.size.cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${props.size.rows}, minmax(0, 1fr))`,
+        }}
+      >
         {slots.map((card, index) => {
           if (!card) {
             return (
@@ -91,31 +88,15 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
             )
           }
 
-          const selected = isSelected(card.id)
-          const isActive = activeId === card.id
-
           return (
-            <button
+            <CardGridCard
               key={card.id}
-              type="button"
-              className={clsx(styles.card, isActive && styles.cardActive)}
+              imageSrc={card.imageSrc}
+              title={card.title}
+              active={highlightedId === card.id}
+              indicator={getCardIndicator(card.id, index)}
               onClick={() => handleCardClick(card.id)}
-              onFocus={(event) => handleCardFocus(event, card.id)}
-              aria-pressed={selected}
-              aria-label={`Карточка ${card.id}`}
-            >
-              <img className={styles.image} src={card.imageSrc} alt="" />
-              <span
-                className={clsx(
-                  styles.check,
-                  selected &&
-                    (isActive && props.isMultiselect
-                      ? styles.checkSelectedActive
-                      : styles.checkSelected),
-                )}
-                aria-hidden="true"
-              />
-            </button>
+            />
           )
         })}
       </Box>

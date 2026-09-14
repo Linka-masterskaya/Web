@@ -1,0 +1,30 @@
+.menuAnchor {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* У Mantine Menu.Dropdown нет флекс-контейнера, поэтому зазор задаём сами. */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/*
+  Menu.Item — это <button>: Mantine центрирует в нём текст и задаёт
+  padding-inline: var(--mantine-spacing-sm), поэтому блок меню выглядел
+  несимметрично. Селектор из двух классов перебивает стили Mantine без
+  !important, а padding-inline задаёт одинаковый отступ слева и справа
+  (вертикальные отступы не трогаем).
+*/
+.dropdown .item {
+  text-align: start;
+  padding-inline: 20px;
+}
+
+/* Зазор между пунктами даёт .dropdown, поэтому у разделителя свои отступы убираем. */
+.dropdown .divider {
+  margin: 0;
+}

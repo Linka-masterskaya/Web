@@ -2,6 +2,7 @@ import '@mantine/core/styles.css'
 import { Router } from '@app/providers/router'
 import { ThemeProvider } from '@app/providers/theme'
 import { useAuthStore } from '@entities/auth'
+import { TtsInitializer } from '@entities/tts'
 import {
   setApiAccessTokenProvider,
   setApiAccessTokenUpdateHandler,
@@ -30,6 +31,7 @@ createRoot(root).render(
     <ErrorBoundary>
       <QueryProvider>
         <ThemeProvider>
+          <TtsInitializer />
           <Router />
         </ThemeProvider>
       </QueryProvider>

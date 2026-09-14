@@ -1,8 +1,11 @@
 export { createSet } from './api/create-set'
 export { createSetPage } from './api/create-set-page'
 export { deleteSet } from './api/delete-set'
+export { deleteSetPage } from './api/delete-set-page'
 export { duplicateSet } from './api/duplicate-set'
+export { duplicateSetPage } from './api/duplicate-set-page'
 export { getSet } from './api/get-set'
+export { insertSetPage } from './api/insert-set-page'
 export { moveSet } from './api/move-set'
 export { sendSet } from './api/send-set'
 export { updateSet } from './api/update-set'
@@ -13,7 +16,10 @@ export { updateSetTitle } from './api/update-set-title'
 export { useCreateSet } from './hooks/use-create-set'
 export { useCreateSetPage } from './hooks/use-create-set-page'
 export { useDeleteSet } from './hooks/use-delete-set'
+export { useDeleteSetPage } from './hooks/use-delete-set-page'
 export { useDuplicateSet } from './hooks/use-duplicate-set'
+export { useDuplicateSetPage } from './hooks/use-duplicate-set-page'
+export { useInsertSetPage } from './hooks/use-insert-set-page'
 export { useMoveSet } from './hooks/use-move-set'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
@@ -21,11 +27,20 @@ export { useUpdateSet } from './hooks/use-update-set'
 export { useUpdateSetPageStructure } from './hooks/use-update-set-page-structure'
 export { useUpdateSetPageType } from './hooks/use-update-set-page-type'
 export { useUpdateSetTitle } from './hooks/use-update-set-title'
+export { cloneSetPage } from './lib/clone-set-page'
 export { getSetPageTitle } from './lib/get-set-page-title'
 export { setMutationKeys, setQueryKeys } from './lib/query-keys'
 export {
   getSetPageStructure,
+  readSetPageAnswers,
+  readSetPageCategories,
+  readSetPagePairs,
+  readSetPageSequence,
   resizeSetPageStructure,
+  type TPageAnswer,
+  type TPageCategory,
+  type TPagePair,
+  type TPageSequenceItem,
   type TSetPageStructure,
 } from './lib/set-page-structure'
 export {
@@ -39,6 +54,10 @@ export {
   type TDeleteSetParams,
 } from './model/delete-set.schema'
 export { duplicateSetParamsSchema, type TDuplicateSetParams } from './model/duplicate-set.schema'
+export {
+  insertSetPageParamsSchema,
+  type TInsertSetPageParams,
+} from './model/insert-set-page.schema'
 export {
   moveSetParamsSchema,
   type TMoveSetParams,
