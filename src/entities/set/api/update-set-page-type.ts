@@ -1,4 +1,4 @@
-import { createEmptySetPage } from '../lib/create-empty-set-page'
+import { changeSetPageType } from '../lib/change-set-page-type'
 import type { TSet } from '../model/set.schema'
 import type { TSetPageType } from '../model/set-config.schema'
 import { getSet } from './get-set'
@@ -24,7 +24,7 @@ export const updateSetPageType = async (
   }
 
   const nextBlocks = [...set.config.blocks]
-  nextBlocks[pageIndex] = createEmptySetPage(type, pageId)
+  nextBlocks[pageIndex] = changeSetPageType(currentPage, type)
 
   return updateSetConfig(setId, {
     ...set.config,

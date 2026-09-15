@@ -161,3 +161,5 @@
     background: var(--mantine-color-blue-4);
     border-radius: 50%;
   }
+.cardSpace { background: transparent; border-style: dashed; }
+button.card:focus-visible { outline: 2px solid var(--mantine-color-blue-4); outline-offset: 2px; }

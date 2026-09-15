@@ -1,5 +1,6 @@
 import { folderQueryKeys } from '@entities/folder'
 import { type TSet, useUpdateSet } from '@entities/set'
+import { useTtsStore } from '@entities/tts'
 import { useQueryClient } from '@tanstack/react-query'
 import { SET_SETTINGS_DEFAULT_VALUES } from '../config'
 import type { TSetSettings } from '../model/set-settings.schema'
@@ -13,6 +14,8 @@ type TEditSetSettingsModalProps = {
 export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set, onClose }) => {
   const queryClient = useQueryClient()
   const updateSetMutation = useUpdateSet(set.id)
+  const voice = useTtsStore((state) => state.voiceBySet[set.id])
+  const setVoice = useTtsStore((state) => state.setVoice)
 
   const handleSave = async (values: TSetSettings) => {
     updateSetMutation.reset()
@@ -30,6 +33,7 @@ export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set
         notes: values.notes,
       })
 
+      setVoice(set.id, values.voice)
       await queryClient.invalidateQueries({ queryKey: folderQueryKeys.all })
       onClose()
     } catch {
@@ -41,6 +45,7 @@ export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set
     <SetSettings
       defaultValues={{
         title: set.title,
+        voice: voice ?? SET_SETTINGS_DEFAULT_VALUES.voice,
         age: String(set.age ?? SET_SETTINGS_DEFAULT_VALUES.age),
         level: set.difficulty ?? SET_SETTINGS_DEFAULT_VALUES.level,
         notes: set.notes ?? SET_SETTINGS_DEFAULT_VALUES.notes,

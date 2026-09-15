@@ -17,12 +17,15 @@ export const createEmptySetPage = (
   const blockId = pageId
 
   switch (type) {
-    case 'grid':
+    case 'grid': {
+      const layout = { rows: 3, columns: 3 }
       return {
         id: blockId,
         type,
-        elements: createTextElements(12),
+        layout,
+        elements: createTextElements(layout.rows * layout.columns),
       }
+    }
 
     case 'single_choice': {
       const elements = createTextElements(3)

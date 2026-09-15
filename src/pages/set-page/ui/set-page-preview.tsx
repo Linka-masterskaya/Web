@@ -6,6 +6,7 @@ import {
   type TSetPage,
   type TSetPageElement,
 } from '@entities/set'
+import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import clsx from 'clsx'
 import styles from './set-page-preview.module.scss'
 
@@ -27,6 +28,16 @@ const getElementImageSrc = (element: TSetPageElement | undefined) => {
 }
 
 const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) => {
+  if (element?.card_type === 'empty' || element?.card_type === 'space') {
+    return <span className={styles.tile} />
+  }
+  if (element?.source_picture_id && element.card_type !== 'text') {
+    return (
+      <span className={styles.tile}>
+        <PictureImage pictureId={element.source_picture_id} alt="" className={styles.tileImage} />
+      </span>
+    )
+  }
   const imageSrc = getElementImageSrc(element)
 
   if (imageSrc) {

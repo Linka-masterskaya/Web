@@ -11,7 +11,10 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const slots = Array.from({ length: capacity }, (_, index) => props.cards[index] ?? null)
 
   const [activeId, setActiveId] = useState<string | null>(null)
-  const highlightedId = activeId ?? (props.mode === 'single' ? props.value : null)
+  const highlightedId =
+    props.selectedCardId !== undefined
+      ? props.selectedCardId
+      : (activeId ?? (props.mode === 'single' ? props.value : null))
 
   const handleCardClick = (id: string) => {
     setActiveId(id)
@@ -71,7 +74,7 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
         className={styles.grid}
         style={{
           gridTemplateColumns: `repeat(${props.size.cols}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${props.size.rows}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${props.size.rows}, minmax(${props.minRowHeight ?? 0}px, 1fr))`,
         }}
       >
         {slots.map((card, index) => {
@@ -91,6 +94,9 @@ export const CardGrid: React.FC<TCardGridProps> = (props) => {
           return (
             <CardGridCard
               key={card.id}
+              cardType={card.cardType}
+              media={card.media}
+              ariaLabel={card.ariaLabel}
               imageSrc={card.imageSrc}
               title={card.title}
               active={highlightedId === card.id}

@@ -1,5 +1,5 @@
 import { folderQueryKeys } from '@entities/folder'
-import { getSetPageTitle, useSet, useUpdateSetTitle } from '@entities/set'
+import { getSetPageTitle, useSaveSetEditor, useSet, useUpdateSetTitle } from '@entities/set'
 import { ActionIcon, Text, TextInput } from '@mantine/core'
 import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
@@ -23,6 +23,7 @@ export const SetStudioTitle: React.FC = () => {
     setOverviewUrl,
   } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
+  const saveEditor = useSaveSetEditor(resolvedSetId)
   const updateSetTitleMutation = useUpdateSetTitle(resolvedSetId)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
   const [titleDraft, setTitleDraft] = useState('')
@@ -48,7 +49,10 @@ export const SetStudioTitle: React.FC = () => {
     updateSetTitleMutation.reset()
   }, [resolvedSetId, updateSetTitleMutation.reset])
 
-  const handleBack = () => {
+  const handleBack = async () => {
+    if ((isSetEditor || isSubsetEditor) && !(await saveEditor())) {
+      return
+    }
     if (setOverviewUrl && !isSetOverview) {
       navigate(setOverviewUrl)
       return
