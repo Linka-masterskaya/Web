@@ -1,6 +1,5 @@
-import { mockCategories } from '../mocks/library-data'
+import { apiClient } from '@shared/lib/api'
 import { libraryCategorySchema, type TLibraryCategory } from '../model/library.schema'
 
-// TODO: заменить на apiClient.get('...').json() после появления backend API
 export const getLibraryCategories = async (): Promise<TLibraryCategory[]> =>
-  libraryCategorySchema.array().parse(mockCategories)
+  apiClient.get('pictures/categories').json(libraryCategorySchema.array())

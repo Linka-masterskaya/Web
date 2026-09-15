@@ -7,6 +7,7 @@ export const useLibraryCategories = () =>
   useQuery({
     queryKey: libraryQueryKeys.categories(),
     queryFn: getLibraryCategories,
+    retry: 1,
     staleTime: LIBRARY_STALE_TIME_MS,
     gcTime: LIBRARY_GC_TIME_MS,
   })

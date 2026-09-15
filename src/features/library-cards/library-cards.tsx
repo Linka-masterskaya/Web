@@ -1,7 +1,6 @@
 import { Flex, Text } from '@mantine/core'
-import { Card } from '@shared/ui/card'
-import clsx from 'clsx'
 import { useEffect, useRef } from 'react'
+import { LibraryCardThumbnail } from './library-card-thumbnail'
 import styles from './library-cards.module.scss'
 import type { TLibraryCardsProps } from './types'
 
@@ -13,7 +12,6 @@ export const LibraryCards: React.FC<TLibraryCardsProps> = ({
 }) => {
   const scrollTargetRef = useRef<HTMLDivElement | null>(null)
 
-  // Прокрутка к карточке, выбранной через поиск: её ряд становится первым видимым.
   useEffect(() => {
     if (!scrollToCard?.id) {
       return
@@ -40,14 +38,7 @@ export const LibraryCards: React.FC<TLibraryCardsProps> = ({
             ref={card.id === scrollToCard?.id ? scrollTargetRef : undefined}
             className={styles.scrollAnchor}
           >
-            <Card
-              variant="image"
-              label={card.title}
-              imageSrc={card.image}
-              imageAlt={card.title}
-              className={clsx(styles.card, isSelected && styles.selected)}
-              action={{ type: 'function', onClick: () => onSelect(card) }}
-            />
+            <LibraryCardThumbnail card={card} isSelected={isSelected} onSelect={onSelect} />
           </div>
         )
       })}

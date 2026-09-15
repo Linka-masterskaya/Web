@@ -1,6 +1,7 @@
 import {
   LIBRARY_DEFAULT_CATEGORY_ID,
   type TLibraryCard,
+  useImportLibraryPicture,
   useLibraryCards,
   useLibraryCategories,
 } from '@entities/library'
@@ -34,15 +35,13 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
     isError: isCategoriesError,
   } = useLibraryCategories()
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     LIBRARY_DEFAULT_CATEGORY_ID,
   )
   const [selectedCards, setSelectedCards] = useState<TLibraryCard[]>([])
 
-  // Карточка, выбранная через поиск: сетка прокручивается так, чтобы её ряд стал первым видимым
   const [searchedCard, setSearchedCard] = useState<TLibraryCard | null>(null)
 
-  // При первом открытии — категория из config или первая из списка
   const activeCategoryId = selectedCategoryId ?? categories[0]?.id ?? null
   const activeCategory = categories.find((category) => category.id === activeCategoryId)
 
@@ -52,30 +51,40 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
     isError: isCardsError,
   } = useLibraryCards(activeCategoryId)
 
-  // Одиночный выбор: клик выбирает карточку, повторный клик снимает выбор
+  const importMutation = useImportLibraryPicture()
+
   const handleCardSelect = (card: TLibraryCard) => {
+    importMutation.reset()
     setSelectedCards((prevCards) => (prevCards[0]?.id === card.id ? [] : [card]))
   }
 
-  // Переключение категории
-  const handleCategorySelect = (categoryId: number) => {
+  const handleCategorySelect = (categoryId: string) => {
+    importMutation.reset()
     setSelectedCategoryId(categoryId)
     setSelectedCards([])
-    // Сбрасываем цель прокрутки, чтобы возврат в категорию не скроллил к старому результату поиска
     setSearchedCard(null)
   }
 
-  // Выбор подсказки в поиске: активируем категорию найденной карточки и выделяем её в сетке
   const handleSearchSelect = (card: TLibraryCard) => {
-    setSelectedCategoryId(card.categoryId)
+    importMutation.reset()
+    setSelectedCategoryId(card.categories[0]?.id ?? null)
     setSelectedCards([card])
-    // Копия объекта — чтобы повторный выбор той же карточки снова запускал прокрутку
     setSearchedCard({ ...card })
   }
 
   const handleConfirm = () => {
-    onSelect(selectedCards)
-    close()
+    const [selectedCard] = selectedCards
+
+    if (!selectedCard) {
+      return
+    }
+
+    importMutation.mutate(selectedCard.id, {
+      onSuccess: (importResult) => {
+        onSelect(selectedCards, [importResult])
+        close()
+      },
+    })
   }
 
   const renderCards = () => {
@@ -170,11 +179,22 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
 
         {renderBody()}
 
+        {importMutation.isError && (
+          <Text c="red.6" ta="right" px={40} role="alert">
+            Не удалось выбрать изображение. Попробуйте ещё раз.
+          </Text>
+        )}
+
         <Flex justify="flex-end" gap={12} className={styles.footer}>
-          <Button w={240} variant="outline" onClick={close}>
+          <Button w={240} variant="outline" onClick={close} disabled={importMutation.isPending}>
             Отменить
           </Button>
-          <Button w={240} onClick={handleConfirm} disabled={selectedCards.length === 0}>
+          <Button
+            w={240}
+            onClick={handleConfirm}
+            disabled={selectedCards.length === 0}
+            loading={importMutation.isPending}
+          >
             Выбрать
           </Button>
         </Flex>

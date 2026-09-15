@@ -10,21 +10,20 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
   const [value, setValue] = useState('')
   const [debouncedValue] = useDebouncedValue(value, LIBRARY_SEARCH_DEBOUNCE_DELAY)
 
-  // Enter нажат раньше, чем debounce/запрос вернули результаты — сабмит откладывается
   const [isSubmitPending, setIsSubmitPending] = useState(false)
 
-  // После onOptionSubmit Autocomplete сам вызывает onChange с текстом выбранной опции,
-  // поэтому очистить строку внутри onOptionSubmit нельзя — флаг откладывает очистку
-  // до этого onChange (см. handleChange)
   const shouldClearRef = useRef(false)
 
-  const { data: foundCards = [] } = useLibraryCardSearch(debouncedValue)
+  const {
+    data: foundCards = [],
+    isFetching,
+    isPlaceholderData,
+  } = useLibraryCardSearch(debouncedValue)
 
-  // Autocomplete работает со строками, поэтому дублирующиеся названия схлопываем.
-  // Если появятся одинаковые title в разных категориях — перейти на Combobox с value = card.id.
   const options = [...new Set(foundCards.map((card) => card.title))]
 
-  // Лучшее совпадение по введённой строке: точное название, иначе первый подходящий результат
+  const isSearchSettledForValue = debouncedValue === value && !isFetching && !isPlaceholderData
+
   const findBestMatch = useCallback(
     (query: string) => {
       const normalizedQuery = query.trim().toLowerCase()
@@ -45,7 +44,6 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
   const handleChange = (nextValue: string) => {
     setIsSubmitPending(false)
 
-    // Отложенная очистка после выбора опции: игнорируем подставленный текст опции
     if (shouldClearRef.current) {
       shouldClearRef.current = false
       setValue('')
@@ -66,45 +64,37 @@ export const LibrarySearch: React.FC<TLibrarySearchProps> = ({ onSelect, classNa
     }
   }
 
-  // Enter — поиск по введённому слову, не дожидаясь выбора подсказки из списка
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    // defaultPrevented — Enter уже обработан комбобоксом как выбор подсвеченной опции
     if (event.key !== 'Enter' || event.defaultPrevented) {
-      return
-    }
-
-    const card = findBestMatch(value)
-
-    if (card) {
-      setIsSubmitPending(false)
-      setValue('')
-      onSelect(card)
       return
     }
 
     setIsSubmitPending(true)
   }
 
-  // Отложенный сабмит: выполняем, когда пришли результаты для текущего запроса
   useEffect(() => {
     if (!isSubmitPending) {
+      return
+    }
+
+    if (value.trim().toLowerCase().length < LIBRARY_SEARCH_MIN_QUERY_LENGTH) {
+      setIsSubmitPending(false)
+      return
+    }
+
+    if (!isSearchSettledForValue) {
       return
     }
 
     const card = findBestMatch(value)
 
     if (card) {
-      setIsSubmitPending(false)
       setValue('')
       onSelect(card)
-      return
     }
 
-    // Запрос завершён, совпадений нет — снимаем отложенный сабмит
-    if (debouncedValue === value) {
-      setIsSubmitPending(false)
-    }
-  }, [isSubmitPending, findBestMatch, value, debouncedValue, onSelect])
+    setIsSubmitPending(false)
+  }, [isSubmitPending, findBestMatch, value, isSearchSettledForValue, onSelect])
 
   return (
     <Autocomplete

@@ -1,6 +1,5 @@
-import { mockCards } from '../mocks/library-data'
-import { libraryCardSchema, type TLibraryCard } from '../model/library.schema'
+import { apiClient } from '@shared/lib/api'
+import { libraryPictureListSchema, type TLibraryCard } from '../model/library.schema'
 
-// TODO: заменить на apiClient.get('...').json() после появления backend API
-export const getLibraryCards = async (categoryId: number): Promise<TLibraryCard[]> =>
-  libraryCardSchema.array().parse(mockCards.filter((card) => card.categoryId === categoryId))
+export const getLibraryCards = async (categoryId: string): Promise<TLibraryCard[]> =>
+  apiClient.get(`pictures/category/${categoryId}/list`).json(libraryPictureListSchema)

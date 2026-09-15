@@ -14,8 +14,8 @@ export const useLibraryCardSearch = (query: string) => {
     queryKey: libraryQueryKeys.cardSearch(normalizedQuery),
     queryFn: () => searchLibraryCards(normalizedQuery),
     enabled: normalizedQuery.length >= LIBRARY_SEARCH_MIN_QUERY_LENGTH,
-    // Пока грузится новый запрос — показываем предыдущие результаты, чтобы dropdown не мигал
     placeholderData: keepPreviousData,
+    retry: 1,
     staleTime: LIBRARY_STALE_TIME_MS,
     gcTime: LIBRARY_GC_TIME_MS,
   })
