@@ -124,7 +124,7 @@ export const SetSubsetEditPage: React.FC = () => {
     <section className={styles.page}>
       <SetPageTypeForm
         title="Редактирование страницы"
-        description="Выберите тип страницы. При смене типа содержимое страницы будет сброшено."
+        description="Выберите тип страницы. При смене типа содержимое карточек сохраняется."
         value={selectedType}
         onChange={handleTypeChange}
         onBack={handleBack}

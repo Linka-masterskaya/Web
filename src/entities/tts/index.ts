@@ -1,4 +1,5 @@
 export { createTts } from './api/create-tts'
+export { generateTts } from './api/generate-tts'
 export { getTtsJob } from './api/get-tts-job'
 export { getTtsVoices } from './api/get-tts-voices'
 export { speakTts } from './api/speak-tts'

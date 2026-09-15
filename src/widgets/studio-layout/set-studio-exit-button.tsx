@@ -1,4 +1,4 @@
-import { setQueryKeys, useSet } from '@entities/set'
+import { setQueryKeys, useSaveSetEditor, useSet, useSetEditorStore } from '@entities/set'
 import { Button } from '@mantine/core'
 import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { useIsMutating } from '@tanstack/react-query'
@@ -10,6 +10,8 @@ export const SetStudioExitButton: React.FC = () => {
   const navigate = useNavigate()
   const { isEditorRoute, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
+  const save = useSaveSetEditor(resolvedSetId)
+  const editorSaving = useSetEditorStore((state) => state.setId === resolvedSetId && state.isSaving)
   const isSaving =
     useIsMutating({
       mutationKey: setQueryKeys.detail(resolvedSetId),
@@ -19,7 +21,10 @@ export const SetStudioExitButton: React.FC = () => {
     return null
   }
 
-  const handleExit = () => {
+  const handleExit = async () => {
+    if (!(await save())) {
+      return
+    }
     if (setOverviewUrl) {
       navigate(setOverviewUrl)
       return
@@ -29,7 +34,7 @@ export const SetStudioExitButton: React.FC = () => {
   }
 
   return (
-    <Button className={styles.exitButton} loading={isSaving} onClick={handleExit}>
+    <Button className={styles.exitButton} loading={isSaving || editorSaving} onClick={handleExit}>
       Сохранить и выйти
     </Button>
   )

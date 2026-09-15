@@ -21,6 +21,7 @@ export { useDuplicateSet } from './hooks/use-duplicate-set'
 export { useDuplicateSetPage } from './hooks/use-duplicate-set-page'
 export { useInsertSetPage } from './hooks/use-insert-set-page'
 export { useMoveSet } from './hooks/use-move-set'
+export { useSaveSetEditor } from './hooks/use-save-set-editor'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
 export { useUpdateSet } from './hooks/use-update-set'
@@ -84,6 +85,7 @@ export {
   type TSetPageElement,
   type TSetPageType,
 } from './model/set-config.schema'
+export { useSetEditorStore } from './model/set-editor.store'
 export { type TUpdateSetParams, updateSetParamsSchema } from './model/update-set.schema'
 export {
   type TUpdateSetPageStructureParams,

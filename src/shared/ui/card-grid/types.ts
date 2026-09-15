@@ -1,5 +1,10 @@
+import type { ReactNode } from 'react'
+
 export type TCardGridItem = {
   id: string
+  cardType?: 'normal' | 'text' | 'empty' | 'space'
+  media?: ReactNode
+  ariaLabel?: string
   imageSrc?: string
   title?: string
 }
@@ -14,6 +19,8 @@ type TCardGridBaseProps = {
   size: TCardGridSize
   cards: TCardGridItem[]
   className?: string
+  selectedCardId?: string | null
+  minRowHeight?: number
 }
 
 export type TCardGridProps =
@@ -33,6 +40,9 @@ export type TCardGridProps =
     })
 
 export type TCardGridCardProps = {
+  cardType?: 'normal' | 'text' | 'empty' | 'space'
+  media?: ReactNode
+  ariaLabel?: string
   imageSrc?: string
   title?: string
   active?: boolean

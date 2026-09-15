@@ -8,7 +8,7 @@ const ttsJobResponseSchema = z.object({
 
 export type TTtsJob = z.infer<typeof ttsJobResponseSchema>
 
-export const getTtsJob = async (jobId: string): Promise<TTtsJob> => {
+export const getTtsJob = async (jobId: string, signal?: AbortSignal): Promise<TTtsJob> => {
   // Проверяем статус асинхронной задачи и получаем media_id после успешной генерации
-  return apiClient.get(`tts/${jobId}`).json(ttsJobResponseSchema)
+  return apiClient.get(`tts/${jobId}`, { signal }).json(ttsJobResponseSchema)
 }

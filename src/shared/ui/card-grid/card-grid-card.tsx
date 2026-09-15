@@ -4,6 +4,9 @@ import styles from './card-grid.module.scss'
 import type { TCardGridCardProps } from './types'
 
 export const CardGridCard: React.FC<TCardGridCardProps> = ({
+  cardType = 'normal',
+  media,
+  ariaLabel,
   imageSrc,
   title,
   active = false,
@@ -15,20 +18,29 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
   return (
     <button
       type="button"
-      className={clsx(styles.card, active && styles.cardActive)}
+      className={clsx(
+        styles.card,
+        active && styles.cardActive,
+        cardType === 'space' && styles.cardSpace,
+      )}
       onClick={onClick}
-      aria-pressed={indicator?.type === 'check' ? indicator.selected : undefined}
-      aria-label={title ?? 'Карточка'}
+      aria-pressed={indicator?.type === 'check' ? indicator.selected : active}
+      aria-label={ariaLabel ?? title ?? 'Карточка'}
     >
-      <span className={styles.cardMedia}>
-        {imageSrc ? (
-          <img className={styles.image} src={imageSrc} alt="" />
-        ) : (
-          <Icon name="Image" size={44} className={styles.placeholderIcon} />
-        )}
-      </span>
+      {cardType === 'normal' && (
+        <span className={styles.cardMedia}>
+          {media ??
+            (imageSrc ? (
+              <img className={styles.image} src={imageSrc} alt="" />
+            ) : (
+              <Icon name="Image" size={44} className={styles.placeholderIcon} />
+            ))}
+        </span>
+      )}
 
-      {title && <span className={styles.cardTitle}>{title}</span>}
+      {(cardType === 'normal' || cardType === 'text') && title && (
+        <span className={styles.cardTitle}>{title}</span>
+      )}
 
       {indicator?.type === 'check' && (
         <span
