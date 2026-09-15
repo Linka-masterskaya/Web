@@ -39,7 +39,7 @@ export const SendSet: React.FC<TSendSetProps> = ({ setId, className, onClose, on
     sendSetMutation.mutate(
       {
         setId: setQuery.data?.id ?? setId,
-        email: selectedRecipient.email,
+        targetId: selectedRecipient.id,
       },
       {
         onSuccess: () => {
