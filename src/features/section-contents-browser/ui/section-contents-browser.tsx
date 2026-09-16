@@ -2,12 +2,12 @@ import { parseSectionContentsFilters, useSectionContents } from '@entities/folde
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
 import { useDeleteSet, useDuplicateSet } from '@entities/set'
 import { ConfirmDelete } from '@features/confirm-delete'
+import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
 import { useRouteQueryParams } from '@shared/lib/routes'
 import type { TContextMenuItem } from '@shared/ui/context-menu'
-import { Icon } from '@shared/ui/icon'
 import { type FC, useEffect, useMemo, useState } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
@@ -47,7 +47,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
 }) => {
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
-  const { open } = useModal()
+  const { open, close } = useModal()
 
   const [actionError, setActionError] = useState<string | null>(null)
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
@@ -56,7 +56,10 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
 
   useEffect(() => {
-    onFolderContextChange?.({ isRoot, currentFolderId })
+    onFolderContextChange?.({
+      isRoot,
+      currentFolderId,
+    })
   }, [currentFolderId, isRoot, onFolderContextChange])
 
   const filters = useMemo(() => parseSectionContentsFilters(queryParams), [queryParams])
@@ -98,6 +101,15 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     } catch (error) {
       setActionError(await getApiErrorMessage(error))
     }
+  }
+
+  const handleSharePack = (pack: TPackContentItem) => {
+    open({
+      padding: 0,
+      radius: 20,
+      withCloseButton: false,
+      content: <SendSet setId={pack.id} onClose={close} />,
+    })
   }
 
   const handleDeletePack = (pack: TPackContentItem) => {
@@ -145,10 +157,15 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             },
           },
           {
+            id: 'share',
+            label: 'Поделиться',
+            disabled: isDuplicatePending || isDeletePending,
+            onClick: handleSharePack,
+          },
+          {
             id: 'delete',
             label: 'Удалить',
             color: 'red',
-            icon: <Icon name="Trash" aria-hidden="true" />,
             disabled: isDuplicatePending || isDeletePending,
             onClick: handleDeletePack,
           },

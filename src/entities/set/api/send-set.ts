@@ -1,3 +1,4 @@
+import { apiClient } from '@shared/lib/api'
 import {
   sendSetParamsSchema,
   sendSetResponseSchema,
@@ -5,12 +6,15 @@ import {
   type TSendSetResponse,
 } from '../model/send-set.schema'
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
 export const sendSet = async (params: TSendSetParams): Promise<TSendSetResponse> => {
-  const payload = sendSetParamsSchema.parse(params)
+  const data = sendSetParamsSchema.parse(params)
 
-  await delay(300)
-
-  return sendSetResponseSchema.parse(payload)
+  return apiClient
+    .post(`packs/${data.setId}/share`, {
+      json: {
+        target_type: 'student',
+        target_id: data.targetId,
+      },
+    })
+    .json(sendSetResponseSchema)
 }
