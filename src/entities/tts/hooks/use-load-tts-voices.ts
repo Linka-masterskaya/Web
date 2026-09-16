@@ -1,11 +1,17 @@
+import { useAuthStore } from '@entities/auth'
 import { useEffect } from 'react'
 import { getTtsVoices } from '../api/get-tts-voices'
 import { useTtsStore } from '../model/tts-store'
 
 export const useLoadTtsVoices = () => {
+  const accessToken = useAuthStore((state) => state.accessToken)
   const setVoices = useTtsStore((state) => state.setVoices)
 
   useEffect(() => {
+    if (!accessToken) {
+      return
+    }
+
     const loadVoices = async () => {
       try {
         const voices = await getTtsVoices()
@@ -16,5 +22,5 @@ export const useLoadTtsVoices = () => {
     }
 
     void loadVoices()
-  }, [setVoices])
+  }, [accessToken, setVoices])
 }

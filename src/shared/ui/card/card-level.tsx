@@ -1,16 +1,17 @@
+import { getAgeLabel } from '@features/set-settings'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
 import styles from './card-level.module.scss'
 import type { TCardLevelProps } from './types'
 
-const levelConfig: Record<TCardLevelProps['level'], { starKeys: string[]; ageLabel: string }> = {
-  easy: { starKeys: ['star-1'], ageLabel: '3-5 лет' },
-  medium: { starKeys: ['star-1', 'star-2'], ageLabel: '5-7 лет' },
-  hard: { starKeys: ['star-1', 'star-2', 'star-3'], ageLabel: '7-9 лет' },
+const levelConfig: Record<TCardLevelProps['level'], { starKeys: string[] }> = {
+  easy: { starKeys: ['star-1'] },
+  medium: { starKeys: ['star-1', 'star-2'] },
+  hard: { starKeys: ['star-1', 'star-2', 'star-3'] },
 }
 
-export const CardLevel: React.FC<TCardLevelProps> = ({ level, className }) => {
-  const { starKeys, ageLabel } = levelConfig[level]
+export const CardLevel: React.FC<TCardLevelProps> = ({ level, age, className }) => {
+  const { starKeys } = levelConfig[level]
 
   return (
     <span className={clsx(styles.wrapper, className)}>
@@ -19,7 +20,7 @@ export const CardLevel: React.FC<TCardLevelProps> = ({ level, className }) => {
           <Icon name="Star" key={starKey} className={styles.star} />
         ))}
       </span>
-      <span className={styles.badge}>{ageLabel}</span>
+      <span className={styles.badge}>{getAgeLabel(age)}</span>
     </span>
   )
 }

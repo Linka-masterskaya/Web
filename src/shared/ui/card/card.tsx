@@ -5,7 +5,7 @@ import { CardLevel } from './card-level'
 import type { TCardProps } from './types'
 
 export const Card: React.FC<TCardProps> = (props) => {
-  const { className, fill = false, variant, label, level, action, onContextMenu } = props
+  const { className, fill = false, variant, label, level, age, action, onContextMenu } = props
   const cardClassName = clsx(styles.card, fill && styles.fill, className)
 
   const content = (
@@ -24,7 +24,7 @@ export const Card: React.FC<TCardProps> = (props) => {
         <span className={styles.label} title={label}>
           {label}
         </span>
-        {level && <CardLevel level={level} />}
+        {level && age != null && <CardLevel level={level} age={age} />}
       </span>
     </>
   )

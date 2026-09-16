@@ -24,6 +24,7 @@ export type TCardProps = {
   fill?: boolean
   label: string
   level?: TCardLevel
+  age?: number
   action: TCardAction
   onContextMenu?: MouseEventHandler<HTMLElement>
 } & (TCardIconVariant | TCardImageVariant)
@@ -31,4 +32,5 @@ export type TCardProps = {
 export type TCardLevelProps = {
   level: TCardLevel
   className?: string
+  age: number
 }

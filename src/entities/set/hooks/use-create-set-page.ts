@@ -1,3 +1,4 @@
+import { folderQueryKeys } from '@entities/folder'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createSetPage } from '../api/create-set-page'
 import { setQueryKeys } from '../lib/query-keys'
@@ -8,8 +9,12 @@ export const useCreateSetPage = (setId: string) => {
 
   return useMutation({
     mutationFn: (type: TSetPageType) => createSetPage(setId, type),
-    onSuccess: (set) => {
+    onSuccess: async (set) => {
       queryClient.setQueryData(setQueryKeys.detail(setId), set)
+
+      await queryClient.invalidateQueries({
+        queryKey: folderQueryKeys.all,
+      })
     },
   })
 }
