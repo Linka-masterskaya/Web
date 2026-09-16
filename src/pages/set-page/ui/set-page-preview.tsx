@@ -16,15 +16,14 @@ const MAX_PREVIEW_PAIRS = 6
 const MAX_PREVIEW_CATEGORIES = 4
 const MAX_PREVIEW_CATEGORY_ITEMS = 4
 
-const getElementText = (element: TSetPageElement | undefined) => element?.value?.trim() ?? ''
+const getElementText = (element: TSetPageElement | undefined) => element?.text?.trim() ?? ''
 
-/** Картинка элемента — только для элементов-изображений с загруженным медиа. */
 const getElementImageSrc = (element: TSetPageElement | undefined) => {
-  if (element?.kind !== 'image') {
+  if (!element || element.kind === 'empty' || element.kind === 'space') {
     return ''
   }
 
-  return element.media_url?.trim() ?? ''
+  return element.image?.media_url?.trim() ?? ''
 }
 
 const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) => {

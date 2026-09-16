@@ -12,11 +12,24 @@ export const setPageTypeSchema = z.enum([
 const editorElementSchema = z
   .object({
     id: z.string().min(1),
-    kind: z.enum(['text', 'image', 'audio']),
-    value: z.string().optional(),
-    media_id: z.string().uuid().nullable().optional(),
-    media_url: z.string().optional(),
-    source_picture_id: z.string().uuid().nullable().optional(),
+    kind: z.enum(['normal', 'text', 'empty', 'space']),
+    text: z.string().optional(),
+    image: z
+      .object({
+        media_id: z.string().uuid().nullable().optional(),
+        media_url: z.string().optional(),
+        source_picture_id: z.string().uuid().nullable().optional(),
+      })
+      .passthrough()
+      .optional(),
+    audio: z
+      .object({
+        media_id: z.string().uuid().nullable().optional(),
+        media_url: z.string().optional(),
+        text: z.string().optional(),
+      })
+      .passthrough()
+      .optional(),
   })
   .passthrough()
 
@@ -57,6 +70,7 @@ export const setPageSchema = z
     layout: z
       .object({ rows: z.number().int().min(1).max(100), columns: z.number().int().min(1).max(100) })
       .optional(),
+    name: z.string().min(1).optional(),
     elements: z.array(setPageElementSchema).min(1),
   })
   .passthrough()

@@ -240,7 +240,7 @@ export const router = createBrowserRouter([
                                 children: [
                                   {
                                     index: true,
-                                    element: 'Страница в разработке',
+                                    lazy: pageLazyLoad(() => import('@pages/set-preview-page')),
                                   },
                                   {
                                     path: routeSegments.edit,

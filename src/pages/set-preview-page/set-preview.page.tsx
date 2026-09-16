@@ -1,0 +1,170 @@
+import { readSetPageAnswers, readSetPageSequence, useSet } from '@entities/set'
+import { ActionIcon, Center, Loader, Text } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
+import { CardGrid } from '@shared/ui/card-grid'
+import { Icon } from '@shared/ui/icon'
+import { useNavigate, useParams } from 'react-router'
+import { z } from 'zod'
+import styles from './set-preview-page.module.scss'
+
+const idSchema = z.string().uuid()
+
+const toCards = (
+  elements: {
+    id: string
+    kind: string
+    text?: string
+    image?: { media_url?: string }
+  }[],
+) =>
+  elements.map((element) => ({
+    id: element.id,
+    imageSrc:
+      element.kind === 'empty' || element.kind === 'space' ? undefined : element.image?.media_url,
+    title: element.text,
+  }))
+
+const getSizeFromCount = (count: number) => {
+  const cols = Math.max(1, Math.ceil(Math.sqrt(count)))
+  const rows = Math.max(1, Math.ceil(count / cols))
+  return { rows, cols }
+}
+
+export const SetPreviewPage: React.FC = () => {
+  const { setId, subsetId } = useParams()
+
+  const parsedSetId = idSchema.safeParse(setId)
+  const parsedSubsetId = idSchema.safeParse(subsetId)
+
+  const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
+  const setQuery = useSet(resolvedSetId)
+  const navigate = useNavigate()
+  if (!parsedSetId.success || !parsedSubsetId.success) {
+    return (
+      <section className={styles.page}>
+        <Text c="red.6" role="alert">
+          Некорректный адрес страницы
+        </Text>
+      </section>
+    )
+  }
+
+  if (setQuery.isLoading) {
+    return (
+      <Center className={styles.page}>
+        <Loader aria-label="Загрузка предпросмотра" />
+      </Center>
+    )
+  }
+
+  if (setQuery.isError) {
+    return (
+      <section className={styles.page}>
+        <Text c="red.6" role="alert">
+          Не удалось загрузить набор
+        </Text>
+      </section>
+    )
+  }
+
+  const pages = setQuery.data?.pages ?? []
+  const activePage = pages.find((page) => page.id === parsedSubsetId.data)
+  if (!activePage) {
+    return (
+      <section className={styles.page}>
+        <Text c="red.6" role="alert">
+          Страница не найдена в наборе
+        </Text>
+      </section>
+    )
+  }
+  const activeIndex = pages.findIndex((page) => page.id === activePage.id)
+  const prevPage = pages[activeIndex - 1]
+  const nextPage = pages[activeIndex + 1]
+
+  const openPage = (pageId: string) => {
+    navigate(
+      createUrl(routerPath.dashboardSubsetId, {
+        setId: parsedSetId.data,
+        subsetId: pageId,
+      }),
+    )
+  }
+
+  const sequence = readSetPageSequence(activePage)
+  const orderedElements =
+    activePage.type === 'sequence' && sequence.length > 0
+      ? [...activePage.elements].sort(
+          (left, right) =>
+            (sequence.find((item) => item.element_id === left.id)?.order ?? 0) -
+            (sequence.find((item) => item.element_id === right.id)?.order ?? 0),
+        )
+      : activePage.elements
+  const cards = toCards(orderedElements)
+  const size =
+    activePage.type === 'grid' && activePage.layout
+      ? {
+          rows: activePage.layout.rows,
+          cols: activePage.layout.columns,
+        }
+      : getSizeFromCount(cards.length)
+  const renderPage = () => {
+    const correctIds = readSetPageAnswers(activePage)
+      .filter((answer) => answer.is_correct)
+      .map((answer) => answer.element_id)
+
+    switch (activePage.type) {
+      case 'grid':
+        return <CardGrid mode="plain" size={size} cards={cards} />
+      case 'sequence':
+        return <CardGrid mode="order" size={size} cards={cards} />
+      case 'single_choice':
+        return (
+          <CardGrid
+            mode="single"
+            size={size}
+            cards={cards}
+            value={correctIds[0] ?? ''}
+            onChange={() => undefined}
+          />
+        )
+      case 'multi_choice':
+        return (
+          <CardGrid
+            mode="multi"
+            size={size}
+            cards={cards}
+            value={correctIds}
+            onChange={() => undefined}
+          />
+        )
+      default:
+        return <Text>Отображение типа «{activePage.type}» добавим следующим шагом</Text>
+    }
+  }
+  return (
+    <section className={styles.page} aria-label="Предпросмотр страницы набора">
+      <ActionIcon
+        className={styles.arrow}
+        variant="transparent"
+        disabled={!prevPage}
+        aria-label="Предыдущая страница"
+        onClick={() => prevPage && openPage(prevPage.id)}
+      >
+        <Icon name="ArrowLeft" size={48} strokeWidth={2} />
+      </ActionIcon>
+
+      <div className={styles.stage}>{renderPage()}</div>
+
+      <ActionIcon
+        className={styles.arrow}
+        variant="transparent"
+        disabled={!nextPage}
+        aria-label="Следующая страница"
+        onClick={() => nextPage && openPage(nextPage.id)}
+      >
+        <Icon name="ArrowRight" size={48} strokeWidth={2} />
+      </ActionIcon>
+    </section>
+  )
+}

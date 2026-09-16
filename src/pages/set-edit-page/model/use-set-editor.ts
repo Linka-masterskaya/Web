@@ -71,12 +71,26 @@ export const useSetEditor = () => {
         : createDashboardSetsUrl(setQuery.data?.folderId),
     )
   }
+
   const handleBackToSets = () => navigate(createDashboardSetsUrl(setQuery.data?.folderId))
   const handleCreatePage = async () => {
     if (parsedSetId.success && (await save())) {
       navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
     }
   }
+
+  const handleOpenPreview = () => {
+    if (!parsedSetId.success || !activePage) {
+      return
+    }
+    navigate(
+      createUrl(routerPath.dashboardSubsetId, {
+        setId: resolvedSetId,
+        subsetId: activePage.id,
+      }),
+    )
+  }
+
   const handleTypeChange = (value: string) => {
     const type = setPageTypeSchema.safeParse(value)
     if (activePage && type.success && type.data !== activePage.type) {
@@ -114,6 +128,7 @@ export const useSetEditor = () => {
     handleBackToSets,
     handleCreatePage,
     handleExit,
+    handleOpenPreview,
     handleStructureChange,
     handleTypeChange,
     handlePageChange,
