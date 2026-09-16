@@ -1,5 +1,6 @@
 export type { TSetLevel } from './config'
 export {
+  getAgeLabel,
   SET_AGE_OPTIONS,
   SET_LEVEL_OPTIONS,
   SET_SETTINGS_DEFAULT_VALUES,

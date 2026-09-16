@@ -116,6 +116,8 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                 action={{ type: 'function', onClick: handleClick }}
                 className={gridStyles.card}
                 onContextMenu={onContextMenu}
+                level={isPackContentItem(item) ? (item.difficulty ?? undefined) : undefined}
+                age={isPackContentItem(item) ? (item.age ?? undefined) : undefined}
               />
             )
           })}

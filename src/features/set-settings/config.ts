@@ -5,7 +5,7 @@ export const SET_AGE_MIN = 3
 export const SET_AGE_MAX = 18
 
 // Вычисление правильного склонения (лет/год)
-const getAgeLabel = (age: number) => {
+export const getAgeLabel = (age: number) => {
   if (age % 10 === 1 && age !== 11) {
     return `${age} год`
   }
