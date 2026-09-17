@@ -3,7 +3,7 @@ import type { TSetPage, TSetPageType } from '../model/set-config.schema'
 const createTextElement = () => ({
   id: crypto.randomUUID(),
   kind: 'text' as const,
-  text: '',
+  value: '',
 })
 
 const createTextElements = (count: number) =>

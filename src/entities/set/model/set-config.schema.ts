@@ -12,24 +12,11 @@ export const setPageTypeSchema = z.enum([
 const editorElementSchema = z
   .object({
     id: z.string().min(1),
-    kind: z.enum(['normal', 'text', 'empty', 'space']),
-    text: z.string().optional(),
-    image: z
-      .object({
-        media_id: z.string().uuid().nullable().optional(),
-        media_url: z.string().optional(),
-        source_picture_id: z.string().uuid().nullable().optional(),
-      })
-      .passthrough()
-      .optional(),
-    audio: z
-      .object({
-        media_id: z.string().uuid().nullable().optional(),
-        media_url: z.string().optional(),
-        text: z.string().optional(),
-      })
-      .passthrough()
-      .optional(),
+    kind: z.enum(['text', 'image', 'audio']),
+    card_type: z.enum(['normal', 'text', 'empty', 'space']).optional(),
+    value: z.string().optional(),
+    media_url: z.string().optional(),
+    source_picture_id: z.string().uuid().nullable().optional(),
   })
   .passthrough()
 

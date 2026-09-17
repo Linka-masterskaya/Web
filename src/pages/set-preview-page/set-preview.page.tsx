@@ -1,28 +1,41 @@
-import { readSetPageAnswers, readSetPageSequence, useSet } from '@entities/set'
+import {
+  readSetPageAnswers,
+  readSetPageSequence,
+  type TSetPageElement,
+  useSet,
+} from '@entities/set'
 import { ActionIcon, Center, Loader, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
-import { CardGrid } from '@shared/ui/card-grid'
+import { CardGrid, type TCardGridItem } from '@shared/ui/card-grid'
 import { Icon } from '@shared/ui/icon'
+import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 import styles from './set-preview-page.module.scss'
 
 const idSchema = z.string().uuid()
 
-const toCards = (
-  elements: {
-    id: string
-    kind: string
-    text?: string
-    image?: { media_url?: string }
-  }[],
-) =>
-  elements.map((element) => ({
-    id: element.id,
-    imageSrc:
-      element.kind === 'empty' || element.kind === 'space' ? undefined : element.image?.media_url,
-    title: element.text,
-  }))
+const toCards = (elements: TSetPageElement[]): TCardGridItem[] =>
+  elements.map((element) => {
+    const type = element.card_type
+    const cardType = type === 'text' || type === 'empty' || type === 'space' ? type : 'normal'
+    const pictureId = element.source_picture_id ?? undefined
+
+    return {
+      id: element.id,
+      cardType,
+      title: element.value,
+      media:
+        cardType === 'normal' && pictureId ? (
+          <PictureImage
+            pictureId={pictureId}
+            alt={element.value ?? ''}
+            className={styles.cardImage}
+          />
+        ) : undefined,
+      imageSrc: cardType === 'normal' && !pictureId ? element.media_url : undefined,
+    }
+  })
 
 const getSizeFromCount = (count: number) => {
   const cols = Math.max(1, Math.ceil(Math.sqrt(count)))

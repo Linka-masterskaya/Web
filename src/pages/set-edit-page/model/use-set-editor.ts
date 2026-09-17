@@ -79,8 +79,11 @@ export const useSetEditor = () => {
     }
   }
 
-  const handleOpenPreview = () => {
+  const handleOpenPreview = async () => {
     if (!parsedSetId.success || !activePage) {
+      return
+    }
+    if (!(await save())) {
       return
     }
     navigate(

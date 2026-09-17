@@ -26,3 +26,11 @@
       color: var(--mantine-color-gray-4);
     }
   }
+
+  .cardImage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }

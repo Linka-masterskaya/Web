@@ -19,7 +19,7 @@ export type TSetPageStructure = {
 const createTextElement = (): TSetPageElement => ({
   id: crypto.randomUUID(),
   kind: 'text',
-  text: '',
+  value: '',
 })
 
 const resizeElements = (elements: TSetPageElement[], count: number) => {

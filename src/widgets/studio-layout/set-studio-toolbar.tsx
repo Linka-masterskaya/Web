@@ -27,31 +27,33 @@ export const SetStudioToolbar: React.FC = () => {
         <Text className={styles.previewProgressLabel}>
           {currentPage}/{totalPages}
         </Text>
-        <Slider
-          classNames={{
-            root: styles.previewSlider,
-            track: styles.previewSliderTrack,
-            bar: styles.previewSliderBar,
-            thumb: styles.previewSliderThumb,
-          }}
-          min={1}
-          max={Math.max(1, totalPages)}
-          value={Math.max(1, currentPage)}
-          label={null}
-          onChange={(value) => {
-            const page = pages[value - 1]
-            if (!page) {
-              return
-            }
+        {totalPages > 1 && (
+          <Slider
+            classNames={{
+              root: styles.previewSlider,
+              track: styles.previewSliderTrack,
+              bar: styles.previewSliderBar,
+              thumb: styles.previewSliderThumb,
+            }}
+            min={1}
+            max={totalPages}
+            value={Math.max(1, currentPage)}
+            label={null}
+            onChange={(value) => {
+              const page = pages[value - 1]
+              if (!page) {
+                return
+              }
 
-            navigate(
-              createUrl(routerPath.dashboardSubsetId, {
-                setId: resolvedSetId,
-                subsetId: page.id,
-              }),
-            )
-          }}
-        />
+              navigate(
+                createUrl(routerPath.dashboardSubsetId, {
+                  setId: resolvedSetId,
+                  subsetId: page.id,
+                }),
+              )
+            }}
+          />
+        )}
       </section>
     )
   }

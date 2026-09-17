@@ -16,24 +16,25 @@ const MAX_PREVIEW_PAIRS = 6
 const MAX_PREVIEW_CATEGORIES = 4
 const MAX_PREVIEW_CATEGORY_ITEMS = 4
 
-const getElementText = (element: TSetPageElement | undefined) => element?.text?.trim() ?? ''
+const getElementText = (element: TSetPageElement | undefined) => element?.value?.trim() ?? ''
 
 const getElementImageSrc = (element: TSetPageElement | undefined) => {
-  if (!element || element.kind === 'empty' || element.kind === 'space') {
+  if (!element || element.card_type === 'empty' || element.card_type === 'space') {
     return ''
   }
 
-  return element.image?.media_url?.trim() ?? ''
+  return element.media_url?.trim() ?? ''
 }
 
 const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) => {
   if (element?.card_type === 'empty' || element?.card_type === 'space') {
     return <span className={styles.tile} />
   }
-  if (element?.source_picture_id && element.card_type !== 'text') {
+  const pictureId = element?.source_picture_id ?? undefined
+  if (pictureId && element && element.card_type !== 'text') {
     return (
       <span className={styles.tile}>
-        <PictureImage pictureId={element.source_picture_id} alt="" className={styles.tileImage} />
+        <PictureImage pictureId={pictureId} alt="" className={styles.tileImage} />
       </span>
     )
   }
