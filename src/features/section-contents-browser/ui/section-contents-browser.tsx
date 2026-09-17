@@ -35,6 +35,7 @@ export type TSectionContentsBrowserProps = {
   onOpenPack?: TOpenSectionPackHandler
   dashboardHref?: string
   onFolderContextChange?: (context: TSectionFolderContext) => void
+  additionalPackContextMenuItems?: readonly TContextMenuItem<TPackContentItem>[]
 }
 
 const DEFAULT_DASHBOARD_HREF = '/'
@@ -44,6 +45,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   onOpenPack,
   dashboardHref = DEFAULT_DASHBOARD_HREF,
   onFolderContextChange,
+  additionalPackContextMenuItems = [],
 }) => {
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
@@ -144,7 +146,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
         onClick: goBack,
       } as const)
 
-  const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
+  const builtInPackContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
     section === 'library'
       ? []
       : [
@@ -170,6 +172,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             onClick: handleDeletePack,
           },
         ]
+
+  const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] = [
+    ...additionalPackContextMenuItems,
+    ...builtInPackContextMenuItems,
+  ]
 
   return (
     <section className={styles.root}>

@@ -1,7 +1,9 @@
 export { createFolder } from './api/create-folder'
+export { getFolderChildren } from './api/get-folder-children'
 export { getFolders } from './api/get-folders'
 export { getSectionContents } from './api/get-section-contents'
 export { useCreateFolder } from './hooks/use-create-folder'
+export { useFolderChildren } from './hooks/use-folder-children'
 export { useFolders } from './hooks/use-folders'
 export { useSectionContents } from './hooks/use-section-contents'
 export {
@@ -32,3 +34,12 @@ export {
   type TFolder,
   type TFoldersResponse,
 } from './model/folder.schema'
+
+export {
+  folderTreeItemSchema,
+  folderTreeItemsResponseSchema,
+  getFolderChildrenParamsSchema,
+  type TFolderTreeItem,
+  type TFolderTreeItemsResponse,
+  type TGetFolderChildrenParams,
+} from './model/folder-tree.schema'
