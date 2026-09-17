@@ -18,9 +18,8 @@ const MAX_PREVIEW_CATEGORY_ITEMS = 4
 
 const getElementText = (element: TSetPageElement | undefined) => element?.value?.trim() ?? ''
 
-/** Картинка элемента — только для элементов-изображений с загруженным медиа. */
 const getElementImageSrc = (element: TSetPageElement | undefined) => {
-  if (element?.kind !== 'image') {
+  if (!element || element.card_type === 'empty' || element.card_type === 'space') {
     return ''
   }
 
@@ -31,10 +30,11 @@ const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) =>
   if (element?.card_type === 'empty' || element?.card_type === 'space') {
     return <span className={styles.tile} />
   }
-  if (element?.source_picture_id && element.card_type !== 'text') {
+  const pictureId = element?.source_picture_id ?? undefined
+  if (pictureId && element && element.card_type !== 'text') {
     return (
       <span className={styles.tile}>
-        <PictureImage pictureId={element.source_picture_id} alt="" className={styles.tileImage} />
+        <PictureImage pictureId={pictureId} alt="" className={styles.tileImage} />
       </span>
     )
   }

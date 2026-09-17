@@ -21,6 +21,8 @@ export const SetStudioTitle: React.FC = () => {
     resolvedSetId,
     resolvedSubsetId,
     setOverviewUrl,
+    isSubsetPreview,
+    subsetEditorUrl,
   } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
   const saveEditor = useSaveSetEditor(resolvedSetId)
@@ -50,6 +52,10 @@ export const SetStudioTitle: React.FC = () => {
   }, [resolvedSetId, updateSetTitleMutation.reset])
 
   const handleBack = async () => {
+    if (isSubsetPreview && subsetEditorUrl) {
+      navigate(subsetEditorUrl)
+      return
+    }
     if ((isSetEditor || isSubsetEditor) && !(await saveEditor())) {
       return
     }
@@ -116,7 +122,13 @@ export const SetStudioTitle: React.FC = () => {
         color="dark"
         size={32}
         onClick={handleBack}
-        aria-label={isSetOverview ? 'К списку наборов' : 'Вернуться к набору'}
+        aria-label={
+          isSubsetPreview
+            ? 'Назад к редактированию'
+            : isSetOverview
+              ? 'К списку наборов'
+              : 'Вернуться к набору'
+        }
       >
         <Icon name="ChevronLeft" size={24} />
       </ActionIcon>
@@ -163,7 +175,9 @@ export const SetStudioTitle: React.FC = () => {
         </form>
       ) : (
         <>
-          <Text className={styles.title}>{currentTitle}</Text>
+          <Text className={styles.title}>
+            {isSubsetPreview ? 'Назад к редактированию' : currentTitle}
+          </Text>
 
           {canEditTitle && (
             <ActionIcon

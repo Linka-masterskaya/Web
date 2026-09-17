@@ -93,3 +93,49 @@
     padding-inline: 12px;
   }
 }
+.previewProgress {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 auto;
+  width: 162px;
+  height: 24px;
+  gap: 4px;
+}
+
+.previewProgressLabel {
+  width: 34px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+  color: var(--mantine-color-black);
+  white-space: nowrap;
+}
+
+.previewSlider {
+  width: 124px;
+  height: 24px;
+}
+
+.previewSliderTrack {
+  height: 12px;
+  background-color: #ededed;
+  border-radius: 6px;
+}
+
+.previewSliderBar {
+  background-color: transparent;
+}
+
+.previewSliderThumb {
+  width: 20px;
+  height: 14px;
+  border: none;
+  background-color: #0093ed;
+  border-radius: 9px;
+}

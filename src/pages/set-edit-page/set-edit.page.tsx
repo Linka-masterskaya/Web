@@ -26,6 +26,7 @@ export const SetEditPage: React.FC = () => {
     handleBackToSets,
     handleCreatePage,
     handleExit,
+    handleOpenPreview,
     handleStructureChange,
     handleTypeChange,
     hasInvalidRoute,
@@ -217,7 +218,7 @@ export const SetEditPage: React.FC = () => {
               variant="outline"
               leftSection={<Icon name="Grid2x2" size={16} />}
               className={styles.overviewButton}
-              onClick={handleExit}
+              onClick={handleOpenPreview}
               disabled={isSaving}
             >
               Обзор

@@ -8,7 +8,7 @@ import styles from './set-studio-controls.module.scss'
 
 export const SetStudioExitButton: React.FC = () => {
   const navigate = useNavigate()
-  const { isEditorRoute, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
+  const { isEditorRoute, isSubsetPreview, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
   const save = useSaveSetEditor(resolvedSetId)
   const editorSaving = useSetEditorStore((state) => state.setId === resolvedSetId && state.isSaving)
@@ -17,7 +17,7 @@ export const SetStudioExitButton: React.FC = () => {
       mutationKey: setQueryKeys.detail(resolvedSetId),
     }) > 0
 
-  if (!isEditorRoute) {
+  if (!isEditorRoute && !isSubsetPreview) {
     return null
   }
 

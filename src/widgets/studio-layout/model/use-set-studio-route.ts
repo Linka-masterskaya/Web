@@ -24,6 +24,14 @@ export const useSetStudioRoute = () => {
         })
       : null
 
+  const subsetPreviewUrl =
+    parsedSetId.success && parsedSubsetId.success
+      ? createUrl(routerPath.dashboardSubsetId, {
+          setId: resolvedSetId,
+          subsetId: parsedSubsetId.data,
+        })
+      : null
+
   const subsetNewUrl = parsedSetId.success
     ? createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId })
     : null
@@ -39,5 +47,7 @@ export const useSetStudioRoute = () => {
     isSubsetEditor: location.pathname === subsetEditorUrl,
     isSubsetNew: location.pathname === subsetNewUrl,
     isEditorRoute: location.pathname === setEditorUrl || location.pathname === subsetEditorUrl,
+    subsetEditorUrl,
+    isSubsetPreview: location.pathname === subsetPreviewUrl,
   }
 }
