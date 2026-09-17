@@ -1,4 +1,4 @@
-import { parseSectionContentsFilters, useSectionContents } from '@entities/folder'
+import { parseSectionContentsFilters, useDeleteFolder, useSectionContents } from '@entities/folder'
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
 import { useDeleteSet, useDuplicateSet } from '@entities/set'
 import { ConfirmDelete } from '@features/confirm-delete'
@@ -8,6 +8,7 @@ import { getApiErrorMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
 import { useRouteQueryParams } from '@shared/lib/routes'
 import type { TContextMenuItem } from '@shared/ui/context-menu'
+import { isHTTPError } from 'ky'
 import { type FC, useEffect, useMemo, useState } from 'react'
 import { sectionBrowserConfig } from '../model/section-browser-config'
 import { useFolderNavigation } from '../model/use-folder-navigation'
@@ -54,6 +55,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const [actionError, setActionError] = useState<string | null>(null)
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
   const { mutateAsync: deleteSet, isPending: isDeletePending } = useDeleteSet()
+  const { mutateAsync: deleteFolder } = useDeleteFolder()
 
   const { currentFolderId, isRoot, isInitialFolder, openFolder, goBack, goToRoot } =
     useFolderNavigation(initialFolderId)
@@ -124,13 +126,28 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
         <ConfirmDelete
           title={`Удалить набор «${pack.name}»?`}
           description="Вы уверены?"
-          onConfirm={async () => {
-            try {
-              setActionError(null)
-              await deleteSet({ setId: pack.id })
-            } catch (error) {
-              setActionError(await getApiErrorMessage(error))
+          onConfirm={() => deleteSet({ setId: pack.id })}
+        />
+      ),
+    })
+  }
+
+  const handleDeleteFolder = (folder: TFolderContentItem) => {
+    open({
+      size: 361,
+      radius: 20,
+      withCloseButton: false,
+      content: (
+        <ConfirmDelete
+          title={`Удалить папку «${folder.name}»?`}
+          description="Вы уверены?"
+          onConfirm={() => deleteFolder(folder.id)}
+          getErrorMessage={async (error) => {
+            if (isHTTPError(error) && error.response.status === 409) {
+              return 'Нельзя удалить папку, пока в ней есть наборы'
             }
+
+            return getApiErrorMessage(error)
           }}
         />
       ),
@@ -175,6 +192,18 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           },
         ]
 
+  const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] =
+    section === 'my'
+      ? [
+          {
+            id: 'delete',
+            label: 'Удалить',
+            color: 'red',
+            onClick: handleDeleteFolder,
+          },
+        ]
+      : []
+
   return (
     <section className={styles.root}>
       {isLoading && (
@@ -199,6 +228,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             onOpenFolder={handleOpenFolder}
             onOpenPack={handleOpenPack}
             packContextMenuItems={packContextMenuItems}
+            folderContextMenuItems={folderContextMenuItems}
           />
         </>
       )}
