@@ -15,6 +15,7 @@ const editorElementSchema = z
     kind: z.enum(['text', 'image', 'audio']),
     card_type: z.enum(['normal', 'text', 'empty', 'space']).optional(),
     value: z.string().optional(),
+    media_id: z.string().uuid().nullable().optional(),
     media_url: z.string().optional(),
     source_picture_id: z.string().uuid().nullable().optional(),
   })
