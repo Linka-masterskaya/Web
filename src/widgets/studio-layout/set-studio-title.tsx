@@ -1,7 +1,7 @@
-import { folderQueryKeys } from '@entities/folder'
+import { folderQueryKeys, useSectionContents } from '@entities/folder'
 import { getSetPageTitle, useSaveSetEditor, useSet, useUpdateSetTitle } from '@entities/set'
 import { ActionIcon, Text, TextInput } from '@mantine/core'
-import { createDashboardSetsUrl } from '@shared/lib/routes'
+import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, type KeyboardEvent, useEffect, useState } from 'react'
@@ -23,6 +23,18 @@ export const SetStudioTitle: React.FC = () => {
     setOverviewUrl,
   } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
+  const studentFoldersQuery = useSectionContents({
+    section: 'students',
+    limit: 50,
+    offset: 0,
+  })
+
+  const studentFolder = studentFoldersQuery.data?.items.find(
+    (item) =>
+      item.type === 'folder' && item.kind === 'student' && item.id === setQuery.data?.folderId,
+  )
+
+  const studentId = studentFolder?.studentId
   const saveEditor = useSaveSetEditor(resolvedSetId)
   const updateSetTitleMutation = useUpdateSetTitle(resolvedSetId)
   const [isEditingTitle, setIsEditingTitle] = useState(false)
@@ -55,6 +67,15 @@ export const SetStudioTitle: React.FC = () => {
     }
     if (setOverviewUrl && !isSetOverview) {
       navigate(setOverviewUrl)
+      return
+    }
+
+    if (studentId) {
+      navigate(
+        createUrl(routerPath.studentId, {
+          id: studentId,
+        }),
+      )
       return
     }
 

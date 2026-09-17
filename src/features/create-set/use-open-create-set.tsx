@@ -7,9 +7,9 @@ export const useOpenCreateSet = () => {
   const { open, close } = useModal()
 
   return useCallback(
-    ({ folderId = null }: TOpenCreateSetParams = {}) => {
+    ({ folderId = null, studentId }: TOpenCreateSetParams = {}) => {
       open({
-        content: <CreateSetModal folderId={folderId} onClose={close} />,
+        content: <CreateSetModal folderId={folderId} studentId={studentId} onClose={close} />,
         size: 518,
         padding: 24,
         radius: 20,

@@ -9,23 +9,25 @@ export type TFolderPathItem = Pick<TFolderContentItem, 'id' | 'name'>
 
 const parseFolderIdParam = (value: string | null): string | undefined => {
   const parsed = folderIdSchema.safeParse(value ?? undefined)
-
   return parsed.success ? parsed.data : undefined
 }
 
-export const useFolderNavigation = () => {
+export const useFolderNavigation = (initialFolderId?: string) => {
   const { queryParams, setQueryParams } = useRouteQueryParams()
+
   const folderIdParam = queryParams.folderId
-  const currentFolderId = parseFolderIdParam(folderIdParam)
+  const queryFolderId = parseFolderIdParam(folderIdParam)
+
+  const currentFolderId = queryFolderId ?? initialFolderId
 
   const folderNamesRef = useRef(new Map<string, string>())
   const [folderPath, setFolderPath] = useState<TFolderPathItem[]>([])
 
   useEffect(() => {
-    if (folderIdParam && !currentFolderId) {
+    if (folderIdParam && !queryFolderId) {
       setQueryParams({ folderId: null }, false, { replace: true })
     }
-  }, [currentFolderId, folderIdParam, setQueryParams])
+  }, [queryFolderId, folderIdParam, setQueryParams])
 
   useEffect(() => {
     setFolderPath((currentPath) => {
@@ -66,7 +68,9 @@ export const useFolderNavigation = () => {
   const goBack = useCallback(() => {
     const parentFolder = folderPath[folderPath.length - 2]
 
-    setQueryParams({ folderId: parentFolder?.id ?? null })
+    setQueryParams({
+      folderId: parentFolder?.id ?? null,
+    })
   }, [folderPath, setQueryParams])
 
   const goToRoot = useCallback(() => {
@@ -77,16 +81,21 @@ export const useFolderNavigation = () => {
     (folderIndex: number) => {
       const folder = folderPath[folderIndex]
 
-      setQueryParams({ folderId: folder?.id ?? null })
+      setQueryParams({
+        folderId: folder?.id ?? null,
+      })
     },
     [folderPath, setQueryParams],
   )
+
+  const isInitialFolder = initialFolderId !== undefined && currentFolderId === initialFolderId
 
   return {
     folderPath,
     currentFolder,
     currentFolderId,
     isRoot: currentFolderId === undefined,
+    isInitialFolder,
     openFolder,
     goBack,
     goToRoot,

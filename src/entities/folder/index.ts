@@ -4,6 +4,7 @@ export { getSectionContents } from './api/get-section-contents'
 export { useCreateFolder } from './hooks/use-create-folder'
 export { useFolders } from './hooks/use-folders'
 export { useSectionContents } from './hooks/use-section-contents'
+export { useStudentFolder } from './hooks/use-student-folder'
 export {
   parseSectionContentsFilters,
   type TSectionContentsFilters,

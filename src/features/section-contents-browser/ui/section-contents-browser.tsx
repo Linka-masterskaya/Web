@@ -35,6 +35,7 @@ export type TSectionContentsBrowserProps = {
   onOpenPack?: TOpenSectionPackHandler
   dashboardHref?: string
   onFolderContextChange?: (context: TSectionFolderContext) => void
+  initialFolderId?: string
 }
 
 const DEFAULT_DASHBOARD_HREF = '/'
@@ -44,6 +45,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   onOpenPack,
   dashboardHref = DEFAULT_DASHBOARD_HREF,
   onFolderContextChange,
+  initialFolderId,
 }) => {
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
@@ -53,7 +55,8 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
   const { mutateAsync: deleteSet, isPending: isDeletePending } = useDeleteSet()
 
-  const { currentFolderId, isRoot, openFolder, goBack, goToRoot } = useFolderNavigation()
+  const { currentFolderId, isRoot, isInitialFolder, openFolder, goBack, goToRoot } =
+    useFolderNavigation(initialFolderId)
 
   useEffect(() => {
     onFolderContextChange?.({
@@ -134,15 +137,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
-  const backAction = isRoot
-    ? ({
-        type: 'link',
-        href: dashboardHref,
-      } as const)
-    : ({
-        type: 'function',
-        onClick: goBack,
-      } as const)
+  const backAction =
+    isRoot || isInitialFolder
+      ? ({
+          type: 'link',
+          href: dashboardHref,
+        } as const)
+      : ({
+          type: 'function',
+          onClick: goBack,
+        } as const)
 
   const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
     section === 'library'
