@@ -7,7 +7,9 @@ export { duplicateSetPage } from './api/duplicate-set-page'
 export { getSet } from './api/get-set'
 export { insertSetPage } from './api/insert-set-page'
 export { moveSet } from './api/move-set'
+export { publishSet } from './api/publish-set'
 export { sendSet } from './api/send-set'
+export { unpublishSet } from './api/unpublish-set'
 export { updateSet } from './api/update-set'
 export { updateSetConfig } from './api/update-set-config'
 export { updateSetPageStructure } from './api/update-set-page-structure'
@@ -21,9 +23,11 @@ export { useDuplicateSet } from './hooks/use-duplicate-set'
 export { useDuplicateSetPage } from './hooks/use-duplicate-set-page'
 export { useInsertSetPage } from './hooks/use-insert-set-page'
 export { useMoveSet } from './hooks/use-move-set'
+export { usePublishSet } from './hooks/use-publish-set'
 export { useSaveSetEditor } from './hooks/use-save-set-editor'
 export { useSendSet } from './hooks/use-send-set'
 export { useSet } from './hooks/use-set'
+export { useUnpublishSet } from './hooks/use-unpublish-set'
 export { useUpdateSet } from './hooks/use-update-set'
 export { useUpdateSetPageStructure } from './hooks/use-update-set-page-structure'
 export { useUpdateSetPageType } from './hooks/use-update-set-page-type'
@@ -63,6 +67,12 @@ export {
   moveSetParamsSchema,
   type TMoveSetParams,
 } from './model/move-set.schema'
+export {
+  publishSetParamsSchema,
+  type TPublishSetParams,
+  type TUnpublishSetParams,
+  unpublishSetParamsSchema,
+} from './model/publish-set.schema'
 export {
   sendSetParamsSchema,
   sendSetResponseSchema,

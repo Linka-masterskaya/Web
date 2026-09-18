@@ -1,6 +1,7 @@
 import { apiClient } from '@shared/lib/api'
 import { z } from 'zod'
 import type { TEditUserProfilePasswordFormValues } from '../model/change-user-password-form.schema'
+import { type TUserProfile, userProfileSchema } from '../model/user-profile.schema'
 import { useUserStore } from '../model/user-store'
 
 const profileResponseSchema = z
@@ -15,9 +16,16 @@ const profileResponseSchema = z
     avatarSrc: profile.avatar_url ?? null,
   }))
 
-export const getUserProfile = async () => {
-  const profile = await apiClient.get('profile/me').json(profileResponseSchema)
-  useUserStore.getState().setUser(profile)
+export const getUserProfile = async (): Promise<TUserProfile> => {
+  const profile = await apiClient.get('profile/me').json(userProfileSchema)
+
+  useUserStore.getState().setUser({
+    name: profile.name,
+    email: profile.email,
+    avatarSrc: profile.avatarUrl,
+    role: profile.role,
+  })
+
   return profile
 }
 

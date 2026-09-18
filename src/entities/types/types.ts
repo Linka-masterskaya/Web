@@ -1,3 +1,5 @@
+import type { TUserRole } from '../user/config/user-role'
+
 export type TAuthState = {
   isAuth: boolean
   accessToken: string | null
@@ -13,10 +15,11 @@ export type TUserState = {
   name: string | null
   email: string | null
   avatarSrc: string | null
+  role: TUserRole | null
 }
 
 export type TUserActions = {
-  setUser: (user: TUserState) => void
+  setUser: (user: Partial<TUserState>) => void
   setAvatarSrc: (avatarSrc: TUserState['avatarSrc']) => void
   setName: (name: TUserState['name']) => void
   setEmail: (email: TUserState['email']) => void

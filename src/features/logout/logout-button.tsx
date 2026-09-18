@@ -1,5 +1,5 @@
 import { logoutApi, useAuthStore } from '@entities/auth'
-import { useUserStore } from '@entities/user'
+import { useResetUser } from '@entities/user'
 import { Button } from '@mantine/core'
 import { queryClient } from '@shared/lib/query'
 import { createUrl, routerPath } from '@shared/lib/routes'
@@ -13,7 +13,7 @@ type TLogoutButtonProps = {
 export const LogoutButton: React.FC<TLogoutButtonProps> = ({ onAfterLogout }) => {
   const isAuth = useAuthStore((s) => s.isAuth)
   const logout = useAuthStore((s) => s.logout)
-  const resetUser = useUserStore((s) => s.resetUser)
+  const resetUser = useResetUser()
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 

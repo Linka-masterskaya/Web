@@ -3,6 +3,7 @@ import { EditNameForm, EditPasswordForm } from '@entities/auth/forms'
 import {
   type TChangeUserNameFormValues,
   type TEditUserProfilePasswordFormValues,
+  useResetUser,
   useUserStore,
 } from '@entities/user'
 import { Box } from '@mantine/core'
@@ -17,7 +18,7 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ className }) 
   const name = useUserStore((state) => state.name)
   const email = useUserStore((state) => state.email)
   const logout = useAuthStore((state) => state.logout)
-  const resetUser = useUserStore((state) => state.resetUser)
+  const resetUser = useResetUser()
   const navigate = useNavigate()
 
   const [view, setView] = useState<TUserProfileEditView>('profile')

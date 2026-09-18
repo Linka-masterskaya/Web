@@ -2,12 +2,14 @@ export { createFolder } from './api/create-folder'
 export { deleteFolder } from './api/delete-folder'
 export { getFolders } from './api/get-folders'
 export { getSectionContents } from './api/get-section-contents'
+export { getSectionFolders } from './api/get-section-folders'
 export { renameFolder } from './api/rename-folder'
 export { useCreateFolder } from './hooks/use-create-folder'
 export { useDeleteFolder } from './hooks/use-delete-folder'
 export { useFolders } from './hooks/use-folders'
 export { useRenameFolder } from './hooks/use-rename-folder'
 export { useSectionContents } from './hooks/use-section-contents'
+export { useSectionFolders } from './hooks/use-section-folders'
 export { useStudentFolder } from './hooks/use-student-folder'
 export {
   parseSectionContentsFilters,
@@ -42,3 +44,11 @@ export {
   type TRenameFolderParams,
   type TRenameFolderResponse,
 } from './model/rename-folder.schema'
+export {
+  getSectionFoldersParamsSchema,
+  sectionFolderSchema,
+  sectionFoldersResponseSchema,
+  type TGetSectionFoldersParams,
+  type TSectionFolder,
+  type TSectionFoldersResponse,
+} from './model/section-folder.schema'
