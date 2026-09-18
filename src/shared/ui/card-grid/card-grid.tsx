@@ -1,10 +1,10 @@
 import { Box, Stack, Title } from '@mantine/core'
+import { CardGridCard, type TCardGridCardIndicator } from '@shared/ui/assignment-card'
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
 import { useState } from 'react'
 import styles from './card-grid.module.scss'
-import { CardGridCard } from './card-grid-card'
-import type { TCardGridCardIndicator, TCardGridProps } from './types'
+import type { TCardGridProps } from './types'
 
 export const CardGrid: React.FC<TCardGridProps> = (props) => {
   const capacity = props.size.rows * props.size.cols

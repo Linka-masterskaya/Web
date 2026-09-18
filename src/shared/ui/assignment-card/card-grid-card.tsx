@@ -1,6 +1,6 @@
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
-import styles from './card-grid.module.scss'
+import styles from './assignment-card.module.scss'
 import type { TCardGridCardProps } from './types'
 
 export const CardGridCard: React.FC<TCardGridCardProps> = ({
