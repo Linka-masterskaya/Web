@@ -28,6 +28,7 @@ type TSectionContentsCardProps = {
   onOpenFolder: (folder: TFolderContentItem) => void
   onOpenPack: (pack: TPackContentItem) => void
   packContextMenuItems?: readonly TContextMenuItem<TPackContentItem>[]
+  folderContextMenuItems?: readonly TContextMenuItem<TFolderContentItem>[]
 }
 
 const isFolderContentItem = (item: TSectionContentItem): item is TFolderContentItem =>
@@ -53,8 +54,15 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   onOpenFolder,
   onOpenPack,
   packContextMenuItems = [],
+  folderContextMenuItems = [],
 }) => {
   const contextMenu = useContextMenu<TPackContentItem>({
+    width: 235,
+    estimatedHeight: 130,
+    viewportMargin: 8,
+  })
+
+  const folderContextMenu = useContextMenu<TFolderContentItem>({
     width: 235,
     estimatedHeight: 130,
     viewportMargin: 8,
@@ -100,11 +108,15 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
             }
 
             const onContextMenu =
-              isPackContentItem(item) && packContextMenuItems.length > 0
+              isFolderContentItem(item) && folderContextMenuItems.length > 0
                 ? (event: ReactMouseEvent<HTMLElement>) => {
-                    contextMenu.open(event, item)
+                    folderContextMenu.open(event, item)
                   }
-                : undefined
+                : isPackContentItem(item) && packContextMenuItems.length > 0
+                  ? (event: ReactMouseEvent<HTMLElement>) => {
+                      contextMenu.open(event, item)
+                    }
+                  : undefined
 
             return (
               <Card
@@ -123,7 +135,13 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
           })}
         </div>
       </ScrollArea>
+
       <ContextMenu<TPackContentItem> items={packContextMenuItems} {...contextMenu.menuProps} />
+
+      <ContextMenu<TFolderContentItem>
+        items={folderContextMenuItems}
+        {...folderContextMenu.menuProps}
+      />
     </section>
   )
 }

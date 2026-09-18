@@ -1,9 +1,12 @@
 export { createFolder } from './api/create-folder'
+export { deleteFolder } from './api/delete-folder'
 export { getFolders } from './api/get-folders'
 export { getSectionContents } from './api/get-section-contents'
 export { useCreateFolder } from './hooks/use-create-folder'
+export { useDeleteFolder } from './hooks/use-delete-folder'
 export { useFolders } from './hooks/use-folders'
 export { useSectionContents } from './hooks/use-section-contents'
+export { useStudentFolder } from './hooks/use-student-folder'
 export {
   parseSectionContentsFilters,
   type TSectionContentsFilters,

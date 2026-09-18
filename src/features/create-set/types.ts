@@ -5,6 +5,7 @@ export type TCreatedSet = {
 
 export type TOpenCreateSetParams = {
   folderId?: string | null
+  studentId?: string
 }
 
 export type TCreateSetModalProps = TOpenCreateSetParams & {
