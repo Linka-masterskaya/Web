@@ -6,6 +6,7 @@ import {
   readSetPageCategories,
   readSetPagePairs,
   readSetPageSequence,
+  resizeSetPageStructure,
 } from '../lib/set-page-structure'
 import type { TSet } from './set.schema'
 import type { TSetConfig, TSetPage, TSetPageElement, TSetPageType } from './set-config.schema'
@@ -22,6 +23,7 @@ type TEditorStore = {
   selectCard: (id: string | null) => void
   changeType: (pageId: string, type: TSetPageType) => void
   resizeGrid: (pageId: string, rows: number, columns: number) => void
+  resizeStructure: (pageId: string, primaryCount: number, secondaryCount?: number) => void
   updateCard: (pageId: string, cardId: string, patch: Partial<TSetPageElement>) => void
 }
 
@@ -133,6 +135,15 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
             : {}),
         }
       })
+    },
+    resizeStructure: (pageId, primaryCount, secondaryCount) => {
+      if (!Number.isInteger(primaryCount) || primaryCount < 1) {
+        return
+      }
+      if (secondaryCount != null && (!Number.isInteger(secondaryCount) || secondaryCount < 1)) {
+        return
+      }
+      updatePage(pageId, (page) => resizeSetPageStructure(page, primaryCount, secondaryCount))
     },
     updateCard: (pageId, cardId, patch) =>
       updatePage(pageId, (page) => ({

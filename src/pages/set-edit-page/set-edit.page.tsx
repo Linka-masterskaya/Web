@@ -29,6 +29,8 @@ export const SetEditPage: React.FC = () => {
     handleOpenPreview,
     handleStructureChange,
     handleTypeChange,
+    handlePageStructureChange,
+    pageStructure,
     hasInvalidRoute,
     hasMissingPage,
     isSaving,
@@ -142,6 +144,33 @@ export const SetEditPage: React.FC = () => {
                   max={100}
                   onChange={(value) => handleStructureChange(rows, value)}
                 />
+              </div>
+            )}
+
+            {activePage.type === 'categories' && pageStructure && (
+              <div className={styles.structureControlsColumn}>
+                <NumberStepper
+                  label={pageStructure.primaryLabel}
+                  value={pageStructure.primaryCount}
+                  min={pageStructure.primaryMin}
+                  max={pageStructure.primaryMax}
+                  disabled={isSaving}
+                  onChange={(value) =>
+                    handlePageStructureChange(value, pageStructure.secondaryCount)
+                  }
+                />
+                {pageStructure.secondaryLabel != null && pageStructure.secondaryCount != null && (
+                  <NumberStepper
+                    label={pageStructure.secondaryLabel}
+                    value={pageStructure.secondaryCount}
+                    min={pageStructure.secondaryMin ?? 1}
+                    max={pageStructure.secondaryMax ?? 12}
+                    disabled={isSaving}
+                    onChange={(value) =>
+                      handlePageStructureChange(pageStructure.primaryCount, value)
+                    }
+                  />
+                )}
               </div>
             )}
 
