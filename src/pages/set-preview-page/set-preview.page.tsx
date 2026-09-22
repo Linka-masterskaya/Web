@@ -1,5 +1,6 @@
 import {
   readSetPageAnswers,
+  readSetPageCategories,
   readSetPageSequence,
   type TSetPageElement,
   useSet,
@@ -7,6 +8,7 @@ import {
 import { ActionIcon, Center, Loader, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { CardGrid, type TCardGridItem } from '@shared/ui/card-grid'
+import { DistributionGrid, type TDistributionGridItem } from '@shared/ui/distribution-grid'
 import { Icon } from '@shared/ui/icon'
 import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import { useNavigate, useParams } from 'react-router'
@@ -36,6 +38,33 @@ const toCards = (elements: TSetPageElement[]): TCardGridItem[] =>
       imageSrc: cardType === 'normal' && !pictureId ? element.media_url : undefined,
     }
   })
+
+const toDistributionItem = (
+  element: TSetPageElement | undefined,
+  id: string,
+): TDistributionGridItem => {
+  if (!element) {
+    return { id, cardType: 'text', title: '' }
+  }
+  const type = element.card_type
+  const cardType = type === 'text' || type === 'empty' || type === 'space' ? type : 'normal'
+  const pictureId = element.source_picture_id ?? undefined
+
+  return {
+    id: element.id,
+    cardType,
+    title: element.value,
+    media:
+      cardType === 'normal' && pictureId ? (
+        <PictureImage
+          pictureId={pictureId}
+          alt={element.value ?? ''}
+          className={styles.cardImage}
+        />
+      ) : undefined,
+    imageSrc: cardType === 'normal' && !pictureId ? element.media_url : undefined,
+  }
+}
 
 const getSizeFromCount = (count: number) => {
   const cols = Math.max(1, Math.ceil(Math.sqrt(count)))
@@ -151,6 +180,25 @@ export const SetPreviewPage: React.FC = () => {
             onChange={() => undefined}
           />
         )
+      case 'categories': {
+        const categories = readSetPageCategories(activePage)
+        const elementById = new Map(activePage.elements.map((element) => [element.id, element]))
+        const itemCount = Math.max(1, ...categories.map((category) => category.items.length), 0)
+
+        return (
+          <DistributionGrid
+            elementCount={itemCount}
+            categories={categories.map((category) => ({
+              id: category.id,
+              header: toDistributionItem(
+                elementById.get(category.element_id ?? ''),
+                category.element_id ?? '',
+              ),
+              items: category.items.map((id) => toDistributionItem(elementById.get(id), id)),
+            }))}
+          />
+        )
+      }
       default:
         return <Text>Отображение типа «{activePage.type}» добавим следующим шагом</Text>
     }

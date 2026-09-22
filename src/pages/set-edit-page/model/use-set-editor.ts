@@ -63,9 +63,11 @@ export const useSetEditor = () => {
     activePage?.type === 'grid'
       ? Math.max(configuredRows, Math.ceil(activePage.elements.length / columns))
       : configuredRows
-  const selectedCard = activePage?.elements
-    .slice(0, rows * columns)
-    .find((card) => card.id === editor.selectedCardId)
+  const selectedCard = (
+    activePage?.type === 'grid'
+      ? activePage.elements.slice(0, rows * columns)
+      : (activePage?.elements ?? [])
+  ).find((card) => card.id === editor.selectedCardId)
 
   const pageStructure = activePage ? getSetPageStructure(activePage) : null
 
@@ -139,7 +141,10 @@ export const useSetEditor = () => {
     ) {
       return
     }
-    const nextElementCount = primaryCount * nextSecondary
+    const nextElementCount =
+      activePage.type === 'categories'
+        ? primaryCount * ((nextSecondary ?? 0) + 1)
+        : primaryCount * (nextSecondary ?? 1)
     const apply = () => editor.resizeStructure(activePage.id, primaryCount, nextSecondary)
     const removed = activePage.elements.length - nextElementCount
     if (removed > 0) {

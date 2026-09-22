@@ -70,22 +70,23 @@ export const createEmptySetPage = (
     }
 
     case 'categories': {
-      const elements = createTextElements(6)
+      const headers = createTextElements(2)
+      const items = createTextElements(6)
 
       return {
         id: blockId,
         type,
-        elements,
+        elements: [...headers, ...items],
         categories: [
           {
             id: crypto.randomUUID(),
-            name: '',
-            items: elements.slice(0, 3).map((element) => element.id),
+            element_id: headers[0].id,
+            items: items.slice(0, 3).map((element) => element.id),
           },
           {
             id: crypto.randomUUID(),
-            name: '',
-            items: elements.slice(3).map((element) => element.id),
+            element_id: headers[1].id,
+            items: items.slice(3).map((element) => element.id),
           },
         ],
       }

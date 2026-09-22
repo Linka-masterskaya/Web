@@ -124,12 +124,10 @@ const CategoriesPreview: React.FC<{ page: TSetPage }> = ({ page }) => {
         .slice(0, MAX_PREVIEW_CATEGORIES)
         .map((category) => (
           <span key={category.id} className={styles.categoryColumn}>
-            <span className={styles.categoryTitle}>{category.name}</span>
-            <span className={styles.categoryItems}>
-              {category.items.slice(0, MAX_PREVIEW_CATEGORY_ITEMS).map((elementId) => (
-                <PreviewElement key={elementId} element={elementById.get(elementId)} />
-              ))}
-            </span>
+            <PreviewElement element={elementById.get(category.element_id ?? '')} />
+            {category.items.slice(0, MAX_PREVIEW_CATEGORY_ITEMS).map((elementId) => (
+              <PreviewElement key={elementId} element={elementById.get(elementId)} />
+            ))}
           </span>
         ))}
     </span>

@@ -13,6 +13,7 @@ import { useSetEditor } from './model/use-set-editor'
 import styles from './set-edit-page.module.scss'
 import { CardInspector } from './ui/card-inspector'
 import { SetEditFeedback } from './ui/set-edit-feedback'
+import { SetEditorDistribution } from './ui/set-editor-distribution'
 import { SetEditorGrid } from './ui/set-editor-grid'
 
 export const SetEditPage: React.FC = () => {
@@ -193,7 +194,7 @@ export const SetEditPage: React.FC = () => {
           </div>
         }
         rightSlot={
-          activePage.type === 'grid' && selectedCard ? (
+          selectedCard ? (
             <CardInspector key={selectedCard.id} pageId={activePage.id} card={selectedCard} />
           ) : (
             <div className={styles.inspectorEmpty}>
@@ -207,7 +208,7 @@ export const SetEditPage: React.FC = () => {
       >
         <div className={styles.workspace}>
           <div className={styles.canvas}>
-            {activePage.type === 'grid' ? (
+            {activePage.type === 'grid' && (
               <SetEditorGrid
                 page={activePage}
                 rows={rows}
@@ -229,7 +230,16 @@ export const SetEditPage: React.FC = () => {
                   }
                 }}
               />
-            ) : (
+            )}
+            {activePage.type === 'categories' && pageStructure?.secondaryCount != null && (
+              <SetEditorDistribution
+                page={activePage}
+                itemCount={pageStructure.secondaryCount}
+                selectedCardId={editor.selectedCardId}
+                onSelect={editor.selectCard}
+              />
+            )}
+            {activePage.type !== 'grid' && activePage.type !== 'categories' && (
               <div className={styles.canvasEmpty}>
                 <span className={styles.canvasIcon} aria-hidden="true">
                   <Icon name={pageTypeIcon} size={36} />
