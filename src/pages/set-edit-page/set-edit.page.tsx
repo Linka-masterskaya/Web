@@ -165,7 +165,7 @@ export const SetEditPage: React.FC = () => {
                     label={pageStructure.secondaryLabel}
                     value={pageStructure.secondaryCount}
                     min={pageStructure.secondaryMin ?? 1}
-                    max={pageStructure.secondaryMax ?? 12}
+                    max={pageStructure.secondaryMax ?? 100}
                     disabled={isSaving}
                     onChange={(value) =>
                       handlePageStructureChange(pageStructure.primaryCount, value)

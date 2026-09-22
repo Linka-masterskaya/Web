@@ -15,7 +15,7 @@ export type TDistributionGridCategory = {
   id: string
   /** Шапка колонки — полноценная карточка. */
   header: TDistributionGridItem
-  /** Варианты под шапкой (мишка). */
+  /** Варианты под шапкой. */
   items: TDistributionGridItem[]
 }
 
