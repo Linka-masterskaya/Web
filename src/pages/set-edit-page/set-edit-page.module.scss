@@ -1,246 +1,250 @@
 .page {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  overflow: hidden;
+	flex: 1;
+	width: 100%;
+	min-height: 0;
+	overflow: hidden;
 }
 
 .editorLayout {
-  height: 100%;
+	height: 100%;
 }
 
 .skeleton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  min-height: 240px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	min-height: 240px;
 }
 
 .feedback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  width: 100%;
-  min-height: 240px;
-  padding: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	width: 100%;
+	min-height: 240px;
+	padding: 24px;
 }
 
 .feedbackContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
 }
 
 .feedbackActions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+	display: flex;
+	align-items: center;
+	gap: 16px;
 }
 
 .feedbackError,
 .saveError {
-  color: var(--mantine-color-red-6);
+	color: var(--mantine-color-red-6);
 }
 
 .feedbackTitle {
-  font-weight: 600;
+	font-weight: 600;
 }
 
 .feedbackDescription,
 .inspectorText,
 .canvasCaption {
-  color: var(--mantine-color-dimmed);
-  font-size: var(--mantine-font-size-sm);
-  text-align: center;
+	color: var(--mantine-color-dimmed);
+	font-size: var(--mantine-font-size-sm);
+	text-align: center;
 }
 
 .sidebarControls {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .sidebarControls {
-  gap: 32px;
+	gap: 32px;
 }
 
 .structureControls {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
 }
 
 .saveStatus {
-  min-height: 16px;
-  text-align: center;
+	min-height: 16px;
+	text-align: center;
 }
 
 .savePending,
 .saveError,
 .typeHint {
-  font-size: var(--mantine-font-size-xs);
+	font-size: var(--mantine-font-size-xs);
 }
 
 .savePending,
 .typeHint {
-  color: var(--mantine-color-dimmed);
+	color: var(--mantine-color-dimmed);
 }
 
 .typeHint {
-  line-height: 16px;
-  text-align: center;
+	line-height: 16px;
+	text-align: center;
 }
 
 .workspace {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  min-width: 0;
-  height: 100%;
-  padding: 32px 12px 0px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 100%;
+	min-width: 0;
+	height: 100%;
+	padding: 32px 12px 0px;
 }
 
 .canvas {
-  display: flex;
-  flex: 1;
-  min-height: 256px;
-  border-radius: 16px;
-  background: var(--mantine-color-lightBlue-0);
+	display: flex;
+	flex: 1;
+	min-height: 256px;
+	border-radius: 16px;
+	background: var(--mantine-color-lightBlue-0);
 }
 
 .canvasEmpty {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  min-width: 0;
-  min-height: 0;
-  padding: 32px;
-  border: 1px solid var(--mantine-color-gray-2);
-  border-radius: 8px;
-  background: var(--mantine-color-white);
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 0;
+	min-height: 0;
+	padding: 32px;
+	border: 1px solid var(--mantine-color-gray-2);
+	border-radius: 8px;
+	background: var(--mantine-color-white);
 }
 
 .canvasTitle {
-  font-size: var(--mantine-font-size-lg);
-  font-weight: 700;
+	font-size: var(--mantine-font-size-lg);
+	font-weight: 700;
 }
 
 .canvasIcon,
 .inspectorIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--mantine-color-blue-4);
-  border-radius: 50%;
-  background: var(--mantine-color-lightBlue-0);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--mantine-color-blue-4);
+	border-radius: 50%;
+	background: var(--mantine-color-lightBlue-0);
 }
 
 .canvasIcon {
-  width: 64px;
-  height: 64px;
+	width: 64px;
+	height: 64px;
 }
 
 .workspaceFooter {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	align-items: center;
 }
 
 .workspaceFooter :global(.mantine-Button-root) {
-  height: 40px;
-  max-height: 40px;
-  padding: 8px 18px;
-  font-size: 16px;
+	height: 40px;
+	max-height: 40px;
+	padding: 8px 18px;
+	font-size: 16px;
 }
 
 .overviewButton {
-  justify-self: start;
+	justify-self: start;
 }
 
 .inspectorEmpty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding-top: 8px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 12px;
+	padding-top: 8px;
 }
 
 .inspectorIcon {
-  width: 48px;
-  height: 48px;
+	width: 48px;
+	height: 48px;
 }
 
 @media (max-width: 720px) {
-  .workspace {
-    padding-top: 20px;
-  }
+	.workspace {
+		padding-top: 20px;
+	}
 }
 
 .editorGrid {
-  flex: 1;
-  min-width: 0;
-  height: auto;
-  min-height: 480px;
-  padding: 0;
+	flex: 1;
+	min-width: 0;
+	height: auto;
+	min-height: 480px;
+	padding: 0;
 }
 
 .cardImage {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 0;
-  flex: 1 1 0;
-  object-fit: contain;
+	display: block;
+	width: 100%;
+	height: 100%;
+	min-height: 0;
+	flex: 1 1 0;
+	object-fit: contain;
 }
 
 .imagePlaceholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  color: var(--mantine-color-blue-4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex: 1;
+	color: var(--mantine-color-blue-4);
 }
 
 .cardTypeOptions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
 }
 
 .cardInspector :global(.mantine-Button-root) {
-  padding: 6px;
-  height: 38px;
-  font-size: 14px;
+	padding: 6px;
+	height: 38px;
+	font-size: 14px;
 }
 
 .inspectorActions {
-  display: flex;
-  gap: 6px;
+	display: flex;
+	gap: 6px;
 
-  > * {
-    flex: 1;
-  }
+	> * {
+		flex: 1;
+	}
 }
 
 .imagePreview {
-  height: 76px;
-  overflow: hidden;
-  border: 2px solid var(--mantine-color-blue-4);
-  border-radius: 8px;
+	height: 76px;
+	overflow: hidden;
+	border: 2px solid var(--mantine-color-blue-4);
+	border-radius: 8px;
 }
 
 .imagePreview .cardImage {
-  height: 100%;
-  object-fit: cover;
+	height: 100%;
+	object-fit: cover;
 }
 
 .audioPlayer {
-  width: 100%;
+	width: 100%;
+}
+
+.matchingStructureControls {
+	width: 100%;
 }

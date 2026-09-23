@@ -1,5 +1,6 @@
 import {
   readSetPageAnswers,
+  readSetPagePairs,
   readSetPageSequence,
   type TSetPageElement,
   useSet,
@@ -8,6 +9,7 @@ import { ActionIcon, Center, Loader, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { CardGrid, type TCardGridItem } from '@shared/ui/card-grid'
 import { Icon } from '@shared/ui/icon'
+import { MatchingGrid, type TMatchingGridItem } from '@shared/ui/matching-grid'
 import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
@@ -42,6 +44,30 @@ const getSizeFromCount = (count: number) => {
   const rows = Math.max(1, Math.ceil(count / cols))
   return { rows, cols }
 }
+
+const toMatchingElements = (elements: TSetPageElement[]): TMatchingGridItem[] =>
+  elements.map((element) => {
+    const type = element.card_type
+    const cardType = type === 'text' || type === 'empty' || type === 'space' ? type : 'normal'
+
+    const pictureId = element.source_picture_id ?? undefined
+
+    return {
+      id: element.id,
+      cardType,
+      title: element.value,
+      media:
+        cardType === 'normal' && pictureId ? (
+          <PictureImage
+            pictureId={pictureId}
+            alt={element.value ?? ''}
+            className={styles.cardImage}
+          />
+        ) : undefined,
+      imageSrc: cardType === 'normal' && !pictureId ? element.media_url : undefined,
+      ariaLabel: element.value,
+    }
+  })
 
 export const SetPreviewPage: React.FC = () => {
   const { setId, subsetId } = useParams()
@@ -151,6 +177,14 @@ export const SetPreviewPage: React.FC = () => {
             onChange={() => undefined}
           />
         )
+      case 'matching': {
+        const matchingElements = toMatchingElements(activePage.elements)
+        const pairs = readSetPagePairs(activePage).map((pair) => ({
+          leftId: pair.left_id,
+          rightId: pair.right_id,
+        }))
+        return <MatchingGrid elements={matchingElements} pairs={pairs} />
+      }
       default:
         return <Text>Отображение типа «{activePage.type}» добавим следующим шагом</Text>
     }

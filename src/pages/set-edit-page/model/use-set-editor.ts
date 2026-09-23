@@ -57,9 +57,13 @@ export const useSetEditor = () => {
     activePage?.type === 'grid'
       ? Math.max(configuredRows, Math.ceil(activePage.elements.length / columns))
       : configuredRows
-  const selectedCard = activePage?.elements
-    .slice(0, rows * columns)
-    .find((card) => card.id === editor.selectedCardId)
+
+  const selectedCard =
+    activePage?.type === 'grid'
+      ? activePage.elements
+          .slice(0, rows * columns)
+          .find((card) => card.id === editor.selectedCardId)
+      : activePage?.elements.find((card) => card.id === editor.selectedCardId)
 
   const handleExit = async () => {
     if (!(await save())) {
@@ -115,12 +119,22 @@ export const useSetEditor = () => {
       }
     }
   }
+
+  const handleMatchingCountChange = (count: number) => {
+    if (activePage?.type === 'matching') {
+      editor.resizeMatching(activePage.id, count)
+    }
+  }
+
   const handlePageChange = (index: number) => {
     const page = pages[index - 1]
     if (page) {
       editor.selectCard(null)
       navigate(
-        createUrl(routerPath.dashboardSubsetIdEdit, { setId: resolvedSetId, subsetId: page.id }),
+        createUrl(routerPath.dashboardSubsetIdEdit, {
+          setId: resolvedSetId,
+          subsetId: page.id,
+        }),
       )
     }
   }
@@ -133,6 +147,7 @@ export const useSetEditor = () => {
     handleExit,
     handleOpenPreview,
     handleStructureChange,
+    handleMatchingCountChange,
     handleTypeChange,
     handlePageChange,
     rows,

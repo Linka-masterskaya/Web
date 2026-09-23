@@ -19,6 +19,7 @@ export type TSetPageStructure = {
 const createTextElement = (): TSetPageElement => ({
   id: crypto.randomUUID(),
   kind: 'text',
+  card_type: 'text',
   value: '',
 })
 
@@ -95,7 +96,7 @@ export const getSetPageStructure = (page: TSetPage): TSetPageStructure => {
           readSetPagePairs(page).length || Math.ceil(page.elements.length / 2),
         ),
         primaryMin: 1,
-        primaryMax: 12,
+        primaryMax: 100,
       }
 
     case 'sequence':
@@ -162,7 +163,7 @@ const resizeChoicePage = (page: TSetPage, count: number): TSetPage => {
   return { ...page, elements, answers }
 }
 
-const resizeMatchingPage = (page: TSetPage, pairCount: number): TSetPage => {
+export const resizeMatchingPage = (page: TSetPage, pairCount: number): TSetPage => {
   const elementById = new Map(page.elements.map((element) => [element.id, element]))
   const currentPairs = readSetPagePairs(page)
   const elements: TSetPageElement[] = []
