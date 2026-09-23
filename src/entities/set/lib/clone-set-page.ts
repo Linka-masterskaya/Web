@@ -11,7 +11,7 @@ import {
  * и для вставки из буфера обмена.
  *
  * Заменяются id страницы, id элементов и все ссылки на элементы:
- * `answers.element_id`, `pairs.left_id`/`right_id`, `categories.items`, `sequence.element_id`.
+ * `answers.element_id`, `pairs.left_id`/`right_id`, `categories.element_id`/`items`, `sequence.element_id`.
  */
 export const cloneSetPage = (page: TSetPage): TSetPage => {
   const elementIdMap = new Map<string, string>()
@@ -44,7 +44,7 @@ export const cloneSetPage = (page: TSetPage): TSetPage => {
   if (Array.isArray(page.categories)) {
     clone.categories = readSetPageCategories(page).map((category) => ({
       id: crypto.randomUUID(),
-      name: category.name,
+      element_id: category.element_id ? remapElementId(category.element_id) : undefined,
       items: category.items.map(remapElementId),
     }))
   }

@@ -12,12 +12,10 @@ export const changeSetPageType = (page: TSetPage, type: TSetPageType): TSetPage 
     return page
   }
   const next: TSetPage = { ...page, type, elements: [...page.elements] }
-  if (
-    type === 'grid' &&
-    next.layout &&
-    next.elements.length > next.layout.rows * next.layout.columns
-  ) {
-    next.layout = { ...next.layout, rows: Math.ceil(next.elements.length / next.layout.columns) }
+  if (type === 'grid') {
+    const columns = next.layout?.columns ?? 3
+    const rows = Math.max(next.layout?.rows ?? 1, Math.ceil(next.elements.length / columns) || 1)
+    next.layout = { rows, columns }
   }
   const addCard = () => next.elements.push({ id: crypto.randomUUID(), kind: 'text', value: '' })
   if (type !== 'grid' && next.elements.length < 2) {
@@ -59,15 +57,36 @@ export const changeSetPageType = (page: TSetPage, type: TSetPageType): TSetPage 
   }
   if (type === 'categories') {
     const categories = readSetPageCategories(page)
-    const assignedIds = new Set(categories.flatMap((category) => category.items))
+    const reservedIds = new Set([
+      ...categories.flatMap((category) => category.items),
+      ...categories.flatMap((category) => (category.element_id ? [category.element_id] : [])),
+    ])
     const unassigned = next.elements
-      .filter((element) => !assignedIds.has(element.id))
+      .filter((element) => !reservedIds.has(element.id))
       .map((element) => element.id)
-    next.categories = categories.length
-      ? categories.map((category, index) =>
-          index === 0 ? { ...category, items: [...category.items, ...unassigned] } : category,
-        )
-      : [{ id: crypto.randomUUID(), name: '', items: unassigned }]
+
+    if (categories.length) {
+      next.categories = categories.map((category, index) =>
+        index === 0 ? { ...category, items: [...category.items, ...unassigned] } : category,
+      )
+    } else {
+      const categoryCount = 2
+      const itemCount = Math.max(1, Math.ceil(unassigned.length / categoryCount) || 1)
+      const neededItems = categoryCount * itemCount
+      while (unassigned.length < neededItems) {
+        addCard()
+        unassigned.push(next.elements[next.elements.length - 1].id)
+      }
+      const headers = Array.from({ length: categoryCount }, () => {
+        addCard()
+        return next.elements[next.elements.length - 1]
+      })
+      next.categories = headers.map((header, index) => ({
+        id: crypto.randomUUID(),
+        element_id: header.id,
+        items: unassigned.slice(index * itemCount, (index + 1) * itemCount),
+      }))
+    }
   }
   if (type === 'sequence') {
     const sequence = readSetPageSequence(page).toSorted((a, b) => a.order - b.order)

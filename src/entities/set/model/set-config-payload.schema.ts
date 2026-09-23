@@ -49,7 +49,14 @@ const pagePayloadSchema = z
     sequence: z.array(z.object({ element_id: z.string(), order: z.number().int() })).optional(),
     pairs: z.array(z.object({ left_id: z.string(), right_id: z.string() })).optional(),
     categories: z
-      .array(z.object({ id: z.string(), name: z.string(), items: z.array(z.string()) }))
+      .array(
+        z.object({
+          id: z.string(),
+          element_id: z.string().optional(),
+          name: z.string().optional(),
+          items: z.array(z.string()),
+        }),
+      )
       .optional(),
   })
   .transform((page) => ({ ...page, layout: page.type === 'grid' ? page.layout : undefined }))

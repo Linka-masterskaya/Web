@@ -16,6 +16,7 @@ import styles from './set-edit-page.module.scss'
 import { CardInspector } from './ui/card-inspector'
 import { GridCardImage } from './ui/grid-card-image'
 import { SetEditFeedback } from './ui/set-edit-feedback'
+import { SetEditorDistribution } from './ui/set-editor-distribution'
 import { SetEditorGrid } from './ui/set-editor-grid'
 
 export const SetEditPage: React.FC = () => {
@@ -33,6 +34,8 @@ export const SetEditPage: React.FC = () => {
     handleStructureChange,
     handleMatchingCountChange,
     handleTypeChange,
+    handlePageStructureChange,
+    pageStructure,
     hasInvalidRoute,
     hasMissingPage,
     isSaving,
@@ -172,7 +175,32 @@ export const SetEditPage: React.FC = () => {
                 />
               </div>
             )}
-
+            {activePage.type === 'categories' && pageStructure && (
+              <div className={styles.structureControlsColumn}>
+                <NumberStepper
+                  label={pageStructure.primaryLabel}
+                  value={pageStructure.primaryCount}
+                  min={pageStructure.primaryMin}
+                  max={pageStructure.primaryMax}
+                  disabled={isSaving}
+                  onChange={(value) =>
+                    handlePageStructureChange(value, pageStructure.secondaryCount)
+                  }
+                />
+                {pageStructure.secondaryLabel != null && pageStructure.secondaryCount != null && (
+                  <NumberStepper
+                    label={pageStructure.secondaryLabel}
+                    value={pageStructure.secondaryCount}
+                    min={pageStructure.secondaryMin ?? 1}
+                    max={pageStructure.secondaryMax ?? 100}
+                    disabled={isSaving}
+                    onChange={(value) =>
+                      handlePageStructureChange(pageStructure.primaryCount, value)
+                    }
+                  />
+                )}
+              </div>
+            )}
             {activePage.type === 'matching' && (
               <div className={styles.matchingStructureControls}>
                 <NumberStepper
@@ -204,7 +232,7 @@ export const SetEditPage: React.FC = () => {
           </div>
         }
         rightSlot={
-          (activePage.type === 'grid' || activePage.type === 'matching') && selectedCard ? (
+          selectedCard ? (
             <CardInspector key={selectedCard.id} pageId={activePage.id} card={selectedCard} />
           ) : (
             <div className={styles.inspectorEmpty}>
@@ -218,7 +246,7 @@ export const SetEditPage: React.FC = () => {
       >
         <div className={styles.workspace}>
           <div className={styles.canvas}>
-            {activePage.type === 'grid' ? (
+            {activePage.type === 'grid' && (
               <SetEditorGrid
                 page={activePage}
                 rows={rows}
@@ -242,24 +270,36 @@ export const SetEditPage: React.FC = () => {
                   }
                 }}
               />
-            ) : activePage.type === 'matching' ? (
+            )}
+            {activePage.type === 'categories' && pageStructure?.secondaryCount != null && (
+              <SetEditorDistribution
+                page={activePage}
+                itemCount={pageStructure.secondaryCount}
+                selectedCardId={editor.selectedCardId}
+                onSelect={editor.selectCard}
+              />
+            )}
+            {activePage.type === 'matching' && (
               <MatchingGrid
                 elements={matchingElements}
                 pairs={matchingPairs}
                 selectedCardId={editor.selectedCardId}
                 onSelect={editor.selectCard}
               />
-            ) : (
-              <div className={styles.canvasEmpty}>
-                <span className={styles.canvasIcon} aria-hidden="true">
-                  <Icon name={pageTypeIcon} size={36} />
-                </span>
-                <Text className={styles.canvasTitle}>{pageTypeLabel}</Text>
-                <Text className={styles.canvasCaption}>
-                  Редактор этого режима будет добавлен позже. Карточки сохранены.
-                </Text>
-              </div>
             )}
+            {activePage.type !== 'grid' &&
+              activePage.type !== 'categories' &&
+              activePage.type !== 'matching' && (
+                <div className={styles.canvasEmpty}>
+                  <span className={styles.canvasIcon} aria-hidden="true">
+                    <Icon name={pageTypeIcon} size={36} />
+                  </span>
+                  <Text className={styles.canvasTitle}>{pageTypeLabel}</Text>
+                  <Text className={styles.canvasCaption}>
+                    Редактор этого режима будет добавлен позже. Карточки сохранены.
+                  </Text>
+                </div>
+              )}
           </div>
 
           <div className={styles.workspaceFooter}>

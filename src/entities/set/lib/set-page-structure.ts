@@ -2,7 +2,12 @@ import type { TSetPage, TSetPageElement } from '../model/set-config.schema'
 
 export type TPageAnswer = { element_id: string; is_correct: boolean }
 export type TPagePair = { left_id: string; right_id: string }
-export type TPageCategory = { id: string; name: string; items: string[] }
+export type TPageCategory = {
+  id: string
+  element_id?: string
+  name?: string
+  items: string[]
+}
 export type TPageSequenceItem = { element_id: string; order: number }
 
 export type TSetPageStructure = {
@@ -68,7 +73,8 @@ export const readSetPageCategories = (page: TSetPage): TPageCategory[] =>
           typeof category === 'object' &&
           category !== null &&
           typeof category.id === 'string' &&
-          typeof category.name === 'string' &&
+          (category.element_id === undefined || typeof category.element_id === 'string') &&
+          (category.name === undefined || typeof category.name === 'string') &&
           Array.isArray(category.items) &&
           category.items.every((item: unknown) => typeof item === 'string'),
       )
@@ -119,11 +125,11 @@ export const getSetPageStructure = (page: TSetPage): TSetPageStructure => {
         primaryLabel: 'Количество категорий',
         primaryCount: categoryCount,
         primaryMin: 1,
-        primaryMax: 8,
+        primaryMax: 100,
         secondaryLabel: 'Кол-во вариантов ответов',
         secondaryCount: itemCount,
         secondaryMin: 1,
-        secondaryMax: 12,
+        secondaryMax: 100,
       }
     }
 
@@ -193,18 +199,23 @@ const resizeCategoriesPage = (
 
   for (let categoryIndex = 0; categoryIndex < categoryCount; categoryIndex += 1) {
     const currentCategory = currentCategories[categoryIndex]
+    const headerFromPage =
+      currentCategory?.element_id != null ? elementById.get(currentCategory.element_id) : undefined
+    const header = headerFromPage ?? createTextElement()
     const categoryElements = resizeElements(
-      (currentCategory?.items ?? []).flatMap((id) => {
-        const element = elementById.get(id)
-        return element ? [element] : []
-      }),
+      (currentCategory?.items ?? [])
+        .filter((id) => id !== header.id)
+        .flatMap((id) => {
+          const element = elementById.get(id)
+          return element ? [element] : []
+        }),
       itemCount,
     )
 
-    elements.push(...categoryElements)
+    elements.push(header, ...categoryElements)
     categories.push({
       id: currentCategory?.id ?? crypto.randomUUID(),
-      name: currentCategory?.name ?? '',
+      element_id: header.id,
       items: categoryElements.map((element) => element.id),
     })
   }

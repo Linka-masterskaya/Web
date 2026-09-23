@@ -1,4 +1,10 @@
-import { setPageTypeSchema, useSaveSetEditor, useSet, useSetEditorStore } from '@entities/set'
+import {
+  getSetPageStructure,
+  setPageTypeSchema,
+  useSaveSetEditor,
+  useSet,
+  useSetEditorStore,
+} from '@entities/set'
 import { useConfirmDelete } from '@features/confirm-delete'
 import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
 import { useEffect } from 'react'
@@ -58,13 +64,13 @@ export const useSetEditor = () => {
       ? Math.max(configuredRows, Math.ceil(activePage.elements.length / columns))
       : configuredRows
 
-  const selectedCard =
+  const selectedCard = (
     activePage?.type === 'grid'
-      ? activePage.elements
-          .slice(0, rows * columns)
-          .find((card) => card.id === editor.selectedCardId)
-      : activePage?.elements.find((card) => card.id === editor.selectedCardId)
+      ? activePage.elements.slice(0, rows * columns)
+      : (activePage?.elements ?? [])
+  ).find((card) => card.id === editor.selectedCardId)
 
+  const pageStructure = activePage ? getSetPageStructure(activePage) : null
   const handleExit = async () => {
     if (!(await save())) {
       return
@@ -120,6 +126,38 @@ export const useSetEditor = () => {
     }
   }
 
+  const handlePageStructureChange = (primaryCount: number, secondaryCount?: number) => {
+    if (!activePage || !pageStructure) {
+      return
+    }
+    if (primaryCount < pageStructure.primaryMin || primaryCount > pageStructure.primaryMax) {
+      return
+    }
+    const nextSecondary = secondaryCount ?? pageStructure.secondaryCount
+    if (
+      nextSecondary == null ||
+      nextSecondary < (pageStructure.secondaryMin ?? 1) ||
+      nextSecondary > (pageStructure.secondaryMax ?? nextSecondary)
+    ) {
+      return
+    }
+    const nextElementCount =
+      activePage.type === 'categories'
+        ? primaryCount * ((nextSecondary ?? 0) + 1)
+        : primaryCount * (nextSecondary ?? 1)
+    const apply = () => editor.resizeStructure(activePage.id, primaryCount, nextSecondary)
+    const removed = activePage.elements.length - nextElementCount
+    if (removed > 0) {
+      confirmDelete({
+        title: 'Уменьшить структуру?',
+        description: `Количество карточек, которые будут удалены: ${removed}. Их содержимое не восстановится при увеличении.`,
+        onConfirm: apply,
+      })
+    } else {
+      apply()
+    }
+  }
+
   const handleMatchingCountChange = (count: number) => {
     if (activePage?.type === 'matching') {
       editor.resizeMatching(activePage.id, count)
@@ -147,12 +185,14 @@ export const useSetEditor = () => {
     handleExit,
     handleOpenPreview,
     handleStructureChange,
+    handlePageStructureChange,
     handleMatchingCountChange,
     handleTypeChange,
     handlePageChange,
     rows,
     columns,
     selectedCard,
+    pageStructure,
     editor,
     save,
     pages,

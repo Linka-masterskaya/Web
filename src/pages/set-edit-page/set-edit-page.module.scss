@@ -248,3 +248,9 @@
 .matchingStructureControls {
 	width: 100%;
 }
+
+.structureControlsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
