@@ -1,49 +1,43 @@
 import clsx from 'clsx'
-import { useState } from 'react'
+import { CardGridCard } from '../assignment-card'
 import styles from './matching-grid.module.scss'
 import type { TMatchingGridProps } from './types'
 
 export const MatchingGrid: React.FC<TMatchingGridProps> = ({
   className,
   elements,
-  elementCount,
-  value,
-  onChange,
+  pairs,
+  selectedCardId,
+  onSelect,
 }) => {
-  const visibleElements = elements.slice(0, elementCount)
-
-  const [focusedId, setFocusedId] = useState<string | null>(null)
-  const highlightedId = focusedId ?? value
+  const elementMap = new Map(elements.map((element) => [element.id, element]))
 
   return (
-    <div
-      className={clsx(styles.grid, className)}
-      role="listbox"
-      aria-label="Сетка заданий на соответствие"
-    >
-      {visibleElements.map((element) => {
-        const isSelected = element.id === value
-        const isHighlighted = element.id === highlightedId
+    <div className={clsx(styles.grid, className)}>
+      {pairs.map((pair) => {
+        const left = elementMap.get(pair.leftId)
+        const right = elementMap.get(pair.rightId)
+
+        if (!left || !right) {
+          return null
+        }
 
         return (
-          <button
-            key={element.id}
-            type="button"
-            role="option"
-            aria-selected={isSelected}
-            className={clsx(styles.row, isHighlighted && styles.rowHighlighted)}
-            onClick={() => onChange(element.id)}
-            onFocus={() => setFocusedId(element.id)}
-            onBlur={() => setFocusedId(null)}
-          >
-            <span className={styles.card}>
-              <img className={styles.image} src={element.imageSrc} alt={element.title} />
-            </span>
+          <div key={`${pair.leftId}-${pair.rightId}`} className={styles.row}>
+            <CardGridCard
+              cardType={left.cardType}
+              media={left.media}
+              imageSrc={left.imageSrc}
+              title={left.title}
+              ariaLabel={left.ariaLabel}
+              active={selectedCardId === left.id}
+              onClick={() => onSelect?.(left.id)}
+            />
 
             <span className={styles.connectorCard} aria-hidden="true">
               <svg
                 className={styles.connectorIcon}
-                viewBox="0 0 64 16"
+                viewBox="0 0 64 18"
                 fill="none"
                 aria-hidden="true"
               >
@@ -53,10 +47,16 @@ export const MatchingGrid: React.FC<TMatchingGridProps> = ({
               </svg>
             </span>
 
-            <span className={clsx(styles.card, styles.title)} title={element.title}>
-              {element.title}
-            </span>
-          </button>
+            <CardGridCard
+              cardType={right.cardType}
+              media={right.media}
+              imageSrc={right.imageSrc}
+              title={right.title}
+              ariaLabel={right.ariaLabel}
+              active={selectedCardId === right.id}
+              onClick={() => onSelect?.(right.id)}
+            />
+          </div>
         )
       })}
     </div>

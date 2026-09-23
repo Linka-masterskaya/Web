@@ -6,6 +6,7 @@ import {
   readSetPageCategories,
   readSetPagePairs,
   readSetPageSequence,
+  resizeMatchingPage,
   resizeSetPageStructure,
 } from '../lib/set-page-structure'
 import type { TSet } from './set.schema'
@@ -24,6 +25,7 @@ type TEditorStore = {
   changeType: (pageId: string, type: TSetPageType) => void
   resizeGrid: (pageId: string, rows: number, columns: number) => void
   resizeStructure: (pageId: string, primaryCount: number, secondaryCount?: number) => void
+  resizeMatching: (pageId: string, pairCount: number) => void
   updateCard: (pageId: string, cardId: string, patch: Partial<TSetPageElement>) => void
 }
 
@@ -108,7 +110,9 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
           layout: { rows, columns },
           elements,
           ...(page.answers
-            ? { answers: readSetPageAnswers(page).filter((item) => ids.has(item.element_id)) }
+            ? {
+                answers: readSetPageAnswers(page).filter((item) => ids.has(item.element_id)),
+              }
             : {}),
           ...(page.pairs
             ? {
@@ -144,6 +148,19 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
         return
       }
       updatePage(pageId, (page) => resizeSetPageStructure(page, primaryCount, secondaryCount))
+    },
+    resizeMatching: (pageId, pairCount) => {
+      if (!Number.isInteger(pairCount) || pairCount < 1 || pairCount > 100) {
+        return
+      }
+
+      updatePage(pageId, (page) => {
+        if (page.type !== 'matching') {
+          return page
+        }
+
+        return resizeMatchingPage(page, pairCount)
+      })
     },
     updateCard: (pageId, cardId, patch) =>
       updatePage(pageId, (page) => ({

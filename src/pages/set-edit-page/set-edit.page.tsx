@@ -1,4 +1,4 @@
-import { useSetEditorStore } from '@entities/set'
+import { readSetPagePairs, useSetEditorStore } from '@entities/set'
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
 import {
   SET_PAGE_TYPE_ICONS,
@@ -7,11 +7,14 @@ import {
 } from '@features/set-page-type-selector'
 import { Button, Loader, Text } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
+import type { TMatchingGridItem } from '@shared/ui/matching-grid'
+import { MatchingGrid } from '@shared/ui/matching-grid'
 import { NumberStepper } from '@shared/ui/number-stepper'
 import { SubsetLayout } from '@widgets/subset-layout'
 import { useSetEditor } from './model/use-set-editor'
 import styles from './set-edit-page.module.scss'
 import { CardInspector } from './ui/card-inspector'
+import { GridCardImage } from './ui/grid-card-image'
 import { SetEditFeedback } from './ui/set-edit-feedback'
 import { SetEditorDistribution } from './ui/set-editor-distribution'
 import { SetEditorGrid } from './ui/set-editor-grid'
@@ -29,6 +32,7 @@ export const SetEditPage: React.FC = () => {
     handleExit,
     handleOpenPreview,
     handleStructureChange,
+    handleMatchingCountChange,
     handleTypeChange,
     handlePageStructureChange,
     pageStructure,
@@ -102,6 +106,30 @@ export const SetEditPage: React.FC = () => {
   const pageTypeLabel = SET_PAGE_TYPE_LABELS[resolvedSelectedType]
   const pageTypeIcon = SET_PAGE_TYPE_ICONS[resolvedSelectedType]
 
+  const matchingElements: TMatchingGridItem[] =
+    activePage.type === 'matching'
+      ? activePage.elements.map((card) => {
+          const type = card.card_type
+          const cardType = type === 'text' || type === 'empty' || type === 'space' ? type : 'normal'
+
+          return {
+            id: card.id,
+            cardType,
+            title: card.value,
+            media: cardType === 'normal' ? <GridCardImage card={card} /> : undefined,
+            ariaLabel: card.value,
+          }
+        })
+      : []
+
+  const matchingPairs =
+    activePage.type === 'matching'
+      ? readSetPagePairs(activePage).map((pair) => ({
+          leftId: pair.left_id,
+          rightId: pair.right_id,
+        }))
+      : []
+
   return (
     <section
       className={styles.page}
@@ -147,7 +175,6 @@ export const SetEditPage: React.FC = () => {
                 />
               </div>
             )}
-
             {activePage.type === 'categories' && pageStructure && (
               <div className={styles.structureControlsColumn}>
                 <NumberStepper
@@ -172,6 +199,17 @@ export const SetEditPage: React.FC = () => {
                     }
                   />
                 )}
+              </div>
+            )}
+            {activePage.type === 'matching' && (
+              <div className={styles.matchingStructureControls}>
+                <NumberStepper
+                  label="Количество пар"
+                  value={Math.max(1, readSetPagePairs(activePage).length)}
+                  min={1}
+                  max={100}
+                  onChange={handleMatchingCountChange}
+                />
               </div>
             )}
 
@@ -217,11 +255,13 @@ export const SetEditPage: React.FC = () => {
                 onSelect={(id) => {
                   if (id.startsWith('slot:')) {
                     editor.resizeGrid(activePage.id, rows, columns)
+
                     const card = useSetEditorStore
                       .getState()
                       .config?.blocks.find((page) => page.id === activePage.id)?.elements[
                       Number(id.slice(5))
                     ]
+
                     if (card) {
                       editor.selectCard(card.id)
                     }
@@ -239,17 +279,27 @@ export const SetEditPage: React.FC = () => {
                 onSelect={editor.selectCard}
               />
             )}
-            {activePage.type !== 'grid' && activePage.type !== 'categories' && (
-              <div className={styles.canvasEmpty}>
-                <span className={styles.canvasIcon} aria-hidden="true">
-                  <Icon name={pageTypeIcon} size={36} />
-                </span>
-                <Text className={styles.canvasTitle}>{pageTypeLabel}</Text>
-                <Text className={styles.canvasCaption}>
-                  Редактор этого режима будет добавлен позже. Карточки сохранены.
-                </Text>
-              </div>
+            {activePage.type === 'matching' && (
+              <MatchingGrid
+                elements={matchingElements}
+                pairs={matchingPairs}
+                selectedCardId={editor.selectedCardId}
+                onSelect={editor.selectCard}
+              />
             )}
+            {activePage.type !== 'grid' &&
+              activePage.type !== 'categories' &&
+              activePage.type !== 'matching' && (
+                <div className={styles.canvasEmpty}>
+                  <span className={styles.canvasIcon} aria-hidden="true">
+                    <Icon name={pageTypeIcon} size={36} />
+                  </span>
+                  <Text className={styles.canvasTitle}>{pageTypeLabel}</Text>
+                  <Text className={styles.canvasCaption}>
+                    Редактор этого режима будет добавлен позже. Карточки сохранены.
+                  </Text>
+                </div>
+              )}
           </div>
 
           <div className={styles.workspaceFooter}>

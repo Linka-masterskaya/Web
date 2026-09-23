@@ -56,7 +56,10 @@ export const setPageSchema = z
     id: z.string().min(1),
     type: setPageTypeSchema,
     layout: z
-      .object({ rows: z.number().int().min(1).max(100), columns: z.number().int().min(1).max(100) })
+      .object({
+        rows: z.number().int().min(1).max(100),
+        columns: z.number().int().min(1).max(100),
+      })
       .optional(),
     name: z.string().min(1).optional(),
     elements: z.array(setPageElementSchema).min(1),
