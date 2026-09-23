@@ -1,21 +1,25 @@
 import { useCreateSet, useUpdateSet } from '@entities/set'
+import { useStudent } from '@entities/student'
 import { SetSettings } from '@features/set-settings'
 import type { TSetSettings } from '@features/set-settings/model/set-settings.schema'
-
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { PopupLayout } from '@shared/ui/popup-layout'
-
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
-
 import type { TCreateSetModalProps } from './types'
 
 const folderIdSchema = z.string().uuid()
 
-export const CreateSetModal: React.FC<TCreateSetModalProps> = ({ folderId = null, onClose }) => {
+export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
+  folderId = null,
+  studentId,
+  onClose,
+}) => {
   const navigate = useNavigate()
   const createSetMutation = useCreateSet()
   const updateSetMutation = useUpdateSet()
+
+  const studentQuery = useStudent(studentId ?? '')
 
   const parsedFolderId = folderIdSchema.safeParse(folderId ?? undefined)
   const resolvedFolderId = parsedFolderId.success ? parsedFolderId.data : null
@@ -59,5 +63,21 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({ folderId = null
     )
   }
 
-  return <SetSettings onClose={onClose} onSave={handleSave} />
+  if (studentId && studentQuery.isLoading) {
+    return (
+      <PopupLayout onClose={onClose}>
+        <div>Загрузка...</div>
+      </PopupLayout>
+    )
+  }
+
+  return (
+    <SetSettings
+      defaultValues={
+        studentQuery.data?.age != null ? { age: String(studentQuery.data.age) } : undefined
+      }
+      onClose={onClose}
+      onSave={handleSave}
+    />
+  )
 }

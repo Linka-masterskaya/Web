@@ -30,7 +30,6 @@ export {
   type TCreateFolderResponse,
 } from './model/create-folder.schema'
 export {
-  folderSchema,
   foldersResponseSchema,
   type TFolder,
   type TFoldersResponse,

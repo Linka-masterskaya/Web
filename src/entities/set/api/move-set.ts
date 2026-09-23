@@ -1,9 +1,15 @@
+import { apiClient } from '@shared/lib/api'
+
 import { moveSetParamsSchema, type TMoveSetParams } from '../model/move-set.schema'
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+export const moveSet = async (params: TMoveSetParams) => {
+  const { setId, folderId } = moveSetParamsSchema.parse(params)
 
-export const moveSet = async (params: TMoveSetParams): Promise<void> => {
-  moveSetParamsSchema.parse(params)
-
-  await delay(300)
+  return apiClient
+    .post(`packs/${setId}/move`, {
+      json: {
+        folder_id: folderId,
+      },
+    })
+    .json()
 }

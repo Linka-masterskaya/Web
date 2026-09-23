@@ -1,6 +1,7 @@
 import { logoutApi, useAuthStore } from '@entities/auth'
 import { useUserStore } from '@entities/user'
 import { Button } from '@mantine/core'
+import { queryClient } from '@shared/lib/query'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -27,6 +28,7 @@ export const LogoutButton: React.FC<TLogoutButtonProps> = ({ onAfterLogout }) =>
 
     logout()
     resetUser()
+    queryClient.clear()
     onAfterLogout?.()
     navigate(createUrl(routerPath.auth))
   }

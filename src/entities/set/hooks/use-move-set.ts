@@ -1,4 +1,6 @@
+import { folderQueryKeys } from '@entities/folder'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { moveSet } from '../api/move-set'
 import { setQueryKeys } from '../lib/query-keys'
 
@@ -9,8 +11,15 @@ export const useMoveSet = () => {
     mutationFn: moveSet,
     onSuccess: (_data, { setId }) =>
       Promise.all([
-        queryClient.invalidateQueries({ queryKey: setQueryKeys.lists() }),
-        queryClient.invalidateQueries({ queryKey: setQueryKeys.detail(setId) }),
+        queryClient.invalidateQueries({
+          queryKey: setQueryKeys.lists(),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: setQueryKeys.detail(setId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: folderQueryKeys.all,
+        }),
       ]),
   })
 }
