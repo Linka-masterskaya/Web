@@ -32,6 +32,7 @@ export { cloneSetPage } from './lib/clone-set-page'
 export { getSetPageTitle } from './lib/get-set-page-title'
 export { setMutationKeys, setQueryKeys } from './lib/query-keys'
 export {
+  getSequenceElements,
   getSetPageStructure,
   readSetPageAnswers,
   readSetPageCategories,

@@ -2,12 +2,15 @@ import { createStore } from '@shared/lib/store'
 import { changeSetPageType } from '../lib/change-set-page-type'
 import { mergeEditorConfig } from '../lib/merge-editor-config'
 import {
+  getSetPageStructure,
+  moveSequenceCard,
   readSetPageAnswers,
   readSetPageCategories,
   readSetPagePairs,
   readSetPageSequence,
   resizeMatchingPage,
   resizeSetPageStructure,
+  toggleSetPageAnswer,
 } from '../lib/set-page-structure'
 import type { TSet } from './set.schema'
 import type { TSetConfig, TSetPage, TSetPageElement, TSetPageType } from './set-config.schema'
@@ -26,6 +29,9 @@ type TEditorStore = {
   resizeGrid: (pageId: string, rows: number, columns: number) => void
   resizeStructure: (pageId: string, primaryCount: number, secondaryCount?: number) => void
   resizeMatching: (pageId: string, pairCount: number) => void
+  resizeOptions: (pageId: string, count: number) => void
+  toggleAnswer: (pageId: string, cardId: string) => void
+  moveSequence: (pageId: string, cardId: string, direction: -1 | 1) => void
   updateCard: (pageId: string, cardId: string, patch: Partial<TSetPageElement>) => void
 }
 
@@ -40,6 +46,9 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
         return state
       }
       const blocks = state.config.blocks.map((page) => (page.id === pageId ? update(page) : page))
+      if (blocks.every((page, index) => page === state.config?.blocks[index])) {
+        return state
+      }
       return {
         selectedCardId: blocks.some((page) =>
           page.elements.some((card) => card.id === state.selectedCardId),
@@ -162,6 +171,23 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
         return resizeMatchingPage(page, pairCount)
       })
     },
+    resizeOptions: (pageId, count) =>
+      updatePage(pageId, (page) => {
+        const limits = getSetPageStructure(page)
+        if (
+          !['single_choice', 'multi_choice', 'sequence'].includes(page.type) ||
+          !Number.isInteger(count) ||
+          count < limits.primaryMin ||
+          count > limits.primaryMax
+        ) {
+          return page
+        }
+        return resizeSetPageStructure(page, count)
+      }),
+    toggleAnswer: (pageId, cardId) =>
+      updatePage(pageId, (page) => toggleSetPageAnswer(page, cardId)),
+    moveSequence: (pageId, cardId, direction) =>
+      updatePage(pageId, (page) => moveSequenceCard(page, cardId, direction)),
     updateCard: (pageId, cardId, patch) =>
       updatePage(pageId, (page) => ({
         ...page,

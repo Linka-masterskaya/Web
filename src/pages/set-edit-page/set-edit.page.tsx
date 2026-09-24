@@ -1,4 +1,4 @@
-import { readSetPagePairs, useSetEditorStore } from '@entities/set'
+import { getSetPageStructure, readSetPagePairs, useSetEditorStore } from '@entities/set'
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
 import {
   SET_PAGE_TYPE_ICONS,
@@ -18,6 +18,7 @@ import { GridCardImage } from './ui/grid-card-image'
 import { SetEditFeedback } from './ui/set-edit-feedback'
 import { SetEditorDistribution } from './ui/set-editor-distribution'
 import { SetEditorGrid } from './ui/set-editor-grid'
+import { SetEditorOptions } from './ui/set-editor-options'
 
 export const SetEditPage: React.FC = () => {
   const {
@@ -33,6 +34,7 @@ export const SetEditPage: React.FC = () => {
     handleOpenPreview,
     handleStructureChange,
     handleMatchingCountChange,
+    handleOptionsChange,
     handleTypeChange,
     handlePageStructureChange,
     pageStructure,
@@ -102,6 +104,8 @@ export const SetEditPage: React.FC = () => {
     )
   }
 
+  const hasOptions = ['single_choice', 'multi_choice', 'sequence'].includes(activePage.type)
+  const structure = getSetPageStructure(activePage)
   const resolvedSelectedType = selectedType ?? activePage.type
   const pageTypeLabel = SET_PAGE_TYPE_LABELS[resolvedSelectedType]
   const pageTypeIcon = SET_PAGE_TYPE_ICONS[resolvedSelectedType]
@@ -213,6 +217,16 @@ export const SetEditPage: React.FC = () => {
               </div>
             )}
 
+            {hasOptions && (
+              <NumberStepper
+                label={structure.primaryLabel}
+                value={structure.primaryCount}
+                min={structure.primaryMin}
+                max={structure.primaryMax}
+                onChange={handleOptionsChange}
+              />
+            )}
+
             <div className={styles.saveStatus} aria-live="polite">
               {isSaving && <Text className={styles.savePending}>Сохраняем настройки…</Text>}
 
@@ -271,6 +285,7 @@ export const SetEditPage: React.FC = () => {
                 }}
               />
             )}
+            {hasOptions && <SetEditorOptions page={activePage} />}
             {activePage.type === 'categories' && pageStructure?.secondaryCount != null && (
               <SetEditorDistribution
                 page={activePage}
@@ -287,7 +302,8 @@ export const SetEditPage: React.FC = () => {
                 onSelect={editor.selectCard}
               />
             )}
-            {activePage.type !== 'grid' &&
+            {!hasOptions &&
+              activePage.type !== 'grid' &&
               activePage.type !== 'categories' &&
               activePage.type !== 'matching' && (
                 <div className={styles.canvasEmpty}>

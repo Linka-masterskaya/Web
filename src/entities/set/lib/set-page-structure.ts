@@ -240,7 +240,7 @@ export const resizeSetPageStructure = (
       return resizeCategoriesPage(page, primaryCount, secondaryCount ?? 1)
 
     case 'sequence': {
-      const elements = resizeElements(page.elements, primaryCount)
+      const elements = resizeElements(getSequenceElements(page), primaryCount)
 
       return {
         ...page,
@@ -254,5 +254,63 @@ export const resizeSetPageStructure = (
 
     case 'grid':
       return { ...page, elements: resizeElements(page.elements, primaryCount) }
+  }
+}
+
+/** Порядок из API может отличаться от порядка массива elements. */
+export const getSequenceElements = (page: TSetPage): TSetPageElement[] => {
+  const positions = new Map(readSetPageSequence(page).map((item) => [item.element_id, item.order]))
+  return page.elements.toSorted(
+    (a, b) => (positions.get(a.id) ?? Infinity) - (positions.get(b.id) ?? Infinity),
+  )
+}
+
+export const toggleSetPageAnswer = (page: TSetPage, cardId: string): TSetPage => {
+  if (
+    !['single_choice', 'multi_choice'].includes(page.type) ||
+    !page.elements.some((card) => card.id === cardId)
+  ) {
+    return page
+  }
+  const correct = new Set(
+    readSetPageAnswers(page)
+      .filter((answer) => answer.is_correct)
+      .map((answer) => answer.element_id),
+  )
+  // В задании должен оставаться хотя бы один верный ответ.
+  if (page.type === 'multi_choice' && correct.has(cardId) && correct.size === 1) {
+    return page
+  }
+  return {
+    ...page,
+    answers: page.elements.map((card) => ({
+      element_id: card.id,
+      is_correct:
+        page.type === 'single_choice'
+          ? card.id === cardId
+          : card.id === cardId
+            ? !correct.has(card.id)
+            : correct.has(card.id),
+    })),
+  }
+}
+
+export const moveSequenceCard = (page: TSetPage, cardId: string, direction: -1 | 1): TSetPage => {
+  if (page.type !== 'sequence') {
+    return page
+  }
+  const elements = getSequenceElements(page)
+  const index = elements.findIndex((card) => card.id === cardId)
+  const target = index + direction
+  if (index < 0 || target < 0 || target >= elements.length) {
+    return page
+  }
+  const card = elements[index]
+  elements[index] = elements[target]
+  elements[target] = card
+  return {
+    ...page,
+    elements,
+    sequence: elements.map((card, index) => ({ element_id: card.id, order: index + 1 })),
   }
 }

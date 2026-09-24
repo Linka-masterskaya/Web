@@ -164,6 +164,22 @@ export const useSetEditor = () => {
     }
   }
 
+  const handleOptionsChange = (count: number) => {
+    if (!activePage) {
+      return
+    }
+    const apply = () => editor.resizeOptions(activePage.id, count)
+    const removed = activePage.elements.length - count
+    if (removed > 0) {
+      confirmDelete({
+        title: 'Уменьшить количество карточек?',
+        description: `Будут удалены последние карточки: ${removed}. Их содержимое не восстановится при увеличении количества.`,
+        onConfirm: apply,
+      })
+    } else {
+      apply()
+    }
+  }
   const handlePageChange = (index: number) => {
     const page = pages[index - 1]
     if (page) {
@@ -185,6 +201,7 @@ export const useSetEditor = () => {
     handleExit,
     handleOpenPreview,
     handleStructureChange,
+    handleOptionsChange,
     handlePageStructureChange,
     handleMatchingCountChange,
     handleTypeChange,
