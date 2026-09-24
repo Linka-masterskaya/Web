@@ -7,6 +7,7 @@ import { useOpenCopySet } from '@features/copy-set'
 import { useOpenMoveSet } from '@features/move-set'
 import { useOpenPublishSet } from '@features/publish-set'
 import { RenameFolderModal } from '@features/rename-folder'
+import { RenameSetModal } from '@features/rename-set'
 import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
@@ -162,6 +163,23 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
+  const handleRenamePack = (pack: TPackContentItem) => {
+    open({
+      size: 518,
+      padding: 0,
+      radius: 20,
+      withCloseButton: false,
+      content: (
+        <RenameSetModal
+          setId={pack.id}
+          currentTitle={pack.name}
+          onClose={close}
+          onSuccess={refetch}
+        />
+      ),
+    })
+  }
+
   const handleDeleteFolder = (folder: TFolderContentItem) => {
     open({
       size: 361,
@@ -263,6 +281,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       id: 'move',
       label: 'Переместить',
       onClick: handleMovePack,
+    },
+    {
+      id: 'rename',
+      label: 'Переименовать',
+      onClick: handleRenamePack,
     },
     {
       id: 'duplicate',
