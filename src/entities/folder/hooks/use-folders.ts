@@ -1,3 +1,4 @@
+import { getIsAuth } from '@entities/auth'
 import { useQuery } from '@tanstack/react-query'
 
 import { getFolders } from '../api/get-folders'
@@ -6,17 +7,20 @@ import type { TSection } from '../model/content-item.schema'
 import type { TFolder } from '../model/folder.schema'
 
 const FOLDERS_STALE_TIME_MS = 60_000
+const FOLDERS_LIMIT = 100
 
-const SECTIONS: TSection[] = ['library', 'my', 'students']
+/** Целевые разделы для перемещения набора (библиотека недоступна как destination) */
+const MOVE_TARGET_SECTIONS: TSection[] = ['my', 'students']
 
 const getFoldersWithChildren = async (section: TSection): Promise<TFolder[]> => {
-  const rootFolders = await getFolders({ section })
+  const rootFolders = await getFolders({ section, limit: FOLDERS_LIMIT })
 
   const children = await Promise.all(
     rootFolders.map((folder) =>
       getFolders({
         section,
         parentId: folder.id,
+        limit: FOLDERS_LIMIT,
       }),
     ),
   )
@@ -24,9 +28,9 @@ const getFoldersWithChildren = async (section: TSection): Promise<TFolder[]> => 
   return [...rootFolders, ...children.flat()]
 }
 
-const getAllFolders = async (): Promise<TFolder[]> => {
+const getMoveTargetFolders = async (): Promise<TFolder[]> => {
   const foldersBySection = await Promise.all(
-    SECTIONS.map((section) => getFoldersWithChildren(section)),
+    MOVE_TARGET_SECTIONS.map((section) => getFoldersWithChildren(section)),
   )
 
   return foldersBySection.flat()
@@ -35,6 +39,7 @@ const getAllFolders = async (): Promise<TFolder[]> => {
 export const useFolders = () =>
   useQuery({
     queryKey: folderQueryKeys.list(),
-    queryFn: getAllFolders,
+    queryFn: getMoveTargetFolders,
     staleTime: FOLDERS_STALE_TIME_MS,
+    enabled: getIsAuth(),
   })

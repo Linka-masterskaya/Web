@@ -17,9 +17,7 @@ export const MoveSetModal: React.FC<TMoveSetModalProps> = ({ setId, onClose, onS
   const folders = foldersQuery.data ?? []
   const currentFolderId = setQuery.data?.folderId
 
-  const availableFolders = folders.filter(
-    (folder) => folder.section !== 'library' && folder.id !== currentFolderId,
-  )
+  const availableFolders = folders.filter((folder) => folder.id !== currentFolderId)
 
   const normalizedSearch = search.trim().toLocaleLowerCase('ru')
   const visibleFolders = availableFolders.filter((folder) =>
