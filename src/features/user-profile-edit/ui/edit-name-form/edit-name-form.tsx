@@ -4,7 +4,7 @@ import {
   type TChangeUserNameFormValues,
 } from '@entities/user'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ActionIcon, Button, Stack, TextInput } from '@mantine/core'
+import { ActionIcon, Button, Stack, Text, TextInput } from '@mantine/core'
 import { Icon } from '@shared/ui/icon'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
@@ -18,6 +18,8 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
   isLoading,
   nameViewMode,
   onEditNameClick,
+  submitError,
+  onFieldChange,
 }) => {
   const isViewMode = nameViewMode === 'view'
 
@@ -50,8 +52,13 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} noValidate style={{ width: '100%' }}>
       <Stack gap="16px">
+        {submitError && (
+          <Text c="red.6" size="sm" role="alert">
+            {submitError}
+          </Text>
+        )}
         <TextInput
-          {...register('name')}
+          {...register('name', { onChange: onFieldChange })}
           type="text"
           placeholder="Ваше имя"
           readOnly={isViewMode}

@@ -2,9 +2,11 @@ export { createFolder } from './api/create-folder'
 export { deleteFolder } from './api/delete-folder'
 export { getFolders } from './api/get-folders'
 export { getSectionContents } from './api/get-section-contents'
+export { renameFolder } from './api/rename-folder'
 export { useCreateFolder } from './hooks/use-create-folder'
 export { useDeleteFolder } from './hooks/use-delete-folder'
 export { useFolders } from './hooks/use-folders'
+export { useRenameFolder } from './hooks/use-rename-folder'
 export { useSectionContents } from './hooks/use-section-contents'
 export { useStudentFolder } from './hooks/use-student-folder'
 export {
@@ -34,3 +36,9 @@ export {
   type TFolder,
   type TFoldersResponse,
 } from './model/folder.schema'
+export {
+  renameFolderParamsSchema,
+  renameFolderResponseSchema,
+  type TRenameFolderParams,
+  type TRenameFolderResponse,
+} from './model/rename-folder.schema'

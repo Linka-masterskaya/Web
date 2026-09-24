@@ -3,6 +3,7 @@ import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/s
 import { useDeleteSet, useDuplicateSet } from '@entities/set'
 import { ConfirmDelete } from '@features/confirm-delete'
 import { useOpenMoveSet } from '@features/move-set'
+import { RenameFolderModal } from '@features/rename-folder'
 import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
@@ -141,6 +142,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
+  const handleRenameFolder = (folder: TFolderContentItem) => {
+    open({
+      size: 518,
+      padding: 0,
+      radius: 20,
+      withCloseButton: false,
+      content: <RenameFolderModal folderId={folder.id} currentName={folder.name} onClose={close} />,
+    })
+  }
+
   const handleDeleteFolder = (folder: TFolderContentItem) => {
     open({
       size: 361,
@@ -209,6 +220,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] =
     section === 'my'
       ? [
+          {
+            id: 'rename',
+            label: 'Переименовать',
+            onClick: handleRenameFolder,
+          },
           {
             id: 'delete',
             label: 'Удалить',
