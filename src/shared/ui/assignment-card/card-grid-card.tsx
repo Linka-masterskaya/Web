@@ -22,11 +22,10 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
       className={clsx(
         styles.card,
         active && styles.cardActive,
-        cardType === 'space' && styles.cardSpace,
       )}
       onClick={onClick}
       aria-pressed={indicator?.type === 'check' ? indicator.selected : active}
-      aria-label={ariaLabel ?? title ?? 'Карточка'}
+      aria-label={ariaLabel ?? title ?? (cardType === 'space' ? 'Пробел' : 'Карточка')}
     >
       {cardType === 'normal' && (
         <span className={styles.cardMedia}>
@@ -40,6 +39,8 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
       )}
 
       {cardType === 'text' && title && <FitText text={title} />}
+
+      {cardType === 'space' && <FitText text="␣" />}
 
       {cardType === 'normal' && title && <span className={styles.cardTitle}>{title}</span>}
 
