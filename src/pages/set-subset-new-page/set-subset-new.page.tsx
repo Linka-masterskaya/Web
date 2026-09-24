@@ -1,14 +1,16 @@
-import { type TSetPageType, useCreateSetPage } from '@entities/set'
-import { SetPageTypeForm } from '@features/set-page-type-form'
-import { Button, Stack, Text } from '@mantine/core'
+import { useCreateSetPage } from '@entities/set'
+import { Button, Center, Group, Loader, Stack, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
-import { useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 
 import styles from './set-subset-new-page.module.scss'
 
 const setIdSchema = z.string().uuid()
+
+/** Защита от двойного create в React Strict Mode. */
+const creatingSetIds = new Set<string>()
 
 export const SetSubsetNewPage: React.FC = () => {
   const navigate = useNavigate()
@@ -17,45 +19,52 @@ export const SetSubsetNewPage: React.FC = () => {
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
 
   const createPageMutation = useCreateSetPage(resolvedSetId)
-  const [selectedType, setSelectedType] = useState<TSetPageType>('grid')
+  const { mutate, isError, reset } = createPageMutation
+  const didStartRef = useRef(false)
 
-  const handleBack = () => {
-    if (!parsedSetId.success) {
-      navigate(createUrl(routerPath.dashboardSets))
+  const openCreatedPage = (set: { pages: { id: string }[] }) => {
+    const createdPage = set.pages.at(-1)
+
+    if (!createdPage) {
+      navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }), {
+        replace: true,
+      })
       return
     }
 
-    navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
+    navigate(
+      createUrl(routerPath.dashboardSubsetIdEdit, {
+        setId: resolvedSetId,
+        subsetId: createdPage.id,
+      }),
+      { replace: true },
+    )
   }
 
-  const handleTypeChange = (value: TSetPageType) => {
-    setSelectedType(value)
-    createPageMutation.reset()
-  }
-
-  const handleCreate = () => {
-    if (!parsedSetId.success || createPageMutation.isPending) {
+  const createPage = () => {
+    if (!parsedSetId.success || creatingSetIds.has(resolvedSetId)) {
       return
     }
 
-    createPageMutation.mutate(selectedType, {
-      onSuccess: (set) => {
-        const createdPage = set.pages.at(-1)
-
-        if (!createdPage) {
-          navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }))
-          return
-        }
-
-        navigate(
-          createUrl(routerPath.dashboardSubsetIdEdit, {
-            setId: resolvedSetId,
-            subsetId: createdPage.id,
-          }),
-        )
+    creatingSetIds.add(resolvedSetId)
+    mutate('grid', {
+      onSuccess: openCreatedPage,
+      onSettled: () => {
+        creatingSetIds.delete(resolvedSetId)
       },
     })
   }
+
+  useEffect(() => {
+    if (!parsedSetId.success || didStartRef.current) {
+      return
+    }
+
+    didStartRef.current = true
+    createPage()
+    // Создание запускаем один раз при входе на маршрут.
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional mount-only create
+  }, [parsedSetId.success, resolvedSetId])
 
   if (!parsedSetId.success) {
     return (
@@ -72,21 +81,43 @@ export const SetSubsetNewPage: React.FC = () => {
     )
   }
 
+  if (isError) {
+    return (
+      <section className={styles.page}>
+        <Stack gap="md" align="flex-start">
+          <Text c="red.6" role="alert">
+            Не удалось создать страницу. Попробуйте ещё раз.
+          </Text>
+          <Group>
+            <Button
+              variant="outline"
+              onClick={() =>
+                navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }), {
+                  replace: true,
+                })
+              }
+            >
+              К набору
+            </Button>
+            <Button
+              onClick={() => {
+                reset()
+                createPage()
+              }}
+            >
+              Повторить
+            </Button>
+          </Group>
+        </Stack>
+      </section>
+    )
+  }
+
   return (
     <section className={styles.page}>
-      <SetPageTypeForm
-        title="Новая страница"
-        description="Выберите тип страницы и создайте её в наборе."
-        value={selectedType}
-        onChange={handleTypeChange}
-        onCancel={handleBack}
-        onSubmit={handleCreate}
-        submitLabel="Создать"
-        isSubmitting={createPageMutation.isPending}
-        errorMessage={
-          createPageMutation.isError ? 'Не удалось создать страницу. Попробуйте ещё раз.' : null
-        }
-      />
+      <Center className={styles.loader}>
+        <Loader aria-label="Создание страницы" />
+      </Center>
     </section>
   )
 }

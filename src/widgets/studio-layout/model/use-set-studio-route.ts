@@ -46,7 +46,10 @@ export const useSetStudioRoute = () => {
     isSetEditor: location.pathname === setEditorUrl,
     isSubsetEditor: location.pathname === subsetEditorUrl,
     isSubsetNew: location.pathname === subsetNewUrl,
-    isEditorRoute: location.pathname === setEditorUrl || location.pathname === subsetEditorUrl,
+    isEditorRoute:
+      location.pathname === setEditorUrl ||
+      location.pathname === subsetEditorUrl ||
+      location.pathname === subsetNewUrl,
     subsetEditorUrl,
     isSubsetPreview: location.pathname === subsetPreviewUrl,
   }

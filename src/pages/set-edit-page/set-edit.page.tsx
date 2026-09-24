@@ -40,6 +40,7 @@ export const SetEditPage: React.FC = () => {
     pageStructure,
     hasInvalidRoute,
     hasMissingPage,
+    isCreatingPage,
     isSaving,
     selectedType,
     setQuery,
@@ -55,10 +56,10 @@ export const SetEditPage: React.FC = () => {
     )
   }
 
-  if (setQuery.isLoading) {
+  if (setQuery.isLoading || isCreatingPage) {
     return (
       <div className={styles.feedback}>
-        <Loader aria-label="Загрузка редактора" />
+        <Loader aria-label={isCreatingPage ? 'Создание страницы' : 'Загрузка редактора'} />
       </div>
     )
   }
@@ -149,7 +150,6 @@ export const SetEditPage: React.FC = () => {
             value={resolvedSelectedType}
             options={[...SET_PAGE_TYPE_OPTIONS]}
             onChange={handleTypeChange}
-            disabled={isSaving}
           />
         }
         leftSlot={
@@ -158,7 +158,6 @@ export const SetEditPage: React.FC = () => {
               value={resolvedSelectedType}
               options={[...SET_PAGE_TYPE_OPTIONS]}
               onChange={handleTypeChange}
-              disabled={isSaving}
             />
 
             {activePage.type === 'grid' && (
@@ -186,7 +185,6 @@ export const SetEditPage: React.FC = () => {
                   value={pageStructure.primaryCount}
                   min={pageStructure.primaryMin}
                   max={pageStructure.primaryMax}
-                  disabled={isSaving}
                   onChange={(value) =>
                     handlePageStructureChange(value, pageStructure.secondaryCount)
                   }
@@ -197,7 +195,6 @@ export const SetEditPage: React.FC = () => {
                     value={pageStructure.secondaryCount}
                     min={pageStructure.secondaryMin ?? 1}
                     max={pageStructure.secondaryMax ?? 100}
-                    disabled={isSaving}
                     onChange={(value) =>
                       handlePageStructureChange(pageStructure.primaryCount, value)
                     }

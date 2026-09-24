@@ -233,7 +233,7 @@ export const router = createBrowserRouter([
                               },
                               {
                                 path: routeSegments.new,
-                                lazy: pageLazyLoad(() => import('@pages/set-subset-new-page')),
+                                lazy: pageLazyLoad(() => import('@pages/set-edit-page')),
                               },
                               {
                                 path: routeParams.subsetId,

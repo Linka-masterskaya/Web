@@ -68,7 +68,7 @@ export const SetStudioTitle: React.FC = () => {
       navigate(subsetEditorUrl)
       return
     }
-    if ((isSetEditor || isSubsetEditor) && !(await saveEditor())) {
+    if ((isSetEditor || isSubsetEditor || isSubsetNew) && !(await saveEditor())) {
       return
     }
     if (setOverviewUrl && !isSetOverview) {

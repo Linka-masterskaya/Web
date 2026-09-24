@@ -1,7 +1,12 @@
 .page {
+  display: flex;
+  flex: 1;
   width: 100%;
+  min-height: 0;
 }
 
-.content {
-  max-width: 420px;
+.loader {
+  flex: 1;
+  width: 100%;
+  min-height: 240px;
 }
