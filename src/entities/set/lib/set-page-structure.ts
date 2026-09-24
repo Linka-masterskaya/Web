@@ -24,7 +24,7 @@ export type TSetPageStructure = {
 const createTextElement = (): TSetPageElement => ({
   id: crypto.randomUUID(),
   kind: 'text',
-  card_type: 'text',
+  card_type: 'normal',
   value: '',
 })
 

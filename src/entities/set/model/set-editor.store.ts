@@ -100,7 +100,7 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
       updatePage(pageId, (page) => {
         const elements = page.elements.slice(0, rows * columns)
         while (elements.length < rows * columns) {
-          elements.push({ id: crypto.randomUUID(), kind: 'text', value: '' })
+          elements.push({ id: crypto.randomUUID(), kind: 'text', card_type: 'normal', value: '' })
         }
         const ids = new Set(elements.map((card) => card.id))
         return {

@@ -17,7 +17,7 @@ const elementPayloadSchema = z
     speech_text: z.string().optional(),
   })
   .transform((card) => {
-    const kind = card.card_type ?? (card.kind === 'text' ? 'text' : 'normal')
+    const kind = card.card_type ?? 'normal'
     if (kind === 'empty' || kind === 'space') {
       return { id: card.id, kind }
     }

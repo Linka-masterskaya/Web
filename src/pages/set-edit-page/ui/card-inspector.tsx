@@ -36,6 +36,7 @@ export const CardInspector: React.FC<{ pageId: string; card: TSetPageElement }> 
             }
             update({
               kind: 'image',
+              card_type: 'normal',
               source_picture_id: imported.sourcePictureId,
               media_id: null,
               media_url: imported.contentUrl,

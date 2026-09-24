@@ -1,27 +1,36 @@
 import { apiClient } from '@shared/lib/api'
+import { z } from 'zod'
 import type { TEditUserProfilePasswordFormValues } from '../model/change-user-password-form.schema'
 import { useUserStore } from '../model/user-store'
 
-export const DEMO_USER_PROFILE = {
-  name: 'Татьяна Т',
-  email: 'mail@email.ru',
-  avatarSrc: null,
-} as const
+const profileResponseSchema = z
+  .object({
+    email: z.string().email(),
+    display_name: z.string().nullable().optional(),
+    avatar_url: z.string().nullable().optional(),
+  })
+  .transform((profile) => ({
+    name: profile.display_name ?? null,
+    email: profile.email,
+    avatarSrc: profile.avatar_url ?? null,
+  }))
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-
-export const getUserProfile = async (): Promise<typeof DEMO_USER_PROFILE> => {
-  await delay(500)
-
-  useUserStore.getState().setUser(DEMO_USER_PROFILE)
-
-  return DEMO_USER_PROFILE
+export const getUserProfile = async () => {
+  const profile = await apiClient.get('profile/me').json(profileResponseSchema)
+  useUserStore.getState().setUser(profile)
+  return profile
 }
 
 export const changeUserName = async (name: string): Promise<void> => {
-  await delay(500)
+  const profile = await apiClient
+    .patch('profile/me', {
+      json: {
+        display_name: name,
+      },
+    })
+    .json(profileResponseSchema)
 
-  useUserStore.getState().setName(name)
+  useUserStore.getState().setUser(profile)
 }
 
 export const changeUserPassword = async (
