@@ -15,6 +15,7 @@ export const folderQueryKeys = {
     query,
     age,
     difficulty,
+    isFavorite,
   }: TGetSectionContentsParams) =>
     [
       ...folderQueryKeys.all,
@@ -28,5 +29,6 @@ export const folderQueryKeys = {
       query ?? null,
       age ?? null,
       difficulty ?? null,
+      isFavorite ?? null,
     ] as const,
 }

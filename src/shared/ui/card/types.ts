@@ -18,6 +18,11 @@ type TCardImageVariant = {
   imageAlt: string
 }
 
+export type TCardFavoriteProps = {
+  isFavorite: boolean
+  onToggle: () => void
+}
+
 export type TCardProps = {
   className?: string
   /** Растягивает карточку на ширину колонки с сохранением пропорций медиа-блока */
@@ -25,6 +30,7 @@ export type TCardProps = {
   label: string
   level?: TCardLevel
   age?: number
+  favorite?: TCardFavoriteProps
   action: TCardAction
   onContextMenu?: MouseEventHandler<HTMLElement>
 } & (TCardIconVariant | TCardImageVariant)

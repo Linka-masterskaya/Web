@@ -6,14 +6,14 @@ import {
   type TSectionContentsResponse,
 } from '../model/content-item.schema'
 
-/** GET /sections/{section}/contents — папки и наборы узла дерева. Фильтры: query, age, difficulty. */
+/** GET /sections/{section}/contents — папки и наборы узла дерева. Фильтры: query, age, difficulty, is_favorite. */
 export const getSectionContents = async (
   params: TGetSectionContentsParams,
 ): Promise<TSectionContentsResponse> => {
-  const { section, parentId, limit, offset, sort, order, query, age, difficulty } =
+  const { section, parentId, limit, offset, sort, order, query, age, difficulty, isFavorite } =
     getSectionContentsParamsSchema.parse(params)
 
-  const searchParams: Record<string, string | number> = {}
+  const searchParams: Record<string, string | number | boolean> = {}
 
   if (parentId) {
     searchParams.parent_id = parentId
@@ -45,6 +45,10 @@ export const getSectionContents = async (
 
   if (difficulty) {
     searchParams.difficulty = difficulty
+  }
+
+  if (isFavorite) {
+    searchParams.is_favorite = true
   }
 
   return apiClient

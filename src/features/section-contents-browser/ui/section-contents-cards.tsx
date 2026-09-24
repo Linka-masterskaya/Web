@@ -3,6 +3,8 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
+// TODO: вернуть после бэкенда is_favorite на contents
+// import { useToggleSetFavorite } from '@entities/set'
 import { Blockquote, ScrollArea } from '@mantine/core'
 import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { Card } from '@shared/ui/card'
@@ -58,6 +60,8 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
 }) => {
   const contextMenu = useContextMenu<TPackContentItem>()
   const folderContextMenu = useContextMenu<TFolderContentItem>()
+  // TODO: вернуть после бэкенда is_favorite на contents
+  // const { mutate: toggleFavorite } = useToggleSetFavorite()
 
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
@@ -109,6 +113,8 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                     }
                   : undefined
 
+            const isPack = isPackContentItem(item)
+
             return (
               <Card
                 key={`${item.type}:${item.id}`}
@@ -119,8 +125,22 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                 action={{ type: 'function', onClick: handleClick }}
                 className={gridStyles.card}
                 onContextMenu={onContextMenu}
-                level={isPackContentItem(item) ? (item.difficulty ?? undefined) : undefined}
-                age={isPackContentItem(item) ? (item.age ?? undefined) : undefined}
+                level={isPack ? (item.difficulty ?? undefined) : undefined}
+                age={isPack ? (item.age ?? undefined) : undefined}
+                // TODO: вернуть после бэкенда is_favorite на contents
+                // favorite={
+                //   isPack
+                //     ? {
+                //         isFavorite: item.isFavorite ?? false,
+                //         onToggle: () => {
+                //           toggleFavorite({
+                //             setId: item.id,
+                //             nextFavorite: !(item.isFavorite ?? false),
+                //           })
+                //         },
+                //       }
+                //     : undefined
+                // }
               />
             )
           })}

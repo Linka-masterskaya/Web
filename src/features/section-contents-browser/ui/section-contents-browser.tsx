@@ -46,6 +46,7 @@ export type TSectionContentsBrowserProps = {
 }
 
 const DEFAULT_DASHBOARD_HREF = '/'
+const FAVORITES_EMPTY_TEXT = 'Нет избранных наборов'
 
 export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   section,
@@ -94,6 +95,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   })
 
   const items = data?.items ?? []
+  const emptyText = filters.isFavorite ? FAVORITES_EMPTY_TEXT : config.emptyText
 
   const handleOpenFolder = (folder: TFolderContentItem) => {
     openFolder(folder)
@@ -360,7 +362,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           <SectionContentsCards
             items={items}
             backAction={backAction}
-            emptyText={config.emptyText}
+            emptyText={emptyText}
             onOpenFolder={handleOpenFolder}
             onOpenPack={handleOpenPack}
             packContextMenuItems={packContextMenuItems}

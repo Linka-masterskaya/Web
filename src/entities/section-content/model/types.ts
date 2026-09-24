@@ -16,6 +16,7 @@ export type TSectionContentItem = {
   published: boolean | undefined
   age: number | null
   difficulty: 'easy' | 'medium' | 'hard' | null
+  isFavorite?: boolean
   updatedAt: string
 }
 

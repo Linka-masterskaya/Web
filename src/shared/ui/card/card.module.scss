@@ -21,6 +21,42 @@
   }
 }
 
+.cardWithFavorite {
+  position: relative;
+  cursor: default;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--mantine-shadow-sm);
+  }
+
+  &:has(.main:hover),
+  &:has(.main:focus-visible) {
+    outline: 2px solid rgba(62, 135, 255, 0.75);
+    box-shadow: none;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-lg);
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  color: inherit;
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
 .fill {
   width: 100%;
   max-width: 100%;
@@ -73,13 +109,76 @@
 }
 
 .label {
+  display: block;
   overflow: hidden;
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
+  max-width: 100%;
   color: var(--mantine-color-black);
   font-size: var(--mantine-font-size-md);
   font-weight: 600;
   line-height: 24px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.meta {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  min-width: 0;
+}
+
+.cardWithFavorite .meta {
+  position: absolute;
+  right: var(--mantine-spacing-md);
+  bottom: var(--mantine-spacing-lg);
+  z-index: 1;
+}
+
+.metaSpacer {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.favorite,
+.favoritePlaceholder {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+}
+
+.favorite {
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--mantine-color-black);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 1.5px solid var(--mantine-color-blue-4);
+    outline-offset: 2px;
+  }
+}
+
+.favoriteIcon {
+  fill: transparent;
+  transition: fill 120ms ease;
+}
+
+.favoriteActive {
+  color: var(--mantine-color-blue-4);
+}
+
+.favoriteActive .favoriteIcon {
+  fill: currentColor;
 }
