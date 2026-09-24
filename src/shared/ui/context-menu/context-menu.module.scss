@@ -4,3 +4,26 @@
   height: 1px;
   pointer-events: none;
 }
+
+/* У Mantine Menu.Dropdown нет флекс-контейнера, поэтому зазор задаём сами. */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: max-content;
+}
+
+/*
+  Menu.Item — это <button>: Mantine центрирует в нём текст и задаёт
+  padding-inline: var(--mantine-spacing-sm). Селектор из двух классов
+  перебивает стили Mantine без !important.
+*/
+.dropdown .item {
+  text-align: start;
+  padding-inline: 20px;
+}
+
+/* Зазор между пунктами даёт .dropdown, поэтому у разделителя свои отступы убираем. */
+.dropdown .divider {
+  margin: 0;
+}

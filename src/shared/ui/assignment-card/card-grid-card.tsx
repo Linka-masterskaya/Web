@@ -19,10 +19,7 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
   return (
     <button
       type="button"
-      className={clsx(
-        styles.card,
-        active && styles.cardActive,
-      )}
+      className={clsx(styles.card, active && styles.cardActive)}
       onClick={onClick}
       aria-pressed={indicator?.type === 'check' ? indicator.selected : active}
       aria-label={ariaLabel ?? title ?? (cardType === 'space' ? 'Пробел' : 'Карточка')}

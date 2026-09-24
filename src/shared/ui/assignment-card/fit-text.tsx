@@ -22,12 +22,19 @@ export const FitText: React.FC<TFitTextProps> = ({
   useLayoutEffect(() => {
     const container = containerRef.current
     const textEl = textRef.current
-    if (!container || !textEl) return
+    if (!container || !textEl) {
+      return
+    }
 
     const fit = () => {
+      // Явно учитываем `text`: children обновляет React, размер нужно пересчитать.
+      textEl.textContent = text
+
       const maxWidth = container.clientWidth
       const maxHeight = container.clientHeight * heightRatio
-      if (maxWidth <= 0 || maxHeight <= 0) return
+      if (maxWidth <= 0 || maxHeight <= 0) {
+        return
+      }
 
       let low = minFontSize
       let high = maxFontSize

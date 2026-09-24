@@ -82,10 +82,7 @@ const GridPreview: React.FC<{
   const columns = getNearSquareColumns(items.length)
 
   return (
-    <span
-      className={styles.gridLayout}
-      style={{ '--preview-columns': columns } as CSSProperties}
-    >
+    <span className={styles.gridLayout} style={{ '--preview-columns': columns } as CSSProperties}>
       {items.map((element, index) => (
         <span key={element.id} className={styles.gridItem}>
           <PreviewElement element={element} />

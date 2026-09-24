@@ -56,17 +56,8 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
   packContextMenuItems = [],
   folderContextMenuItems = [],
 }) => {
-  const contextMenu = useContextMenu<TPackContentItem>({
-    width: 235,
-    estimatedHeight: 130,
-    viewportMargin: 8,
-  })
-
-  const folderContextMenu = useContextMenu<TFolderContentItem>({
-    width: 235,
-    estimatedHeight: 130,
-    viewportMargin: 8,
-  })
+  const contextMenu = useContextMenu<TPackContentItem>()
+  const folderContextMenu = useContextMenu<TFolderContentItem>()
 
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
