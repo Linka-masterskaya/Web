@@ -1,0 +1,16 @@
+.wrapper {
+  gap: 24px;
+  box-sizing: border-box;
+  padding: 8px 40px 40px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.submitButton {
+  align-self: center;
+  width: min(240px, 100%);
+}
