@@ -5,6 +5,7 @@ const initialState: TUserState = {
   name: null,
   email: null,
   avatarSrc: null,
+  role: null,
 }
 
 export const useUserStore = createStore<TUserStore>('UserStore')((set) => ({

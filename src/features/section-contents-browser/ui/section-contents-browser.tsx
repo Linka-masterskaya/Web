@@ -1,8 +1,11 @@
 import { parseSectionContentsFilters, useDeleteFolder, useSectionContents } from '@entities/folder'
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
-import { useDeleteSet, useDuplicateSet } from '@entities/set'
+import { useDeleteSet, useDuplicateSet, useUnpublishSet } from '@entities/set'
+import { isHeadDefectologist, useUserStore } from '@entities/user'
 import { ConfirmDelete } from '@features/confirm-delete'
+import { useOpenCopySet } from '@features/copy-set'
 import { useOpenMoveSet } from '@features/move-set'
+import { useOpenPublishSet } from '@features/publish-set'
 import { RenameFolderModal } from '@features/rename-folder'
 import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
@@ -55,10 +58,17 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const { open, close } = useModal()
   const openMoveSet = useOpenMoveSet()
 
+  // Редактирование Библиотеки (публикация, снятие публикации) доступно главному методисту
+  const role = useUserStore((state) => state.role)
+  const canEditLibrary = isHeadDefectologist(role)
+  const openPublishSet = useOpenPublishSet()
+  const openCopySet = useOpenCopySet()
+
   const [actionError, setActionError] = useState<string | null>(null)
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
   const { mutateAsync: deleteSet, isPending: isDeletePending } = useDeleteSet()
   const { mutateAsync: deleteFolder } = useDeleteFolder()
+  const { mutateAsync: unpublishSet, isPending: isUnpublishPending } = useUnpublishSet()
 
   const { currentFolderId, isRoot, isInitialFolder, openFolder, goBack, goToRoot } =
     useFolderNavigation(initialFolderId)
@@ -174,6 +184,23 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
+  const handleCopyPack = (pack: TPackContentItem) => {
+    openCopySet({ setId: pack.id })
+  }
+
+  const handlePublishPack = (pack: TPackContentItem) => {
+    openPublishSet({ setId: pack.id })
+  }
+
+  const handleUnpublishPack = async (pack: TPackContentItem) => {
+    try {
+      setActionError(null)
+      await unpublishSet({ setId: pack.id })
+    } catch (error) {
+      setActionError(await getApiErrorMessage(error))
+    }
+  }
+
   const backAction =
     isRoot || isInitialFolder
       ? ({
@@ -185,54 +212,110 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           onClick: goBack,
         } as const)
 
-  const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
-    section === 'library'
-      ? []
-      : [
+  const isPackActionPending = isDuplicatePending || isDeletePending || isUnpublishPending
+
+  // Публикация — только в «Мои наборы» и только у главного методиста
+  const canPublishFromSection = canEditLibrary && section === 'my'
+
+  const publicationContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
+    canPublishFromSection
+      ? [
           {
-            id: 'move',
-            label: 'Переместить',
-            onClick: handleMovePack,
+            id: 'publish',
+            label: 'Опубликовать',
+            disabled: (pack) => isPackActionPending || pack.published === true,
+            onClick: handlePublishPack,
           },
           {
-            id: 'duplicate',
-            label: 'Дублировать',
-            disabled: isDuplicatePending || isDeletePending,
+            id: 'unpublish',
+            label: 'Снять публикацию',
+            disabled: (pack) => isPackActionPending || pack.published !== true,
             onClick: (pack) => {
-              void handleDuplicatePack(pack)
+              void handleUnpublishPack(pack)
             },
           },
+        ]
+      : []
+
+  const libraryPackContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] = [
+    {
+      id: 'copy',
+      label: 'Скопировать в мои папки',
+      disabled: isPackActionPending,
+      onClick: handleCopyPack,
+    },
+    ...(canEditLibrary
+      ? [
           {
-            id: 'share',
-            label: 'Поделиться',
-            disabled: isDuplicatePending || isDeletePending,
-            onClick: handleSharePack,
-          },
-          {
-            id: 'delete',
-            label: 'Удалить',
-            color: 'red',
-            disabled: isDuplicatePending || isDeletePending,
-            onClick: handleDeletePack,
+            id: 'unpublish',
+            label: 'Снять публикацию',
+            disabled: isPackActionPending,
+            onClick: (pack: TPackContentItem) => {
+              void handleUnpublishPack(pack)
+            },
           },
         ]
+      : []),
+  ]
 
-  const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] =
-    section === 'my'
+  const ownPackContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] = [
+    {
+      id: 'move',
+      label: 'Переместить',
+      onClick: handleMovePack,
+    },
+    {
+      id: 'duplicate',
+      label: 'Дублировать',
+      disabled: isPackActionPending,
+      onClick: (pack) => {
+        void handleDuplicatePack(pack)
+      },
+    },
+    {
+      id: 'share',
+      label: 'Поделиться',
+      disabled: isPackActionPending,
+      onClick: handleSharePack,
+    },
+    ...publicationContextMenuItems,
+    {
+      id: 'delete',
+      label: 'Удалить',
+      color: 'red',
+      disabled: isPackActionPending,
+      onClick: handleDeletePack,
+    },
+  ]
+
+  const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
+    section === 'library' ? libraryPackContextMenuItems : ownPackContextMenuItems
+
+  // Переименование папки — только в «Моих наборах».
+  // Удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
+  const canDeleteFolder = section === 'my' || (section === 'library' && canEditLibrary)
+
+  const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] = [
+    ...(section === 'my'
       ? [
           {
             id: 'rename',
             label: 'Переименовать',
             onClick: handleRenameFolder,
           },
+        ]
+      : []),
+    ...(canDeleteFolder
+      ? [
           {
             id: 'delete',
             label: 'Удалить',
-            color: 'red',
+            color: 'red' as const,
             onClick: handleDeleteFolder,
           },
         ]
-      : []
+      : []),
+  ]
 
   return (
     <section className={styles.root}>

@@ -1,9 +1,10 @@
-import type { TGetSectionContentsParams } from '../model/content-item.schema'
+import type { TGetSectionContentsParams, TSection } from '../model/content-item.schema'
 
 export const folderQueryKeys = {
   all: ['folders'] as const,
   lists: () => [...folderQueryKeys.all, 'list'] as const,
   list: () => [...folderQueryKeys.lists()] as const,
+  sectionList: (section: TSection) => [...folderQueryKeys.lists(), 'section', section] as const,
   sectionContents: ({
     section,
     parentId,

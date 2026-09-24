@@ -3,6 +3,7 @@ import { Router } from '@app/providers/router'
 import { ThemeProvider } from '@app/providers/theme'
 import { useAuthStore } from '@entities/auth'
 import { TtsInitializer } from '@entities/tts'
+import { UserProfileInitializer } from '@entities/user'
 import {
   setApiAccessTokenProvider,
   setApiAccessTokenUpdateHandler,
@@ -32,6 +33,7 @@ createRoot(root).render(
       <QueryProvider>
         <ThemeProvider>
           <TtsInitializer />
+          <UserProfileInitializer />
           <Router />
         </ThemeProvider>
       </QueryProvider>
