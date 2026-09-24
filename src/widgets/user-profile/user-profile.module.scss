@@ -1,9 +1,9 @@
 .container {
 	position: relative;
 	box-sizing: border-box;
-	width: 518px;
-	max-width: min(518px, calc(100vw - 32px));
-	padding: 84px 92px 40px;
+	width: fit-content;
+	max-width: calc(100vw - 32px);
+	padding: 84px 40px 40px;
 	border: 1px solid #eeeff1;
 	border-radius: 20px;
 	background-color: #ffffff;
@@ -11,7 +11,9 @@
 }
 
 .content {
-	width: 100%;
+	width: 332px;
+	min-width: 200px;
+	max-width: 100%;
 }
 
 .closeButton {
