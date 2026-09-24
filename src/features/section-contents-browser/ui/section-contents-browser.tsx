@@ -291,22 +291,31 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
     section === 'library' ? libraryPackContextMenuItems : ownPackContextMenuItems
 
-  const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] =
-    section === 'my'
+  // Переименование папки — только в «Моих наборах».
+  // Удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
+  const canDeleteFolder = section === 'my' || (section === 'library' && canEditLibrary)
+
+  const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] = [
+    ...(section === 'my'
       ? [
           {
             id: 'rename',
             label: 'Переименовать',
             onClick: handleRenameFolder,
           },
+        ]
+      : []),
+    ...(canDeleteFolder
+      ? [
           {
             id: 'delete',
             label: 'Удалить',
-            color: 'red',
+            color: 'red' as const,
             onClick: handleDeleteFolder,
           },
         ]
-      : []
+      : []),
+  ]
 
   return (
     <section className={styles.root}>
