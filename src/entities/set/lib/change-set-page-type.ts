@@ -17,7 +17,8 @@ export const changeSetPageType = (page: TSetPage, type: TSetPageType): TSetPage 
     const rows = Math.max(next.layout?.rows ?? 1, Math.ceil(next.elements.length / columns) || 1)
     next.layout = { rows, columns }
   }
-  const addCard = () => next.elements.push({ id: crypto.randomUUID(), kind: 'text', value: '' })
+  const addCard = () =>
+    next.elements.push({ id: crypto.randomUUID(), kind: 'text', card_type: 'normal', value: '' })
   if (type !== 'grid' && next.elements.length < 2) {
     addCard()
   }

@@ -23,7 +23,12 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ className }) 
   const [view, setView] = useState<TUserProfileEditView>('profile')
   const [nameViewMode, setNameViewMode] = useState<TUserNameViewMode>('view')
 
-  const { updateUserName, isLoading: isUpdateNameLoading } = useUpdateUserName()
+  const {
+    updateUserName,
+    isLoading: isUpdateNameLoading,
+    errorMessage: updateNameError,
+    clearErrorMessage: clearNameError,
+  } = useUpdateUserName()
 
   const {
     updatePassword,
@@ -70,6 +75,8 @@ export const UserProfileEdit: React.FC<TUserProfileEditProps> = ({ className }) 
           isLoading={isUpdateNameLoading}
           nameViewMode={nameViewMode}
           onEditNameClick={() => setNameViewMode('edit')}
+          submitError={updateNameError}
+          onFieldChange={clearNameError}
         />
       ) : (
         <EditPasswordForm

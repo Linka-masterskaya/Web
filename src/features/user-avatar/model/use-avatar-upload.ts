@@ -1,4 +1,9 @@
-import { changeUserAvatar, deleteUserAvatar, useUserStore } from '@entities/user'
+import {
+  changeUserAvatar,
+  changeUserAvatarFormSchema,
+  deleteUserAvatar,
+  useUserStore,
+} from '@entities/user'
 import { useState } from 'react'
 
 export const useAvatarUpload = () => {
@@ -9,6 +14,11 @@ export const useAvatarUpload = () => {
 
   const handleFileChange = async (file: File | null) => {
     if (!file) {
+      return
+    }
+    const parsed = changeUserAvatarFormSchema.safeParse({ avatar: file })
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? 'Не удалось обновить аватар')
       return
     }
     const previousAvatar = avatarSrc

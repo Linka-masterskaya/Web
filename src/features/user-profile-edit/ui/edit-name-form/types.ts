@@ -9,4 +9,6 @@ export type TEditNameFormProps = {
   isLoading: boolean
   nameViewMode: TUserNameViewMode
   onEditNameClick: () => void
+  submitError?: string | null
+  onFieldChange?: () => void
 }
