@@ -1,6 +1,7 @@
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
 import styles from './assignment-card.module.scss'
+import { FitText } from './fit-text'
 import type { TCardGridCardProps } from './types'
 
 export const CardGridCard: React.FC<TCardGridCardProps> = ({
@@ -38,9 +39,9 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
         </span>
       )}
 
-      {(cardType === 'normal' || cardType === 'text') && title && (
-        <span className={styles.cardTitle}>{title}</span>
-      )}
+      {cardType === 'text' && title && <FitText text={title} />}
+
+      {cardType === 'normal' && title && <span className={styles.cardTitle}>{title}</span>}
 
       {indicator?.type === 'check' && (
         <span

@@ -56,6 +56,26 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  .cardTitleFit {
+    flex: 1;
+    min-height: 0;
+    width: 80%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .cardTitleFitText {
+    display: block;
+    width: 100%;
+    color: var(--mantine-color-black);
+    line-height: 1.15;
+    text-align: center;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
      
   .placeholderIcon {
     color: var(--mantine-color-blue-4);
