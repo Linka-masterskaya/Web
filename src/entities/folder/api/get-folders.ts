@@ -1,18 +1,32 @@
+import { apiClient } from '@shared/lib/api'
+import type { TSection } from '../model/content-item.schema'
 import { foldersResponseSchema, type TFoldersResponse } from '../model/folder.schema'
 
-const MOCK_FOLDERS: TFoldersResponse = [
-  { id: 'my-sets', name: 'Мои наборы', parentId: null },
-  { id: 'students', name: 'Картотека учеников', parentId: null },
-  { id: 'student-1', name: 'Иванов Иван', parentId: 'students' },
-  { id: 'student-2', name: 'Катюшина Екатерина', parentId: 'students' },
-  { id: 'student-3', name: 'Сергиев Сергей', parentId: 'students' },
-  { id: 'student-4', name: 'Зайчик Лиза', parentId: 'students' },
-]
+type TGetFoldersParams = {
+  section: TSection
+  parentId?: string | null
+  limit?: number
+  offset?: number
+}
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+export const getFolders = async (params: TGetFoldersParams): Promise<TFoldersResponse> => {
+  const { section, parentId, limit, offset } = params
 
-export const getFolders = async (): Promise<TFoldersResponse> => {
-  await delay(300)
+  const searchParams: Record<string, string | number> = {
+    section,
+  }
 
-  return foldersResponseSchema.parse(MOCK_FOLDERS)
+  if (parentId) {
+    searchParams.parent_id = parentId
+  }
+
+  if (limit != null) {
+    searchParams.limit = limit
+  }
+
+  if (offset != null) {
+    searchParams.offset = offset
+  }
+
+  return apiClient.get('folders', { searchParams }).json(foldersResponseSchema)
 }

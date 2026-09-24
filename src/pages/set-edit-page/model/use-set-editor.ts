@@ -1,5 +1,6 @@
 import {
   getSetPageStructure,
+  readSetPagePairs,
   setPageTypeSchema,
   useSaveSetEditor,
   useSet,
@@ -159,8 +160,22 @@ export const useSetEditor = () => {
   }
 
   const handleMatchingCountChange = (count: number) => {
-    if (activePage?.type === 'matching') {
-      editor.resizeMatching(activePage.id, count)
+    if (activePage?.type !== 'matching') {
+      return
+    }
+
+    const currentCount = readSetPagePairs(activePage).length
+    const apply = () => editor.resizeMatching(activePage.id, count)
+
+    if (count < currentCount) {
+      confirmDelete({
+        title: 'Уменьшить количество пар?',
+        description:
+          'Последняя пара будет удалена. Её содержимое не восстановится при увеличении количества пар.',
+        onConfirm: apply,
+      })
+    } else {
+      apply()
     }
   }
 

@@ -1,12 +1,26 @@
 import { z } from 'zod'
 
-export const folderSchema = z.object({
-  id: z.string().trim().min(1),
-  name: z.string().trim().min(1),
-  parentId: z.string().trim().min(1).nullable().optional(),
-})
+import { sectionSchema } from './content-item.schema'
 
-export const foldersResponseSchema = z.array(folderSchema)
+const folderResponseSchema = z
+  .object({
+    id: z.string().uuid(),
+    name: z.string().trim().min(1),
+    parent_id: z.string().uuid().nullable(),
+    section: sectionSchema,
+    kind: z.enum(['folder', 'student']),
+    student_id: z.string().uuid().nullable(),
+  })
+  .transform(({ id, name, parent_id, section, kind, student_id }) => ({
+    id,
+    name,
+    parentId: parent_id,
+    section,
+    kind,
+    studentId: student_id,
+  }))
 
-export type TFolder = z.infer<typeof folderSchema>
+export const foldersResponseSchema = z.array(folderResponseSchema)
+
+export type TFolder = z.infer<typeof folderResponseSchema>
 export type TFoldersResponse = z.infer<typeof foldersResponseSchema>

@@ -2,6 +2,7 @@ import { parseSectionContentsFilters, useDeleteFolder, useSectionContents } from
 import type { TFolderContentItem, TPackContentItem, TSection } from '@entities/section-content'
 import { useDeleteSet, useDuplicateSet } from '@entities/set'
 import { ConfirmDelete } from '@features/confirm-delete'
+import { useOpenMoveSet } from '@features/move-set'
 import { RenameFolderModal } from '@features/rename-folder'
 import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
@@ -52,6 +53,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const config = sectionBrowserConfig[section]
   const { queryParams } = useRouteQueryParams()
   const { open, close } = useModal()
+  const openMoveSet = useOpenMoveSet()
 
   const [actionError, setActionError] = useState<string | null>(null)
   const { mutateAsync: duplicateSet, isPending: isDuplicatePending } = useDuplicateSet()
@@ -95,6 +97,13 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   }
   const handleGoToRoot = () => {
     goToRoot()
+  }
+
+  const handleMovePack = (pack: TPackContentItem) => {
+    openMoveSet({
+      setId: pack.id,
+      onSuccess: refetch,
+    })
   }
 
   const handleDuplicatePack = async (pack: TPackContentItem) => {
@@ -180,6 +189,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     section === 'library'
       ? []
       : [
+          {
+            id: 'move',
+            label: 'Переместить',
+            onClick: handleMovePack,
+          },
           {
             id: 'duplicate',
             label: 'Дублировать',
