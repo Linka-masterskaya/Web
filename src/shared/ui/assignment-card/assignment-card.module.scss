@@ -52,9 +52,31 @@
     overflow: hidden;
     color: var(--mantine-color-black);
     font-size: 14px;
+    font-weight: 700;
     line-height: 20px;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  .cardTitleFit {
+    flex: 1;
+    align-self: stretch;
+    min-height: 0;
+    width: 80%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .cardTitleFitText {
+    max-width: 100%;
+    color: var(--mantine-color-black);
+    line-height: 1;
+    text-align: center;
+    word-break: normal;
+    overflow-wrap: normal;
   }
      
   .placeholderIcon {
@@ -123,5 +145,4 @@
     background: var(--mantine-color-blue-4);
     border-radius: 50%;
   }
-.cardSpace { background: transparent; border-style: dashed; }
 button.card:focus-visible { outline: 2px solid var(--mantine-color-blue-4); outline-offset: 2px; }

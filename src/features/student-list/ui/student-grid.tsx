@@ -27,11 +27,7 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({
   contextMenuItems,
   onOpenShelf,
 }) => {
-  const contextMenu = useContextMenu<TStudent>({
-    width: 235,
-    estimatedHeight: 130,
-    viewportMargin: 8,
-  })
+  const contextMenu = useContextMenu<TStudent>()
 
   return (
     <>

@@ -1,6 +1,6 @@
 import type { TSetPage } from '@entities/set'
 import { ScrollArea, Text } from '@mantine/core'
-import { useContextMenu } from '@shared/ui/context-menu'
+import { ContextMenu, useContextMenu } from '@shared/ui/context-menu'
 import { useMemo } from 'react'
 import {
   createSetPageContextMenuConfig,
@@ -8,7 +8,6 @@ import {
 } from '../model/context-menu-config'
 import { useSetPageActions } from '../model/use-set-page-actions'
 import { SetPageCard } from './set-page-card'
-import { SetPageContextMenu } from './set-page-context-menu'
 import styles from './set-page-grid.module.scss'
 
 type TSetPageGridProps = {
@@ -38,13 +37,11 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
 
   /*
     Здесь width — это только оценка ширины для клэмпа у края экрана.
-    Сам блок меню размеряется по контенту (width="max-content" у меню ниже),
-    поэтому оценка взята по самой длинной подписи, а не фиксированные 235px.
+    Сам блок меню размеряется по контенту (`max-content`).
   */
   const contextMenu = useContextMenu<TSetPageContextMenuTarget>({
     width: 160,
     estimatedHeight: 200,
-    viewportMargin: 8,
   })
 
   const contextMenuItems = useMemo(
@@ -101,7 +98,7 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
       </ScrollArea>
 
       {/* Меню живёт вне области прокрутки: якорь позиционируется от viewport. */}
-      <SetPageContextMenu items={contextMenuItems} {...contextMenu.menuProps} width="max-content" />
+      <ContextMenu<TSetPageContextMenuTarget> items={contextMenuItems} {...contextMenu.menuProps} />
     </div>
   )
 }

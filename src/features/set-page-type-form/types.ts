@@ -5,8 +5,6 @@ export type TSetPageTypeFormProps = {
   description: string
   value: TSetPageType
   onChange: (type: TSetPageType) => void
-  onBack: () => void
-  backLabel?: string
   onCancel: () => void
   onSubmit: () => void
   submitLabel: string

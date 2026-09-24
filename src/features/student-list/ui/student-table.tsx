@@ -22,11 +22,7 @@ export const StudentTable: React.FC<TStudentTableProps> = ({
   onSortToggle,
   onOpenShelf,
 }) => {
-  const contextMenu = useContextMenu<TStudent>({
-    width: 235,
-    estimatedHeight: 130,
-    viewportMargin: 8,
-  })
+  const contextMenu = useContextMenu<TStudent>()
 
   const renderSortIcon = (field: string) => {
     if (params.sort !== field) {

@@ -12,6 +12,7 @@ export const contentItemSchema = z
     published: z.boolean().optional(),
     age: z.number().int().min(3).max(18).nullable().optional(),
     difficulty: z.enum(['easy', 'medium', 'hard']).nullable().optional(),
+    is_favorite: z.boolean().optional(),
     updated_at: z.string().min(1),
   })
   .transform((item) => ({
@@ -23,6 +24,7 @@ export const contentItemSchema = z
     published: item.published,
     age: item.age ?? null,
     difficulty: item.difficulty ?? null,
+    isFavorite: item.is_favorite ?? false,
     updatedAt: item.updated_at,
   }))
 
@@ -45,6 +47,7 @@ export const getSectionContentsParamsSchema = z.object({
   query: z.string().trim().min(1).optional(),
   age: z.number().int().min(3).max(18).optional(),
   difficulty: sectionContentsDifficultySchema.optional(),
+  isFavorite: z.boolean().optional(),
 })
 
 export type TSection = z.infer<typeof sectionSchema>

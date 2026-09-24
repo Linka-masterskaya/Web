@@ -8,15 +8,20 @@ import {
 } from '@entities/set'
 import { useConfirmDelete } from '@features/confirm-delete'
 import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
-import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useEffect, useLayoutEffect } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 
 const idSchema = z.string().uuid()
 
+/** Одна навигация на /subset/new → одна страница (в т.ч. при Strict Mode). */
+const seededPageByLocationKey = new Map<string, string>()
+
 export const useSetEditor = () => {
   const confirmDelete = useConfirmDelete()
   const navigate = useNavigate()
+  const location = useLocation()
+  const isSubsetNew = /\/subset\/new\/?$/.test(location.pathname)
   const { setId, subsetId } = useParams()
   const parsedSetId = idSchema.safeParse(setId)
   const parsedSubsetId = subsetId == null ? null : idSchema.safeParse(subsetId)
@@ -25,12 +30,49 @@ export const useSetEditor = () => {
   const editor = useSetEditorStore()
   const save = useSaveSetEditor(resolvedSetId)
   const initialize = editor.initialize
+  const seededPageId = seededPageByLocationKey.get(location.key)
 
   useEffect(() => {
-    if (setQuery.data) {
+    if (setQuery.data && !isSubsetNew) {
       initialize(setQuery.data)
     }
-  }, [setQuery.data, initialize])
+  }, [setQuery.data, initialize, isSubsetNew])
+
+  useLayoutEffect(() => {
+    if (!isSubsetNew || !parsedSetId.success || !setQuery.data) {
+      return
+    }
+
+    const state = useSetEditorStore.getState()
+    if (state.setId !== resolvedSetId || !state.config) {
+      initialize(setQuery.data)
+    }
+
+    let pageId = seededPageByLocationKey.get(location.key)
+    if (!pageId) {
+      pageId = useSetEditorStore.getState().addPage('grid') ?? undefined
+      if (!pageId) {
+        return
+      }
+      seededPageByLocationKey.set(location.key, pageId)
+    }
+
+    navigate(
+      createUrl(routerPath.dashboardSubsetIdEdit, {
+        setId: resolvedSetId,
+        subsetId: pageId,
+      }),
+      { replace: true },
+    )
+  }, [
+    initialize,
+    isSubsetNew,
+    location.key,
+    navigate,
+    parsedSetId.success,
+    resolvedSetId,
+    setQuery.data,
+  ])
 
   useEffect(() => {
     if (
@@ -50,7 +92,11 @@ export const useSetEditor = () => {
   const pages = config?.blocks ?? []
   const activePage = parsedSubsetId?.success
     ? pages.find((page) => page.id === parsedSubsetId.data)
-    : pages[0]
+    : isSubsetNew && seededPageId
+      ? pages.find((page) => page.id === seededPageId)
+      : isSubsetNew
+        ? undefined
+        : pages[0]
   const activePageIndex = activePage ? pages.findIndex((page) => page.id === activePage.id) : -1
   const configuredRows =
     activePage?.layout?.rows ??
@@ -230,6 +276,7 @@ export const useSetEditor = () => {
     pages,
     hasInvalidRoute: !parsedSetId.success || parsedSubsetId?.success === false,
     hasMissingPage: parsedSubsetId?.success === true && !activePage,
+    isCreatingPage: isSubsetNew && !activePage,
     isSaving: editor.isSaving,
     resolvedSetId,
     selectedType: activePage?.type,

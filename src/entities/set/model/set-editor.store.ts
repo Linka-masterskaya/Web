@@ -1,5 +1,6 @@
 import { createStore } from '@shared/lib/store'
 import { changeSetPageType } from '../lib/change-set-page-type'
+import { createEmptySetPage } from '../lib/create-empty-set-page'
 import { mergeEditorConfig } from '../lib/merge-editor-config'
 import {
   getSetPageStructure,
@@ -24,6 +25,7 @@ type TEditorStore = {
   isSaving: boolean
   saveError: boolean
   initialize: (set: TSet) => void
+  addPage: (type?: TSetPageType) => string | null
   selectCard: (id: string | null) => void
   changeType: (pageId: string, type: TSetPageType) => void
   resizeGrid: (pageId: string, rows: number, columns: number) => void
@@ -94,6 +96,26 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
         }
       }),
     selectCard: (selectedCardId) => set({ selectedCardId }),
+    addPage: (type = 'grid') => {
+      let pageId: string | null = null
+      set((state) => {
+        if (!state.config) {
+          return state
+        }
+        const page = createEmptySetPage(type)
+        pageId = page.id
+        return {
+          selectedCardId: null,
+          config: {
+            ...state.config,
+            blocks: [...state.config.blocks, page],
+          },
+          revision: state.revision + 1,
+          saveError: false,
+        }
+      })
+      return pageId
+    },
     changeType: (pageId, type) => updatePage(pageId, (page) => changeSetPageType(page, type)),
     resizeGrid: (pageId, rows, columns) => {
       if (

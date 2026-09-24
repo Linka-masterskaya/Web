@@ -1,7 +1,6 @@
 import { AssignmentTypeSelector } from '@features/assignment-type-selector'
 import { isSetPageType, SET_PAGE_TYPE_OPTIONS } from '@features/set-page-type-selector'
 import { Button, Group, Stack, Text, Title } from '@mantine/core'
-import { Icon } from '@shared/ui/icon'
 import { SubsetLayout } from '@widgets/subset-layout'
 
 import styles from '../set-page-type-form.module.scss'
@@ -12,8 +11,6 @@ export const SetPageTypeForm: React.FC<TSetPageTypeFormProps> = ({
   description,
   value,
   onChange,
-  onBack,
-  backLabel = 'К набору',
   onCancel,
   onSubmit,
   submitLabel,
@@ -29,15 +26,6 @@ export const SetPageTypeForm: React.FC<TSetPageTypeFormProps> = ({
 
   return (
     <Stack gap="lg">
-      <Button
-        variant="subtle"
-        w="fit-content"
-        leftSection={<Icon name="ArrowLeft" size={16} />}
-        onClick={onBack}
-      >
-        {backLabel}
-      </Button>
-
       <Title order={2}>{title}</Title>
 
       <SubsetLayout

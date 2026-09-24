@@ -3,14 +3,18 @@ import { useCallback, useState } from 'react'
 import type { TContextMenuPosition } from './types'
 
 type TUseContextMenuOptions = {
+  /**
+   * Оценка ширины меню для клэмпа у края экрана.
+   * Сам блок меню размеряется по контенту (`width="max-content"`).
+   */
   width?: number
   estimatedHeight?: number
   viewportMargin?: number
 }
 
 export function useContextMenu<TTarget extends object>({
-  width = 235,
-  estimatedHeight = 130,
+  width = 180,
+  estimatedHeight = 160,
   viewportMargin = 8,
 }: TUseContextMenuOptions = {}) {
   const [target, setTarget] = useState<TTarget | null>(null)
@@ -53,7 +57,7 @@ export function useContextMenu<TTarget extends object>({
       opened,
       target,
       position,
-      width,
+      width: 'max-content' as const,
       onClose: close,
     },
   }

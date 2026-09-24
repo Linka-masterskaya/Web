@@ -6,11 +6,18 @@ import type { TGetSectionContentsParams } from '../model/content-item.schema'
 
 const SECTION_CONTENTS_STALE_TIME_MS = 30_000
 
-export const useSectionContents = (params: TGetSectionContentsParams) =>
+type TUseSectionContentsOptions = {
+  enabled?: boolean
+}
+
+export const useSectionContents = (
+  params: TGetSectionContentsParams,
+  options?: TUseSectionContentsOptions,
+) =>
   useQuery({
     queryKey: folderQueryKeys.sectionContents(params),
     queryFn: () => getSectionContents(params),
     staleTime: SECTION_CONTENTS_STALE_TIME_MS,
     placeholderData: keepPreviousData,
-    enabled: getIsAuth(),
+    enabled: (options?.enabled ?? true) && getIsAuth(),
   })

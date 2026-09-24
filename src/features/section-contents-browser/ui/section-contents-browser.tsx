@@ -7,6 +7,7 @@ import { useOpenCopySet } from '@features/copy-set'
 import { useOpenMoveSet } from '@features/move-set'
 import { useOpenPublishSet } from '@features/publish-set'
 import { RenameFolderModal } from '@features/rename-folder'
+import { RenameSetModal } from '@features/rename-set'
 import { SendSet } from '@features/set'
 import { Button, Group, Loader, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
@@ -45,6 +46,7 @@ export type TSectionContentsBrowserProps = {
 }
 
 const DEFAULT_DASHBOARD_HREF = '/'
+const FAVORITES_EMPTY_TEXT = 'Нет избранных наборов'
 
 export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   section,
@@ -93,6 +95,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   })
 
   const items = data?.items ?? []
+  const emptyText = filters.isFavorite ? FAVORITES_EMPTY_TEXT : config.emptyText
 
   const handleOpenFolder = (folder: TFolderContentItem) => {
     openFolder(folder)
@@ -159,6 +162,23 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       radius: 20,
       withCloseButton: false,
       content: <RenameFolderModal folderId={folder.id} currentName={folder.name} onClose={close} />,
+    })
+  }
+
+  const handleRenamePack = (pack: TPackContentItem) => {
+    open({
+      size: 518,
+      padding: 0,
+      radius: 20,
+      withCloseButton: false,
+      content: (
+        <RenameSetModal
+          setId={pack.id}
+          currentTitle={pack.name}
+          onClose={close}
+          onSuccess={refetch}
+        />
+      ),
     })
   }
 
@@ -265,6 +285,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       onClick: handleMovePack,
     },
     {
+      id: 'rename',
+      label: 'Переименовать',
+      onClick: handleRenamePack,
+    },
+    {
       id: 'duplicate',
       label: 'Дублировать',
       disabled: isPackActionPending,
@@ -337,7 +362,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
           <SectionContentsCards
             items={items}
             backAction={backAction}
-            emptyText={config.emptyText}
+            emptyText={emptyText}
             onOpenFolder={handleOpenFolder}
             onOpenPack={handleOpenPack}
             packContextMenuItems={packContextMenuItems}

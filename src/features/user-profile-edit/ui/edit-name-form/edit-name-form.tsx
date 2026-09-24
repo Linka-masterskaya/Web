@@ -62,6 +62,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
           type="text"
           placeholder="Ваше имя"
           readOnly={isViewMode}
+          miw={200}
           error={errors.name?.message}
           rightSectionPointerEvents="all"
           rightSection={
@@ -77,7 +78,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
             </ActionIcon>
           }
         />
-        <TextInput value={email} readOnly placeholder="Ваша почта" />
+        <TextInput value={email} disabled placeholder="Ваша почта" miw={200} />
         <Button
           type="button"
           onClick={openPasswordForm}

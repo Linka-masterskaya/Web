@@ -1,6 +1,7 @@
 import { Icon } from '@shared/ui/icon'
 import clsx from 'clsx'
 import styles from './assignment-card.module.scss'
+import { FitText } from './fit-text'
 import type { TCardGridCardProps } from './types'
 
 export const CardGridCard: React.FC<TCardGridCardProps> = ({
@@ -18,14 +19,10 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
   return (
     <button
       type="button"
-      className={clsx(
-        styles.card,
-        active && styles.cardActive,
-        cardType === 'space' && styles.cardSpace,
-      )}
+      className={clsx(styles.card, active && styles.cardActive)}
       onClick={onClick}
       aria-pressed={indicator?.type === 'check' ? indicator.selected : active}
-      aria-label={ariaLabel ?? title ?? 'Карточка'}
+      aria-label={ariaLabel ?? title ?? (cardType === 'space' ? 'Пробел' : 'Карточка')}
     >
       {cardType === 'normal' && (
         <span className={styles.cardMedia}>
@@ -38,9 +35,11 @@ export const CardGridCard: React.FC<TCardGridCardProps> = ({
         </span>
       )}
 
-      {(cardType === 'normal' || cardType === 'text') && title && (
-        <span className={styles.cardTitle}>{title}</span>
-      )}
+      {cardType === 'text' && title && <FitText text={title} />}
+
+      {cardType === 'space' && <FitText text="␣" />}
+
+      {cardType === 'normal' && title && <span className={styles.cardTitle}>{title}</span>}
 
       {indicator?.type === 'check' && (
         <span

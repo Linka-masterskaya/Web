@@ -7,16 +7,18 @@ import {
 
 const SECTION_CONTENTS_AGE_MIN = 3
 const SECTION_CONTENTS_AGE_MAX = 18
+const SECTION_CONTENTS_FAVORITE_ACTIVE_VALUE = 'true'
 
 export type TSectionContentsFilters = {
   query?: string
   age?: number
   difficulty?: TSectionContentsDifficulty
+  isFavorite?: boolean
 }
 
 /**
  * Разбирает query-параметры URL в фильтры списка папок и наборов.
- * URL использует `search` и `level`, бэкенд — `query` и `difficulty`.
+ * URL: `search`, `level`, `favorite` → бэкенд: `query`, `difficulty`, `is_favorite`.
  */
 export const parseSectionContentsFilters = (
   queryParams: TRouteQueryParamsState,
@@ -28,10 +30,14 @@ export const parseSectionContentsFilters = (
   const parsedDifficulty = sectionContentsDifficultySchema.safeParse(queryParams.level)
   const difficulty = parsedDifficulty.success ? parsedDifficulty.data : undefined
 
+  const isFavorite =
+    queryParams.favorite === SECTION_CONTENTS_FAVORITE_ACTIVE_VALUE ? true : undefined
+
   return {
     query,
     age,
     difficulty,
+    isFavorite,
   }
 }
 

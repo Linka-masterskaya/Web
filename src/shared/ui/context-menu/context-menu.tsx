@@ -8,7 +8,8 @@ type TContextMenuProps<TTarget extends object> = {
   opened: boolean
   target: TTarget | null
   position: TContextMenuPosition
-  width: number
+  /** Ширина Menu.Dropdown: число (px) или CSS-значение, например 'max-content'. */
+  width?: number | string
   onClose: () => void
 }
 
@@ -17,7 +18,7 @@ export function ContextMenu<TTarget extends object>({
   opened,
   target,
   position,
-  width,
+  width = 'max-content',
   onClose,
 }: TContextMenuProps<TTarget>) {
   const handleMenuChange = useCallback(
@@ -81,11 +82,12 @@ export function ContextMenu<TTarget extends object>({
           }}
         />
       </Menu.Target>
-      <Menu.Dropdown>
+      <Menu.Dropdown className={styles.dropdown} onMouseLeave={onClose}>
         {items.map((item, index) => (
           <React.Fragment key={item.id}>
-            {index > 0 && <Menu.Divider />}
+            {index > 0 && index === items.length - 1 && <Menu.Divider className={styles.divider} />}
             <Menu.Item
+              className={styles.item}
               c={item.color === 'red' ? 'red.6' : 'gray.6'}
               disabled={isItemDisabled(item)}
               leftSection={item.icon}
