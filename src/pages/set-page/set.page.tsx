@@ -1,5 +1,5 @@
 import { useSet } from '@entities/set'
-import { Button, Center, Group, Loader, Stack, Text, Title } from '@mantine/core'
+import { Blockquote, Button, Center, Group, Loader, Stack, Text, Title } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
@@ -82,7 +82,16 @@ export const SetPage: React.FC = () => {
         </Stack>
       )}
 
-      {setQuery.isSuccess && pages.length === 0 && <Text c="dimmed">Здесь пока нет страниц</Text>}
+      {setQuery.isSuccess && pages.length === 0 && (
+        <Blockquote
+          className={styles.emptyText}
+          color="blue"
+          icon={<Icon name="Info" aria-hidden="true" />}
+          iconSize={32}
+        >
+          Здесь пока нет страниц
+        </Blockquote>
+      )}
 
       {setQuery.isSuccess && pages.length > 0 && (
         <SetPageGrid
