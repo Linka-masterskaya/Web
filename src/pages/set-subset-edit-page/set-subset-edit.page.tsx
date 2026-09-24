@@ -127,7 +127,6 @@ export const SetSubsetEditPage: React.FC = () => {
         description="Выберите тип страницы. При смене типа содержимое карточек сохраняется."
         value={selectedType}
         onChange={handleTypeChange}
-        onBack={handleBack}
         onCancel={handleBack}
         onSubmit={handleSave}
         submitLabel="Сохранить"

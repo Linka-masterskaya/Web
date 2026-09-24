@@ -79,7 +79,6 @@ export const SetSubsetNewPage: React.FC = () => {
         description="Выберите тип страницы и создайте её в наборе."
         value={selectedType}
         onChange={handleTypeChange}
-        onBack={handleBack}
         onCancel={handleBack}
         onSubmit={handleCreate}
         submitLabel="Создать"

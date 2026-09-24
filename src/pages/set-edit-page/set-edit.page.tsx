@@ -141,7 +141,7 @@ export const SetEditPage: React.FC = () => {
     >
       <SubsetLayout
         className={styles.editorLayout}
-        leftTitle="Набор"
+        leftTitle="Тип страницы"
         rightTitle="Карточка"
         leftCollapsedSlot={
           <AssignmentTypeSelector
