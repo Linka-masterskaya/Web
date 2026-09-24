@@ -13,7 +13,13 @@ export const PopupLayout: React.FC<TPopupLayoutProps> = ({
       <Stack gap={0}>
         {onClose && (
           <Flex justify="flex-end">
-            <ActionIcon variant="subtle" color="gray" onClick={onClose} aria-label="Закрыть">
+            <ActionIcon
+              variant="subtle"
+              color="gray"
+              onClick={onClose}
+              aria-label="Закрыть"
+              style={{ marginTop: 6, marginRight: 6 }}
+            >
               <Icon name="X" size={24} />
             </ActionIcon>
           </Flex>
