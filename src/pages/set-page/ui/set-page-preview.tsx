@@ -1,13 +1,14 @@
 import {
-  readSetPageAnswers,
+  getSequenceElements,
   readSetPageCategories,
   readSetPagePairs,
-  readSetPageSequence,
   type TSetPage,
   type TSetPageElement,
 } from '@entities/set'
+import { FitText } from '@shared/ui/assignment-card'
 import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import clsx from 'clsx'
+import type { CSSProperties, ReactNode } from 'react'
 import styles from './set-page-preview.module.scss'
 
 /** Сколько элементов страницы показываем в миниатюре. */
@@ -26,10 +27,22 @@ const getElementImageSrc = (element: TSetPageElement | undefined) => {
   return element.media_url?.trim() ?? ''
 }
 
+/** Число колонок ближе к квадрату: 1→1, 2–4→2, 5–9→3, 10–12→4. */
+const getNearSquareColumns = (count: number) => Math.max(1, Math.ceil(Math.sqrt(count)))
+
 const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) => {
-  if (element?.card_type === 'empty' || element?.card_type === 'space') {
+  if (element?.card_type === 'empty') {
     return <span className={styles.tile} />
   }
+
+  if (element?.card_type === 'space') {
+    return (
+      <span className={styles.tile}>
+        <FitText text="␣" minFontSize={6} />
+      </span>
+    )
+  }
+
   const pictureId = element?.source_picture_id ?? undefined
   if (pictureId && element && element.card_type !== 'text') {
     return (
@@ -52,7 +65,7 @@ const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) =>
 
   return (
     <span className={clsx(styles.tile, !text && styles.tileEmpty)}>
-      {text && <span className={styles.tileText}>{text}</span>}
+      {text && <FitText text={text} minFontSize={6} />}
     </span>
   )
 }
@@ -60,35 +73,23 @@ const PreviewElement: React.FC<{ element?: TSetPageElement }> = ({ element }) =>
 const createElementIndex = (page: TSetPage) =>
   new Map(page.elements.map((element) => [element.id, element]))
 
-/** Тип «Сетка»: элементы раскладываются плиткой. */
-const GridPreview: React.FC<{ page: TSetPage }> = ({ page }) => (
-  <span className={styles.gridLayout}>
-    {page.elements.slice(0, MAX_PREVIEW_ITEMS).map((element) => (
-      <PreviewElement key={element.id} element={element} />
-    ))}
-  </span>
-)
-
-/** Типы «Один ответ» и «Несколько ответов»: список вариантов с маркерами. */
-const ChoicePreview: React.FC<{ page: TSetPage; isMultiple: boolean }> = ({ page, isMultiple }) => {
-  const correctElementIds = new Set(
-    readSetPageAnswers(page)
-      .filter((answer) => answer.is_correct)
-      .map((answer) => answer.element_id),
-  )
+/** Плиточная раскладка ближе к квадрату по числу элементов. */
+const GridPreview: React.FC<{
+  elements: TSetPageElement[]
+  renderBadge?: (element: TSetPageElement, index: number) => ReactNode
+}> = ({ elements, renderBadge }) => {
+  const items = elements.slice(0, MAX_PREVIEW_ITEMS)
+  const columns = getNearSquareColumns(items.length)
 
   return (
-    <span className={styles.listLayout}>
-      {page.elements.slice(0, MAX_PREVIEW_ITEMS).map((element) => (
-        <span key={element.id} className={styles.listRow}>
-          <span
-            className={clsx(
-              styles.marker,
-              isMultiple && styles.markerSquare,
-              correctElementIds.has(element.id) && styles.markerCorrect,
-            )}
-          />
-          <span className={styles.listText}>{getElementText(element)}</span>
+    <span
+      className={styles.gridLayout}
+      style={{ '--preview-columns': columns } as CSSProperties}
+    >
+      {items.map((element, index) => (
+        <span key={element.id} className={styles.gridItem}>
+          <PreviewElement element={element} />
+          {renderBadge?.(element, index)}
         </span>
       ))}
     </span>
@@ -134,35 +135,8 @@ const CategoriesPreview: React.FC<{ page: TSetPage }> = ({ page }) => {
   )
 }
 
-/** Тип «Последовательность»: нумерованный список в порядке `sequence`. */
-const SequencePreview: React.FC<{ page: TSetPage }> = ({ page }) => {
-  const orderByElementId = new Map(
-    readSetPageSequence(page).map((item) => [item.element_id, item.order]),
-  )
-  const orderedElements = [...page.elements].sort(
-    (a, b) => (orderByElementId.get(a.id) ?? 0) - (orderByElementId.get(b.id) ?? 0),
-  )
-
-  return (
-    <span className={styles.listLayout}>
-      {orderedElements.slice(0, MAX_PREVIEW_ITEMS).map((element, index) => (
-        <span key={element.id} className={styles.listRow}>
-          <span className={styles.orderBadge}>{index + 1}</span>
-          <span className={styles.listText}>{getElementText(element)}</span>
-        </span>
-      ))}
-    </span>
-  )
-}
-
 const renderPreview = (page: TSetPage) => {
   switch (page.type) {
-    case 'single_choice':
-      return <ChoicePreview page={page} isMultiple={false} />
-
-    case 'multi_choice':
-      return <ChoicePreview page={page} isMultiple />
-
     case 'matching':
       return <MatchingPreview page={page} />
 
@@ -170,10 +144,20 @@ const renderPreview = (page: TSetPage) => {
       return <CategoriesPreview page={page} />
 
     case 'sequence':
-      return <SequencePreview page={page} />
+      return (
+        <GridPreview
+          elements={getSequenceElements(page)}
+          renderBadge={(_, index) => <span className={styles.orderBadge}>{index + 1}</span>}
+        />
+      )
+
+    case 'single_choice':
+    case 'multi_choice':
+    case 'grid':
+      return <GridPreview elements={page.elements} />
 
     default:
-      return <GridPreview page={page} />
+      return <GridPreview elements={page.elements} />
   }
 }
 
