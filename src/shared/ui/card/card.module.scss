@@ -1,184 +1,185 @@
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mantine-spacing-lg);
-  width: 334px;
-  max-width: 100%;
-  padding: var(--mantine-spacing-md) var(--mantine-spacing-md) var(--mantine-spacing-lg);
-  border: none;
-  border-radius: 16px;
-  background-color: var(--mantine-color-white);
-  box-shadow: var(--mantine-shadow-sm);
-  font-family: var(--mantine-font-family);
-  text-align: start;
-  text-decoration: none;
-  cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: var(--mantine-spacing-lg);
+	width: 334px;
+	max-width: 100%;
+	padding: var(--mantine-spacing-md) var(--mantine-spacing-md)
+		var(--mantine-spacing-lg);
+	border: none;
+	border-radius: 16px;
+	background-color: var(--mantine-color-white);
+	box-shadow: var(--mantine-shadow-sm);
+	font-family: var(--mantine-font-family);
+	text-align: start;
+	text-decoration: none;
+	cursor: pointer;
 
-  &:hover,
-  &:focus-visible {
-    outline: 2px solid rgba(62, 135, 255, 0.75);
-    box-shadow: none;
-  }
+	&:hover,
+	&:focus-visible {
+		outline: 2px solid rgba(62, 135, 255, 0.75);
+		box-shadow: none;
+	}
 }
 
 .cardWithFavorite {
-  position: relative;
-  cursor: default;
+	position: relative;
+	cursor: default;
 
-  &:hover,
-  &:focus-visible {
-    outline: none;
-    box-shadow: var(--mantine-shadow-sm);
-  }
+	&:hover,
+	&:focus-visible {
+		outline: none;
+		box-shadow: var(--mantine-shadow-sm);
+	}
 
-  &:has(.main:hover),
-  &:has(.main:focus-visible) {
-    outline: 2px solid rgba(62, 135, 255, 0.75);
-    box-shadow: none;
-  }
+	&:has(.main:hover),
+	&:has(.main:focus-visible) {
+		outline: 2px solid rgba(62, 135, 255, 0.75);
+		box-shadow: none;
+	}
 }
 
 .main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--mantine-spacing-lg);
-  width: 100%;
-  padding: 0;
-  border: none;
-  background: transparent;
-  font: inherit;
-  color: inherit;
-  text-align: start;
-  text-decoration: none;
-  cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: var(--mantine-spacing-lg);
+	width: 100%;
+	padding: 0;
+	border: none;
+	background: transparent;
+	font: inherit;
+	color: inherit;
+	text-align: start;
+	text-decoration: none;
+	cursor: pointer;
 
-  &:focus {
-    outline: none;
-  }
+	&:focus {
+		outline: none;
+	}
 }
 
 .fill {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
+	width: 100%;
+	max-width: 100%;
+	height: auto;
 
-  .media {
-    flex-shrink: 0;
-    height: auto;
-    aspect-ratio: 302 / 180;
-  }
+	.media {
+		flex-shrink: 0;
+		height: auto;
+		aspect-ratio: 302 / 180;
+	}
 
-  .iconTile svg {
-    width: clamp(36px, 21.56%, 72px);
-    height: clamp(36px, 21.56%, 72px);
-  }
+	.iconTile svg {
+		width: clamp(36px, 21.56%, 72px);
+		height: clamp(36px, 21.56%, 72px);
+	}
 }
 
 .media {
-  width: 100%;
-  height: 180px;
-  border-radius: var(--mantine-radius-default);
+	width: 100%;
+	height: 180px;
+	border-radius: var(--mantine-radius-default);
 }
 
 .image {
-  display: block;
-  object-fit: cover;
+	display: block;
+	object-fit: contain;
 }
 
 .iconTile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--mantine-color-lightBlue-0);
-  color: var(--mantine-color-blue-4);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--mantine-color-lightBlue-0);
+	color: var(--mantine-color-blue-4);
 
-  svg {
-    width: 72px;
-    height: 72px;
-  }
+	svg {
+		width: 72px;
+		height: 72px;
+	}
 }
 
 .nameRow {
-  display: flex;
-  flex-shrink: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--mantine-spacing-sm);
-  min-width: 0;
-  min-height: 24px;
+	display: flex;
+	flex-shrink: 0;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--mantine-spacing-sm);
+	min-width: 0;
+	min-height: 24px;
 }
 
 .label {
-  display: block;
-  overflow: hidden;
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 100%;
-  color: var(--mantine-color-black);
-  font-size: var(--mantine-font-size-md);
-  font-weight: 600;
-  line-height: 24px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	display: block;
+	overflow: hidden;
+	flex: 1 1 0;
+	min-width: 0;
+	max-width: 100%;
+	color: var(--mantine-color-black);
+	font-size: var(--mantine-font-size-md);
+	font-weight: 600;
+	line-height: 24px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .meta {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: var(--mantine-spacing-sm);
-  min-width: 0;
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: var(--mantine-spacing-sm);
+	min-width: 0;
 }
 
 .cardWithFavorite .meta {
-  position: absolute;
-  right: var(--mantine-spacing-md);
-  bottom: var(--mantine-spacing-lg);
-  z-index: 1;
+	position: absolute;
+	right: var(--mantine-spacing-md);
+	bottom: var(--mantine-spacing-lg);
+	z-index: 1;
 }
 
 .metaSpacer {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: var(--mantine-spacing-sm);
-  visibility: hidden;
-  pointer-events: none;
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	gap: var(--mantine-spacing-sm);
+	visibility: hidden;
+	pointer-events: none;
 }
 
 .favorite,
 .favoritePlaceholder {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  width: 26px;
-  height: 26px;
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
 }
 
 .favorite {
-  padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--mantine-color-black);
-  cursor: pointer;
+	padding: 0;
+	border: none;
+	border-radius: 8px;
+	background: transparent;
+	color: var(--mantine-color-black);
+	cursor: pointer;
 
-  &:focus-visible {
-    outline: 1.5px solid var(--mantine-color-blue-4);
-    outline-offset: 2px;
-  }
+	&:focus-visible {
+		outline: 1.5px solid var(--mantine-color-blue-4);
+		outline-offset: 2px;
+	}
 }
 
 .favoriteIcon {
-  fill: transparent;
-  transition: fill 120ms ease;
+	fill: transparent;
+	transition: fill 120ms ease;
 }
 
 .favoriteActive {
-  color: var(--mantine-color-blue-4);
+	color: var(--mantine-color-blue-4);
 }
 
 .favoriteActive .favoriteIcon {
-  fill: currentColor;
+	fill: currentColor;
 }
