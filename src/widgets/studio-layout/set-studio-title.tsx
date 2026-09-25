@@ -11,13 +11,12 @@ import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, type KeyboardEvent, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { useSetStudioRoute } from './model/use-set-studio-route'
 import styles from './set-studio-controls.module.scss'
 
 export const SetStudioTitle: React.FC = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const queryClient = useQueryClient()
   const {
     hasValidSetId,
@@ -73,18 +72,18 @@ export const SetStudioTitle: React.FC = () => {
 
   const handleBack = async () => {
     if (isSubsetPreview && subsetEditorUrl && canEditSet) {
-      navigate(subsetEditorUrl, { state: location.state })
+      navigate(subsetEditorUrl)
       return
     }
     if (isSubsetPreview && setOverviewUrl) {
-      navigate(setOverviewUrl, { state: location.state })
+      navigate(setOverviewUrl)
       return
     }
     if ((isSetEditor || isSubsetEditor || isSubsetNew) && !(await saveEditor())) {
       return
     }
     if (setOverviewUrl && !isSetOverview) {
-      navigate(setOverviewUrl, { state: location.state })
+      navigate(setOverviewUrl)
       return
     }
 

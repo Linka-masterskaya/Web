@@ -1,4 +1,3 @@
-import type { TSetLocationState } from '@entities/set'
 import { isHeadDefectologist, useUserStore } from '@entities/user'
 import { useOpenCreateFolder } from '@features/create-folder'
 import {
@@ -59,14 +58,15 @@ export const LibraryPage: React.FC = () => {
         dashboardHref={createUrl(routerPath.dashboard)}
         onFolderContextChange={handleFolderContextChange}
         onOpenPack={(pack, context) => {
-          const locationState: TSetLocationState = {
-            section: 'library',
-            folderId: context.currentFolderId,
-          }
-
           navigate(
-            createUrl(routerPath.dashboardSetId, { setId: pack.id }, { section: 'library' }),
-            { state: locationState },
+            createUrl(
+              routerPath.dashboardSetId,
+              { setId: pack.id },
+              {
+                section: 'library',
+                ...(context.currentFolderId ? { folderId: context.currentFolderId } : {}),
+              },
+            ),
           )
         }}
       />

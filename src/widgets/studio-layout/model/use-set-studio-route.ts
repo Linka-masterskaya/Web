@@ -18,13 +18,15 @@ export const useSetStudioRoute = () => {
   const parsedSetId = idSchema.safeParse(setId)
   const parsedSubsetId = idSchema.safeParse(subsetId)
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
-  const sectionQuery = createSetSectionQuery(
-    queryParams.section === 'library' ||
+  const sectionQuery = createSetSectionQuery({
+    section:
+      queryParams.section === 'library' ||
       queryParams.section === 'my' ||
       queryParams.section === 'students'
-      ? queryParams.section
-      : null,
-  )
+        ? queryParams.section
+        : null,
+    folderId: queryParams.folderId,
+  })
 
   const setOverviewUrl = parsedSetId.success
     ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }, sectionQuery)

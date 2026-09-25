@@ -1,9 +1,9 @@
 import { useSet, useSetAccess } from '@entities/set'
 import { Blockquote, Button, Center, Group, Loader, Stack, Text, Title } from '@mantine/core'
-import { createSetSectionQuery, createUrl, routerPath } from '@shared/lib/routes'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
-import { useLocation, useNavigate, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 
 import styles from './set-page.module.scss'
@@ -21,14 +21,12 @@ const getLoadErrorMessage = (error: unknown) => {
 
 export const SetPage: React.FC = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const { setId } = useParams()
   const parsedSetId = setIdSchema.safeParse(setId)
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
 
   const setQuery = useSet(resolvedSetId)
-  const { canEditSet, backUrl, section } = useSetAccess(setQuery.data?.folderId)
-  const sectionQuery = createSetSectionQuery(section)
+  const { canEditSet, backUrl, navigationQuery } = useSetAccess(setQuery.data?.folderId)
 
   if (!parsedSetId.success) {
     return (
@@ -63,8 +61,7 @@ export const SetPage: React.FC = () => {
             disabled={setQuery.isLoading || setQuery.isError}
             onClick={() =>
               navigate(
-                createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, sectionQuery),
-                { state: location.state },
+                createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, navigationQuery),
               )
             }
           >
@@ -114,9 +111,8 @@ export const SetPage: React.FC = () => {
                   setId: resolvedSetId,
                   subsetId: page.id,
                 },
-                sectionQuery,
+                navigationQuery,
               ),
-              { state: location.state },
             )
           }
         />

@@ -7,13 +7,12 @@ import {
 } from '@entities/set'
 import { Button } from '@mantine/core'
 import { useIsMutating } from '@tanstack/react-query'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { useSetStudioRoute } from './model/use-set-studio-route'
 import styles from './set-studio-controls.module.scss'
 
 export const SetStudioExitButton: React.FC = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const { isEditorRoute, isSubsetPreview, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
   const { backUrl, canEditSet } = useSetAccess(setQuery.data?.folderId)
@@ -33,7 +32,7 @@ export const SetStudioExitButton: React.FC = () => {
       return
     }
     if (setOverviewUrl) {
-      navigate(setOverviewUrl, { state: location.state })
+      navigate(setOverviewUrl)
       return
     }
 

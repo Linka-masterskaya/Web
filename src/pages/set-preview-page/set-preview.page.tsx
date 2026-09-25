@@ -5,14 +5,10 @@ import {
   readSetPageSequence,
   type TSetPageElement,
   useSet,
+  useSetAccess,
 } from '@entities/set'
 import { ActionIcon, Center, Loader, Text } from '@mantine/core'
-import {
-  createSetSectionQuery,
-  createUrl,
-  routerPath,
-  useRouteQueryParams,
-} from '@shared/lib/routes'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { CardGrid, type TCardGridItem } from '@shared/ui/card-grid'
 import { DistributionGrid, type TDistributionGridItem } from '@shared/ui/distribution-grid'
 import { Icon } from '@shared/ui/icon'
@@ -112,14 +108,7 @@ export const SetPreviewPage: React.FC = () => {
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
   const setQuery = useSet(resolvedSetId)
   const navigate = useNavigate()
-  const { queryParams } = useRouteQueryParams()
-  const sectionQuery = createSetSectionQuery(
-    queryParams.section === 'library' ||
-      queryParams.section === 'my' ||
-      queryParams.section === 'students'
-      ? queryParams.section
-      : null,
-  )
+  const { navigationQuery } = useSetAccess(setQuery.data?.folderId)
   if (!parsedSetId.success || !parsedSubsetId.success) {
     return (
       <section className={styles.page}>
@@ -171,7 +160,7 @@ export const SetPreviewPage: React.FC = () => {
           setId: parsedSetId.data,
           subsetId: pageId,
         },
-        sectionQuery,
+        navigationQuery,
       ),
     )
   }

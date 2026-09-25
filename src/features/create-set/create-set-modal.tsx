@@ -55,10 +55,11 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       })
 
       navigate(
-        createUrl(routerPath.dashboardSubsetNew, { setId: set.id }, createSetSectionQuery(section)),
-        {
-          state: section ? { section, folderId: resolvedFolderId } : undefined,
-        },
+        createUrl(
+          routerPath.dashboardSubsetNew,
+          { setId: set.id },
+          createSetSectionQuery({ section, folderId: resolvedFolderId }),
+        ),
       )
 
       onClose()

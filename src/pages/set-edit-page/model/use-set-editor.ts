@@ -8,7 +8,7 @@ import {
   useSetEditorStore,
 } from '@entities/set'
 import { useConfirmDelete } from '@features/confirm-delete'
-import { createSetSectionQuery, createUrl, routerPath } from '@shared/lib/routes'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { useEffect, useLayoutEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
@@ -28,8 +28,9 @@ export const useSetEditor = () => {
   const parsedSubsetId = subsetId == null ? null : idSchema.safeParse(subsetId)
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
   const setQuery = useSet(resolvedSetId)
-  const { canEditSet, backUrl, isAccessResolved, section } = useSetAccess(setQuery.data?.folderId)
-  const sectionQuery = createSetSectionQuery(section)
+  const { canEditSet, backUrl, isAccessResolved, navigationQuery } = useSetAccess(
+    setQuery.data?.folderId,
+  )
   const editor = useSetEditorStore()
   const save = useSaveSetEditor(resolvedSetId)
   const initialize = editor.initialize
@@ -48,33 +49,24 @@ export const useSetEditor = () => {
             setId: resolvedSetId,
             subsetId: parsedSubsetId.data,
           },
-          createSetSectionQuery(section),
+          navigationQuery,
         ),
-        { replace: true, state: location.state },
+        { replace: true },
       )
       return
     }
 
-    navigate(
-      createUrl(
-        routerPath.dashboardSetId,
-        { setId: resolvedSetId },
-        createSetSectionQuery(section),
-      ),
-      {
-        replace: true,
-        state: location.state,
-      },
-    )
+    navigate(createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }, navigationQuery), {
+      replace: true,
+    })
   }, [
     canEditSet,
     isAccessResolved,
-    location.state,
     navigate,
+    navigationQuery,
     parsedSetId.success,
     parsedSubsetId,
     resolvedSetId,
-    section,
   ])
 
   useEffect(() => {
@@ -109,20 +101,19 @@ export const useSetEditor = () => {
           setId: resolvedSetId,
           subsetId: pageId,
         },
-        createSetSectionQuery(section),
+        navigationQuery,
       ),
-      { replace: true, state: location.state },
+      { replace: true },
     )
   }, [
     canEditSet,
     initialize,
     isSubsetNew,
     location.key,
-    location.state,
     navigate,
+    navigationQuery,
     parsedSetId.success,
     resolvedSetId,
-    section,
     setQuery.data,
   ])
 
@@ -176,18 +167,15 @@ export const useSetEditor = () => {
     }
     navigate(
       parsedSetId.success
-        ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }, sectionQuery)
+        ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }, navigationQuery)
         : backUrl,
-      { state: location.state },
     )
   }
 
   const handleBackToSets = () => navigate(backUrl)
   const handleCreatePage = async () => {
     if (parsedSetId.success && (await save())) {
-      navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, sectionQuery), {
-        state: location.state,
-      })
+      navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, navigationQuery))
     }
   }
 
@@ -205,9 +193,8 @@ export const useSetEditor = () => {
           setId: resolvedSetId,
           subsetId: activePage.id,
         },
-        sectionQuery,
+        navigationQuery,
       ),
-      { state: location.state },
     )
   }
 
