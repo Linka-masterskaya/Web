@@ -11,6 +11,7 @@ export type TSectionContentItem = {
   type: 'folder' | 'pack'
   id: string
   name: string
+  coverSourcePictureId: string | null
   kind: 'folder' | 'student' | null
   studentId: string | null
   published: boolean | undefined

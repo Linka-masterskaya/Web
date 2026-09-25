@@ -44,6 +44,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       difficulty: values.level,
       goals: [],
       notes: values.notes,
+      coverSourcePictureId: null,
     })
 
     navigate(

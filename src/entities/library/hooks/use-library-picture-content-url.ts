@@ -10,8 +10,10 @@ export const useLibraryPictureContentUrl = (pictureId: string) => {
     queryKey: libraryQueryKeys.pictureContent(pictureId),
     queryFn: async () => {
       const blob = await getLibraryPictureContent(pictureId)
+
       return URL.createObjectURL(blob)
     },
+    enabled: pictureId.trim().length > 0,
     retry: 1,
     staleTime: 0,
     gcTime: 0,

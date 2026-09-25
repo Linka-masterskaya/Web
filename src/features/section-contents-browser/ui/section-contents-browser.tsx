@@ -9,6 +9,7 @@ import { useOpenPublishSet } from '@features/publish-set'
 import { RenameFolderModal } from '@features/rename-folder'
 import { RenameSetModal } from '@features/rename-set'
 import { SendSet } from '@features/set'
+import { CoverPickerModal } from '@features/set-settings'
 import { Button, Group, Loader, Pagination, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
@@ -167,6 +168,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
+  const handleChangePackCover = (pack: TPackContentItem) => {
+    open({
+      size: 1280,
+      padding: 0,
+      radius: 20,
+      withCloseButton: false,
+      content: <CoverPickerModal packId={pack.id} />,
+    })
+  }
+
   const handleRenameFolder = (folder: TFolderContentItem) => {
     open({
       size: 518,
@@ -300,6 +311,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       id: 'rename',
       label: 'Переименовать',
       onClick: handleRenamePack,
+    },
+    {
+      id: 'change-cover',
+      label: 'Изменить обложку',
+      onClick: handleChangePackCover,
     },
     {
       id: 'duplicate',

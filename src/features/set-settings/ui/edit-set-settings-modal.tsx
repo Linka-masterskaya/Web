@@ -31,6 +31,7 @@ export const EditSetSettingsModal: React.FC<TEditSetSettingsModalProps> = ({ set
         difficulty: values.level,
         goals: set.goals ?? [],
         notes: values.notes,
+        coverSourcePictureId: set.coverSourcePictureId,
       })
 
       setVoice(set.id, values.voice)

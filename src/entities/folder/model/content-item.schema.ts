@@ -13,6 +13,7 @@ export const contentItemSchema = z
     age: z.number().int().min(3).max(18).nullable().optional(),
     difficulty: z.enum(['easy', 'medium', 'hard']).nullable().optional(),
     is_favorite: z.boolean().optional(),
+    cover_source_picture_id: z.string().uuid().nullable().optional(),
     updated_at: z.string().min(1),
   })
   .transform((item) => ({
@@ -25,6 +26,7 @@ export const contentItemSchema = z
     age: item.age ?? null,
     difficulty: item.difficulty ?? null,
     isFavorite: item.is_favorite ?? false,
+    coverSourcePictureId: item.cover_source_picture_id ?? null,
     updatedAt: item.updated_at,
   }))
 

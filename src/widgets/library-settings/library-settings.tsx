@@ -80,8 +80,8 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
     }
 
     importMutation.mutate(selectedCard.id, {
-      onSuccess: (importResult) => {
-        onSelect(selectedCards, [importResult])
+      onSuccess: async (importResult) => {
+        await onSelect(selectedCards, [importResult])
         close()
       },
     })
