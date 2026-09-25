@@ -25,8 +25,8 @@ export const studentSchema = z.object({
   last_lesson_at: z.string().nullable().optional(),
   avatar_media_id: z.string().uuid().nullable().optional(),
   avatar_url: z.string().nullable().optional(),
-  created_at: z.iso.datetime({ message: 'Некорректная дата создания' }),
-  updated_at: z.iso.datetime({ message: 'Некорректная дата обновления' }),
+  created_at: z.iso.datetime({ offset: true, message: 'Некорректная дата создания' }),
+  updated_at: z.iso.datetime({ offset: true, message: 'Некорректная дата обновления' }),
 })
 
 export const studentsListResponseSchema = z.object({
