@@ -10,6 +10,7 @@ import { LibraryCategories } from '@features/library-categories'
 import { LibrarySearch } from '@features/library-search'
 import {
   ActionIcon,
+  Blockquote,
   Button,
   Center,
   Flex,
@@ -19,6 +20,7 @@ import {
   Text,
   Title,
 } from '@mantine/core'
+import { getApiErrorMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
 import { Icon } from '@shared/ui/icon'
 import { PopupLayout } from '@shared/ui/popup-layout'
@@ -26,7 +28,10 @@ import { useState } from 'react'
 import styles from './library-settings.module.scss'
 import type { TLibrarySettingsProps } from './types'
 
-export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) => {
+export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({
+  onSelect,
+  selectionOnly = false,
+}) => {
   const { close } = useModal()
 
   const {
@@ -39,8 +44,9 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
     LIBRARY_DEFAULT_CATEGORY_ID,
   )
   const [selectedCards, setSelectedCards] = useState<TLibraryCard[]>([])
-
   const [searchedCard, setSearchedCard] = useState<TLibraryCard | null>(null)
+  const [selectError, setSelectError] = useState<string | null>(null)
+  const [isSelecting, setIsSelecting] = useState(false)
 
   const activeCategoryId = selectedCategoryId ?? categories[0]?.id ?? null
   const activeCategory = categories.find((category) => category.id === activeCategoryId)
@@ -52,14 +58,17 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
   } = useLibraryCards(activeCategoryId)
 
   const importMutation = useImportLibraryPicture()
+  const isPending = importMutation.isPending || isSelecting
 
   const handleCardSelect = (card: TLibraryCard) => {
     importMutation.reset()
+    setSelectError(null)
     setSelectedCards((prevCards) => (prevCards[0]?.id === card.id ? [] : [card]))
   }
 
   const handleCategorySelect = (categoryId: string) => {
     importMutation.reset()
+    setSelectError(null)
     setSelectedCategoryId(categoryId)
     setSelectedCards([])
     setSearchedCard(null)
@@ -67,25 +76,51 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
 
   const handleSearchSelect = (card: TLibraryCard) => {
     importMutation.reset()
+    setSelectError(null)
     setSelectedCategoryId(card.categories[0]?.id ?? null)
     setSelectedCards([card])
     setSearchedCard({ ...card })
   }
 
+  const applySelection = async (imports: Parameters<TLibrarySettingsProps['onSelect']>[1]) => {
+    setSelectError(null)
+    setIsSelecting(true)
+
+    try {
+      await onSelect(selectedCards, imports)
+      close()
+    } catch (error) {
+      setSelectError(await getApiErrorMessage(error))
+    } finally {
+      setIsSelecting(false)
+    }
+  }
+
   const handleConfirm = () => {
     const [selectedCard] = selectedCards
 
-    if (!selectedCard) {
+    if (!selectedCard || isPending) {
+      return
+    }
+
+    if (selectionOnly) {
+      void applySelection([])
       return
     }
 
     importMutation.mutate(selectedCard.id, {
-      onSuccess: async (importResult) => {
-        await onSelect(selectedCards, [importResult])
-        close()
+      onSuccess: (importResult) => {
+        void applySelection([importResult])
+      },
+      onError: async (error) => {
+        setSelectError(await getApiErrorMessage(error))
       },
     })
   }
+
+  const errorMessage =
+    selectError ??
+    (importMutation.isError ? 'Не удалось выбрать изображение. Попробуйте ещё раз.' : null)
 
   const renderCards = () => {
     if (isCardsLoading) {
@@ -147,13 +182,29 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
         </Flex>
 
         <Flex direction="column" gap="lg" className={styles.cards}>
+          {errorMessage && (
+            <Blockquote
+              className={styles.cardsFeedback}
+              color="red"
+              icon={<Icon name="Info" aria-hidden="true" />}
+              iconSize={32}
+              role="alert"
+            >
+              {errorMessage}
+            </Blockquote>
+          )}
           {activeCategory && (
-            <Title order={2} className={styles.cardsTitle} size={30}>
+            <Title
+              order={2}
+              className={errorMessage ? styles.cardsTitleAfterFeedback : styles.cardsTitle}
+              size={30}
+            >
               {activeCategory.name}
             </Title>
           )}
           <ScrollArea
-            type="auto"
+            type="scroll"
+            scrollbars="y"
             className={styles.cardsScroll}
             classNames={{ viewport: styles.cardsViewport }}
           >
@@ -179,21 +230,15 @@ export const LibrarySettings: React.FC<TLibrarySettingsProps> = ({ onSelect }) =
 
         {renderBody()}
 
-        {importMutation.isError && (
-          <Text c="red.6" ta="right" px={40} role="alert">
-            Не удалось выбрать изображение. Попробуйте ещё раз.
-          </Text>
-        )}
-
         <Flex justify="flex-end" gap={12} className={styles.footer}>
-          <Button w={240} variant="outline" onClick={close} disabled={importMutation.isPending}>
+          <Button w={240} variant="outline" onClick={close} disabled={isPending}>
             Отменить
           </Button>
           <Button
             w={240}
             onClick={handleConfirm}
-            disabled={selectedCards.length === 0}
-            loading={importMutation.isPending}
+            disabled={selectedCards.length === 0 || isPending}
+            loading={isPending}
           >
             Выбрать
           </Button>

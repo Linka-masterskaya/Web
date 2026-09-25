@@ -39,6 +39,7 @@ export const routeQueryParams = {
   folderId: 'folderId',
   sort: 'sort',
   order: 'order',
+  section: 'section',
 } as const
 
 // Routes

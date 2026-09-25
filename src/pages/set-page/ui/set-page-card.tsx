@@ -12,12 +12,12 @@ type TSetPageCardProps = {
   /** Страница лежит в буфере обмена в режиме «вырезать». */
   isCut: boolean
   onOpen: (page: TSetPage) => void
-  onOpenContextMenu: (event: ReactMouseEvent<HTMLElement>, page: TSetPage) => void
+  onOpenContextMenu?: (event: ReactMouseEvent<HTMLElement>, page: TSetPage) => void
 }
 
 /**
- * Карточка страницы набора: 334×371 = миниатюра 334×303 + зазор 16 + блок
- * с названием и типом страницы 334×52.
+ * Карточка страницы набора: миниатюра с пропорциями 334×303 и блок
+ * названия/типа (52px). Ширина растягивается по колонке сетки.
  *
  * Контекстное меню действий открывается кликом правой кнопки мыши.
  */
@@ -36,7 +36,13 @@ export const SetPageCard: React.FC<TSetPageCardProps> = ({
       type="button"
       className={clsx(styles.card, isCut && styles.cardCut)}
       onClick={() => onOpen(page)}
-      onContextMenu={(event) => onOpenContextMenu(event, page)}
+      onContextMenu={
+        onOpenContextMenu
+          ? (event) => {
+              onOpenContextMenu(event, page)
+            }
+          : undefined
+      }
       aria-label={`Открыть страницу «${title}», ${pageTypeLabel}`}
     >
       <span className={styles.preview}>

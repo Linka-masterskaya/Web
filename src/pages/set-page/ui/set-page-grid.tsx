@@ -14,6 +14,8 @@ type TSetPageGridProps = {
   setId: string
   pages: TSetPage[]
   onOpenPage: (page: TSetPage) => void
+  /** Без меню и действий изменения страниц (просмотр библиотеки). */
+  readOnly?: boolean
 }
 
 /**
@@ -23,7 +25,12 @@ type TSetPageGridProps = {
  * пустому месту области — то же меню без цели: доступна только вставка, и она
  * добавляет страницу в конец набора.
  */
-export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenPage }) => {
+export const SetPageGrid: React.FC<TSetPageGridProps> = ({
+  setId,
+  pages,
+  onOpenPage,
+  readOnly = false,
+}) => {
   const {
     clipboard,
     errorMessage,
@@ -46,16 +53,18 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
 
   const contextMenuItems = useMemo(
     () =>
-      createSetPageContextMenuConfig({
-        canPaste: clipboard !== null,
-        disabled: isPending,
-        onCopy: copyPage,
-        onCut: cutPage,
-        onDelete: deletePage,
-        onDuplicate: duplicatePage,
-        onPaste: pastePage,
-      }),
-    [clipboard, copyPage, cutPage, deletePage, duplicatePage, isPending, pastePage],
+      readOnly
+        ? []
+        : createSetPageContextMenuConfig({
+            canPaste: clipboard !== null,
+            disabled: isPending,
+            onCopy: copyPage,
+            onCut: cutPage,
+            onDelete: deletePage,
+            onDuplicate: duplicatePage,
+            onPaste: pastePage,
+          }),
+    [clipboard, copyPage, cutPage, deletePage, duplicatePage, isPending, pastePage, readOnly],
   )
 
   const cutPageId =
@@ -63,7 +72,7 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
 
   return (
     <div className={styles.root}>
-      {errorMessage && (
+      {errorMessage && !readOnly && (
         <Text className={styles.error} c="red.6" role="alert">
           {errorMessage}
         </Text>
@@ -75,9 +84,13 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
         scrollbars="y"
         className={styles.scrollArea}
         classNames={{ viewport: styles.viewport }}
-        onContextMenu={(event) => {
-          contextMenu.open(event, { page: null })
-        }}
+        onContextMenu={
+          readOnly
+            ? undefined
+            : (event) => {
+                contextMenu.open(event, { page: null })
+              }
+        }
       >
         <div className={styles.grid}>
           {pages.map((page, index) => (
@@ -85,20 +98,29 @@ export const SetPageGrid: React.FC<TSetPageGridProps> = ({ setId, pages, onOpenP
               key={page.id}
               page={page}
               index={index}
-              isCut={page.id === cutPageId}
+              isCut={!readOnly && page.id === cutPageId}
               onOpen={onOpenPage}
-              onOpenContextMenu={(event, targetPage) => {
-                // Цель — конкретная карточка; в обработчик области событие не отдаём.
-                event.stopPropagation()
-                contextMenu.open(event, { page: targetPage })
-              }}
+              onOpenContextMenu={
+                readOnly
+                  ? undefined
+                  : (event, targetPage) => {
+                      // Цель — конкретная карточка; в обработчик области событие не отдаём.
+                      event.stopPropagation()
+                      contextMenu.open(event, { page: targetPage })
+                    }
+              }
             />
           ))}
         </div>
       </ScrollArea>
 
       {/* Меню живёт вне области прокрутки: якорь позиционируется от viewport. */}
-      <ContextMenu<TSetPageContextMenuTarget> items={contextMenuItems} {...contextMenu.menuProps} />
+      {!readOnly && (
+        <ContextMenu<TSetPageContextMenuTarget>
+          items={contextMenuItems}
+          {...contextMenu.menuProps}
+        />
+      )}
     </div>
   )
 }

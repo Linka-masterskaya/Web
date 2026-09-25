@@ -3,6 +3,7 @@ import { SpeechButton } from '@features/speak-text'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Accordion,
+  Blockquote,
   Button,
   Flex,
   Group,
@@ -63,8 +64,8 @@ export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSe
     label: voice.name,
   }))
 
-  const handleFormSubmit = (values: TSetSettings) => {
-    onSave?.(values)
+  const handleFormSubmit = async (values: TSetSettings) => {
+    await onSave?.(values)
   }
 
   return (
@@ -304,9 +305,15 @@ export const SetSettings = ({ defaultValues, onClose, onSave, submitError }: TSe
 
           <Stack gap="sm" className={styles.footer} align="center">
             {submitError && (
-              <Text className={styles.submitError} role="alert">
+              <Blockquote
+                className={styles.submitError}
+                color="red"
+                icon={<Icon name="Info" aria-hidden="true" />}
+                iconSize={32}
+                role="alert"
+              >
                 {submitError}
-              </Text>
+              </Blockquote>
             )}
             <Button
               className={styles.saveButton}

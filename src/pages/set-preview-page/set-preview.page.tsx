@@ -5,6 +5,7 @@ import {
   readSetPageSequence,
   type TSetPageElement,
   useSet,
+  useSetAccess,
 } from '@entities/set'
 import { ActionIcon, Center, Loader, Text } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
@@ -107,6 +108,7 @@ export const SetPreviewPage: React.FC = () => {
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
   const setQuery = useSet(resolvedSetId)
   const navigate = useNavigate()
+  const { navigationQuery } = useSetAccess(setQuery.data?.folderId)
   if (!parsedSetId.success || !parsedSubsetId.success) {
     return (
       <section className={styles.page}>
@@ -152,10 +154,14 @@ export const SetPreviewPage: React.FC = () => {
 
   const openPage = (pageId: string) => {
     navigate(
-      createUrl(routerPath.dashboardSubsetId, {
-        setId: parsedSetId.data,
-        subsetId: pageId,
-      }),
+      createUrl(
+        routerPath.dashboardSubsetId,
+        {
+          setId: parsedSetId.data,
+          subsetId: pageId,
+        },
+        navigationQuery,
+      ),
     )
   }
 

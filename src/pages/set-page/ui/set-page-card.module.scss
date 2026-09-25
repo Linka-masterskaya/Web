@@ -3,8 +3,8 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
-  /* 371 = 303 (миниатюра) + 16 (зазор) + 52 (блок с названием) */
-  height: 371px;
+  min-width: 0;
+  height: auto;
   padding: 0;
   overflow: hidden;
   text-align: start;
@@ -33,9 +33,11 @@
 
 .preview {
   display: block;
-  flex: 0 0 303px;
+  flex: none;
   width: 100%;
-  height: 303px;
+  /* Исходные пропорции миниатюры 334×303 */
+  aspect-ratio: 334 / 303;
+  height: auto;
   overflow: hidden;
 }
 

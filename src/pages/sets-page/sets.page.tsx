@@ -34,7 +34,7 @@ export const SetsPage: React.FC = () => {
       return
     }
 
-    openCreateSet({ folderId: folderContext.currentFolderId })
+    openCreateSet({ folderId: folderContext.currentFolderId, section: 'my' })
   }
 
   return (
@@ -69,8 +69,17 @@ export const SetsPage: React.FC = () => {
         section="my"
         dashboardHref={createUrl(routerPath.dashboard)}
         onFolderContextChange={handleFolderContextChange}
-        onOpenPack={(pack) => {
-          navigate(createUrl(routerPath.dashboardSetId, { setId: pack.id }))
+        onOpenPack={(pack, context) => {
+          navigate(
+            createUrl(
+              routerPath.dashboardSetId,
+              { setId: pack.id },
+              {
+                section: 'my',
+                ...(context.currentFolderId ? { folderId: context.currentFolderId } : {}),
+              },
+            ),
+          )
         }}
       />
     </section>

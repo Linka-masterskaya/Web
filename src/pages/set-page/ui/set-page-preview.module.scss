@@ -73,6 +73,22 @@
   border-radius: 50%;
 }
 
+.correctBadge {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  right: 2px;
+  width: 14px;
+  height: 14px;
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: var(--mantine-color-white);
+  background: var(--mantine-color-green-6);
+  border-radius: 50%;
+}
+
 .matchingLayout {
   display: flex;
   flex-direction: column;
