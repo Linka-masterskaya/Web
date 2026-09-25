@@ -1,13 +1,17 @@
 .container {
   width: min(1280px, calc(100dvw - 80px));
+  max-width: 100%;
+  min-width: 0;
   height: min(870px, calc(100dvh - 80px));
   max-height: calc(100dvh - 2 * var(--modal-y-offset, 5dvh));
+  overflow: hidden;
 }
 
 .header {
   position: relative;
   z-index: 2;
   flex-shrink: 0;
+  gap: var(--mantine-spacing-md);
   height: 62px;
   padding: 12px 20px;
   border-bottom: 1px solid var(--mantine-color-gray-2);
@@ -15,9 +19,12 @@
 }
 
 .search {
-  flex-shrink: 0;
-  width: 566px;
-  margin-left: 336px;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: 566px;
+  /* Выравнивание с колонкой карточек (ширина категорий). */
+  margin-left: 272px;
 
   input {
     height: 36px;
@@ -28,13 +35,16 @@
 }
 
 .headerIcons {
+  flex-shrink: 0;
   margin-left: auto;
   color: var(--mantine-color-gray-9);
 }
 
 .body {
   flex-grow: 1;
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .categories {
@@ -42,7 +52,7 @@
   z-index: 1;
   flex-shrink: 0;
   width: 272px;
-  min-height: min-content;
+  min-height: 0;
   padding: 40px 0 16px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
@@ -61,27 +71,57 @@
 }
 
 .cards {
-  flex-grow: 1;
+  flex: 1 1 0;
   min-width: 0;
-  min-height: min-content;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .cardsTitle {
   color: var(--mantine-color-black);
   line-height: 40px;
-  margin-top: 40px;
-  margin-left: 28px;
+  margin-top: 16px;
+  margin-left: 16px;
+  font-weight: 700;
+}
+
+.cardsFeedback {
+  flex-shrink: 0;
+  margin-top: var(--mantine-spacing-md);
+  margin-right: 16px;
+  margin-left: 16px;
+  margin-bottom: 0;
+}
+
+.cardsTitleAfterFeedback {
+  color: var(--mantine-color-black);
+  line-height: 40px;
+  margin-top: 0;
+  margin-left: 16px;
   font-weight: 700;
 }
 
 .cardsScroll {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .cardsViewport {
-  padding: 4px 38px 4px 28px;
+  padding: 4px 0;
   scroll-padding-top: 4px;
+  overflow-x: hidden !important;
+
+  /* Иначе контент растягивается по min-content карточек и появляется горизонтальный скролл. */
+  :global(.mantine-ScrollArea-content) {
+    display: block !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+    padding-inline: 16px;
+  }
 }
 
 .footer {

@@ -1,4 +1,4 @@
-import { Flex, Text } from '@mantine/core'
+import { Text } from '@mantine/core'
 import { useEffect, useRef } from 'react'
 import { LibraryCardThumbnail } from './library-card-thumbnail'
 import styles from './library-cards.module.scss'
@@ -28,7 +28,7 @@ export const LibraryCards: React.FC<TLibraryCardsProps> = ({
   }
 
   return (
-    <Flex wrap="wrap" gap="lg" className={styles.wrap}>
+    <div className={styles.grid}>
       {cards.map((card) => {
         const isSelected = selectedCards.some((selectedCard) => selectedCard.id === card.id)
 
@@ -42,6 +42,6 @@ export const LibraryCards: React.FC<TLibraryCardsProps> = ({
           </div>
         )
       })}
-    </Flex>
+    </div>
   )
 }

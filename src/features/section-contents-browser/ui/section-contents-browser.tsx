@@ -288,6 +288,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     ...(canEditLibrary
       ? [
           {
+            id: 'change-cover',
+            label: 'Изменить обложку',
+            onClick: handleChangePackCover,
+          },
+          {
             id: 'unpublish',
             label: 'Снять публикацию',
             disabled: isPackActionPending,

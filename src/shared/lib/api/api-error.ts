@@ -52,6 +52,10 @@ export const getApiErrorMessage = async (error: unknown): Promise<string> => {
       return 'Сессия истекла. Войдите заново'
     }
 
+    if (error.response.status === 404) {
+      return 'Набор не найден или недоступен для изменения'
+    }
+
     if (error.response.status >= 500) {
       return 'Сервер временно недоступен. Попробуйте позже'
     }

@@ -1,4 +1,4 @@
-import type { TLibraryCard, TLibraryPictureImport } from '@entities/library'
+import type { TLibraryCard } from '@entities/library'
 import { useSet, useUpdateSet } from '@entities/set'
 import { Center, Loader, Text } from '@mantine/core'
 import { LibrarySettings } from '@widgets/library-settings'
@@ -11,13 +11,14 @@ export const CoverPickerModal: React.FC<TCoverPickerModalProps> = ({ packId }) =
   const { data: set, isLoading, isError } = useSet(packId)
   const updateSetMutation = useUpdateSet(packId)
 
-  const handleSelect = async (_cards: TLibraryCard[], imports: TLibraryPictureImport[]) => {
-    const imported = imports[0]
+  const handleSelect = async (cards: TLibraryCard[]) => {
+    const coverId = cards[0]?.id
 
-    if (!set || !imported) {
-      return
+    if (!set || !coverId) {
+      throw new Error('Не выбрано изображение для обложки')
     }
 
+    // Обложка в списке наборов читается как library picture id — import не нужен.
     await updateSetMutation.mutateAsync({
       id: set.id,
       title: set.title,
@@ -26,7 +27,7 @@ export const CoverPickerModal: React.FC<TCoverPickerModalProps> = ({ packId }) =
       difficulty: set.difficulty,
       goals: set.goals ?? [],
       notes: set.notes ?? null,
-      coverSourcePictureId: imported.sourcePictureId,
+      coverSourcePictureId: coverId,
     })
   }
 
@@ -50,5 +51,5 @@ export const CoverPickerModal: React.FC<TCoverPickerModalProps> = ({ packId }) =
     return null
   }
 
-  return <LibrarySettings onSelect={handleSelect} />
+  return <LibrarySettings selectionOnly onSelect={handleSelect} />
 }
