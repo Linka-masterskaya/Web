@@ -9,7 +9,7 @@ import { useOpenPublishSet } from '@features/publish-set'
 import { RenameFolderModal } from '@features/rename-folder'
 import { RenameSetModal } from '@features/rename-set'
 import { SendSet } from '@features/set'
-import { Button, Group, Loader, Stack, Text } from '@mantine/core'
+import { Button, Group, Loader, Pagination, Stack, Text } from '@mantine/core'
 import { getApiErrorMessage } from '@shared/lib/api'
 import { useModal } from '@shared/lib/modal'
 import { useRouteQueryParams } from '@shared/lib/routes'
@@ -47,6 +47,7 @@ export type TSectionContentsBrowserProps = {
 
 const DEFAULT_DASHBOARD_HREF = '/'
 const FAVORITES_EMPTY_TEXT = 'Нет избранных наборов'
+const PAGE_SIZE = 50
 
 export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   section,
@@ -72,6 +73,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const { mutateAsync: deleteFolder } = useDeleteFolder()
   const { mutateAsync: unpublishSet, isPending: isUnpublishPending } = useUnpublishSet()
 
+  const [page, setPage] = useState(1)
   const { currentFolderId, isRoot, isInitialFolder, openFolder, goBack, goToRoot } =
     useFolderNavigation(initialFolderId)
 
@@ -89,12 +91,22 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     parentId: currentFolderId,
     sort: 'name',
     order: 'asc',
-    limit: 50,
-    offset: 0,
     ...filters,
+    limit: PAGE_SIZE,
+    offset: (page - 1) * PAGE_SIZE,
   })
 
+  useEffect(() => {
+    setPage(1)
+  }, [currentFolderId, filters, section])
+
   const items = data?.items ?? []
+  const totalPages = Math.ceil((data?.total ?? 0) / PAGE_SIZE)
+  useEffect(() => {
+    if (totalPages > 0 && page > totalPages) {
+      setPage(totalPages)
+    }
+  }, [page, totalPages])
   const emptyText = filters.isFavorite ? FAVORITES_EMPTY_TEXT : config.emptyText
 
   const handleOpenFolder = (folder: TFolderContentItem) => {
@@ -368,6 +380,11 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
             packContextMenuItems={packContextMenuItems}
             folderContextMenuItems={folderContextMenuItems}
           />
+          {totalPages > 1 && (
+            <Group justify="flex-start" mt="md">
+              <Pagination total={totalPages} value={page} onChange={setPage} />
+            </Group>
+          )}
         </>
       )}
 
