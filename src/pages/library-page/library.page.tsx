@@ -17,7 +17,7 @@ const ROOT_FOLDER_CONTEXT: TSectionFolderContext = {
 }
 
 export const LibraryPage: React.FC = () => {
-  // Папки Библиотеки создаёт только главный методист (остальным раздел доступен для чтения и копирования)
+  // Редактирование Библиотеки доступно только главному методисту
   const role = useUserStore((state) => state.role)
   const canEditLibrary = isHeadDefectologist(role)
   const navigate = useNavigate()
@@ -31,7 +31,7 @@ export const LibraryPage: React.FC = () => {
   const handleCreateFolder = () => {
     openCreateFolder({
       section: 'library',
-      parentId: folderContext.currentFolderId ?? null,
+      parentId: null,
     })
   }
 
@@ -42,7 +42,7 @@ export const LibraryPage: React.FC = () => {
           Библиотека
         </Title>
 
-        {canEditLibrary && (
+        {canEditLibrary && folderContext.isRoot && (
           <Button
             variant="filled"
             classNames={{ inner: styles.createActionInner }}

@@ -2,8 +2,10 @@ import { useCreateSet, useUpdateSet } from '@entities/set'
 import { useStudent } from '@entities/student'
 import { SetSettings } from '@features/set-settings'
 import type { TSetSettings } from '@features/set-settings/model/set-settings.schema'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { getApiErrorMessage } from '@shared/lib/api'
+import { createSetSectionQuery, createUrl, routerPath } from '@shared/lib/routes'
 import { PopupLayout } from '@shared/ui/popup-layout'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { z } from 'zod'
 import type { TCreateSetModalProps } from './types'
@@ -13,11 +15,13 @@ const folderIdSchema = z.string().uuid()
 export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
   folderId = null,
   studentId,
+  section,
   onClose,
 }) => {
   const navigate = useNavigate()
   const createSetMutation = useCreateSet()
   const updateSetMutation = useUpdateSet()
+  const [submitError, setSubmitError] = useState<string>()
 
   const studentQuery = useStudent(studentId ?? '')
 
@@ -29,31 +33,38 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       return
     }
 
-    const set = await createSetMutation.mutateAsync({
-      title: values.title.trim(),
-      folderId: resolvedFolderId,
-    })
+    setSubmitError(undefined)
 
-    const age = Number.parseInt(values.age, 10)
+    try {
+      const set = await createSetMutation.mutateAsync({
+        title: values.title.trim(),
+        folderId: resolvedFolderId,
+      })
 
-    await updateSetMutation.mutateAsync({
-      id: set.id,
-      title: values.title.trim(),
-      folderId: resolvedFolderId,
-      age,
-      difficulty: values.level,
-      goals: [],
-      notes: values.notes,
-      coverSourcePictureId: null,
-    })
+      const age = Number.parseInt(values.age, 10)
 
-    navigate(
-      createUrl(routerPath.dashboardSubsetNew, {
-        setId: set.id,
-      }),
-    )
+      await updateSetMutation.mutateAsync({
+        id: set.id,
+        title: values.title.trim(),
+        folderId: resolvedFolderId,
+        age,
+        difficulty: values.level,
+        goals: [],
+        notes: values.notes,
+        coverSourcePictureId: null,
+      })
 
-    onClose()
+      navigate(
+        createUrl(routerPath.dashboardSubsetNew, { setId: set.id }, createSetSectionQuery(section)),
+        {
+          state: section ? { section, folderId: resolvedFolderId } : undefined,
+        },
+      )
+
+      onClose()
+    } catch (error) {
+      setSubmitError(await getApiErrorMessage(error))
+    }
   }
 
   if (!resolvedFolderId) {
@@ -79,6 +90,7 @@ export const CreateSetModal: React.FC<TCreateSetModalProps> = ({
       }
       onClose={onClose}
       onSave={handleSave}
+      submitError={submitError}
     />
   )
 }

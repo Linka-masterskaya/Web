@@ -285,23 +285,6 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       disabled: isPackActionPending,
       onClick: handleCopyPack,
     },
-    ...(canEditLibrary
-      ? [
-          {
-            id: 'change-cover',
-            label: 'Изменить обложку',
-            onClick: handleChangePackCover,
-          },
-          {
-            id: 'unpublish',
-            label: 'Снять публикацию',
-            disabled: isPackActionPending,
-            onClick: (pack: TPackContentItem) => {
-              void handleUnpublishPack(pack)
-            },
-          },
-        ]
-      : []),
   ]
 
   const ownPackContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] = [
@@ -347,22 +330,17 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
     section === 'library' ? libraryPackContextMenuItems : ownPackContextMenuItems
 
-  // Переименование папки — только в «Моих наборах».
-  // Удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
-  const canDeleteFolder = section === 'my' || (section === 'library' && canEditLibrary)
+  // Переименование и удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
+  const canManageFolder = section === 'my' || (section === 'library' && canEditLibrary)
 
   const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] = [
-    ...(section === 'my'
+    ...(canManageFolder
       ? [
           {
             id: 'rename',
             label: 'Переименовать',
             onClick: handleRenameFolder,
           },
-        ]
-      : []),
-    ...(canDeleteFolder
-      ? [
           {
             id: 'delete',
             label: 'Удалить',

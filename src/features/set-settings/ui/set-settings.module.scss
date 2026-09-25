@@ -114,8 +114,9 @@
 }
 
 .submitError {
-	color: var(--mantine-color-red-6);
-	font-size: var(--mantine-font-size-sm);
+	width: 100%;
+	margin: 0;
+	text-align: left;
 }
 
 .ttsError {
