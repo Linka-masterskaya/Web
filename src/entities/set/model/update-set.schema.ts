@@ -8,6 +8,7 @@ export const updateSetParamsSchema = z.object({
   difficulty: z.enum(['easy', 'medium', 'hard']).nullable(),
   goals: z.array(z.string()),
   notes: z.string().nullable(),
+  coverSourcePictureId: z.string().uuid().nullable(),
 })
 
 export type TUpdateSetParams = z.infer<typeof updateSetParamsSchema>

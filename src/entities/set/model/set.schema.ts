@@ -14,6 +14,7 @@ export const setSchema = z
     difficulty: setDifficultySchema.nullable().optional(),
     goals: z.array(z.string()).nullable().optional(),
     notes: z.string().nullable().optional(),
+    cover_source_picture_id: z.string().uuid().nullable().optional(),
     config: setConfigSchema,
   })
   .transform((pack) => ({
@@ -24,6 +25,7 @@ export const setSchema = z
     difficulty: pack.difficulty ?? null,
     goals: pack.goals ?? undefined,
     notes: pack.notes ?? undefined,
+    coverSourcePictureId: pack.cover_source_picture_id ?? null,
     config: pack.config,
     pages: pack.config.blocks,
   }))

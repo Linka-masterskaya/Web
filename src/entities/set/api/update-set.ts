@@ -16,6 +16,7 @@ export const updateSet = async (params: TUpdateSetParams): Promise<TSet> => {
         difficulty: data.difficulty,
         goals: data.goals,
         notes: data.notes,
+        cover_source_picture_id: data.coverSourcePictureId,
       },
     })
     .json(setSchema)
