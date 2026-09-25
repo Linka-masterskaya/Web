@@ -215,8 +215,18 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     })
   }
 
-  const handleCopyPack = (pack: TPackContentItem) => {
-    openCopySet({ setId: pack.id })
+  const handleCopyPackToMy = (pack: TPackContentItem) => {
+    openCopySet({
+      setId: pack.id,
+      targetSection: 'my',
+    })
+  }
+
+  const handleCopyPackToStudent = (pack: TPackContentItem) => {
+    openCopySet({
+      setId: pack.id,
+      targetSection: 'students',
+    })
   }
 
   const handlePublishPack = (pack: TPackContentItem) => {
@@ -273,7 +283,13 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       id: 'copy',
       label: 'Скопировать в мои папки',
       disabled: isPackActionPending,
-      onClick: handleCopyPack,
+      onClick: handleCopyPackToMy,
+    },
+    {
+      id: 'copy-to-student',
+      label: 'Скопировать в папку ученика',
+      disabled: isPackActionPending,
+      onClick: handleCopyPackToStudent,
     },
     ...(canEditLibrary
       ? [

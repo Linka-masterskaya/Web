@@ -7,9 +7,16 @@ export const useOpenCopySet = () => {
   const { open, close } = useModal()
 
   return useCallback(
-    ({ setId, onSuccess }: TOpenCopySetParams) => {
+    ({ setId, targetSection = 'my', onSuccess }: TOpenCopySetParams) => {
       open({
-        content: <CopySetModal setId={setId} onClose={close} onSuccess={onSuccess} />,
+        content: (
+          <CopySetModal
+            setId={setId}
+            targetSection={targetSection}
+            onClose={close}
+            onSuccess={onSuccess}
+          />
+        ),
         size: 518,
         padding: 0,
         radius: 20,
