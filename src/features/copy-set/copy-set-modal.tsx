@@ -13,8 +13,13 @@ const FOLDER_INDENT_PX = 16
  * Копирование набора из Библиотеки в свои папки.
  * Обычному пользователю доступно только копирование: набор из Библиотеки редактировать нельзя.
  */
-export const CopySetModal: React.FC<TCopySetModalProps> = ({ setId, onClose, onSuccess }) => {
-  const foldersQuery = useSectionFolders('my')
+export const CopySetModal: React.FC<TCopySetModalProps> = ({
+  setId,
+  targetSection,
+  onClose,
+  onSuccess,
+}) => {
+  const foldersQuery = useSectionFolders(targetSection)
   const { mutateAsync: duplicateSet, isPending } = useDuplicateSet()
   const [selectedFolderId, setSelectedFolderId] = useState<string | null>(null)
   const [actionError, setActionError] = useState<string | null>(null)
@@ -65,7 +70,7 @@ export const CopySetModal: React.FC<TCopySetModalProps> = ({ setId, onClose, onS
       </ActionIcon>
 
       <Title id="copy-set-title" className={styles.title} order={2}>
-        Скопировать в мои папки:
+        {targetSection === 'students' ? 'Скопировать в папку ученика:' : 'Скопировать в мои папки:'}
       </Title>
 
       {foldersQuery.isLoading && renderState(<Loader aria-label="Загрузка папок" />)}
@@ -84,12 +89,19 @@ export const CopySetModal: React.FC<TCopySetModalProps> = ({ setId, onClose, onS
         !foldersQuery.isError &&
         folders.length === 0 &&
         renderState(
-          <Text>В «Мои наборы» пока нет папок. Создайте папку и повторите копирование.</Text>,
+          <Text>
+            {targetSection === 'students'
+              ? 'Нет доступных папок учеников.'
+              : 'В «Мои наборы» пока нет папок. Создайте папку и повторите копирование.'}
+          </Text>,
         )}
 
       {!foldersQuery.isLoading && !foldersQuery.isError && folders.length > 0 && (
         <form className={styles.form} onSubmit={handleSubmit}>
-          <fieldset className={styles.folders} aria-label="Мои папки">
+          <fieldset
+            className={styles.folders}
+            aria-label={targetSection === 'students' ? 'Папки учеников' : 'Мои папки'}
+          >
             {folders.map((folder) => (
               <UnstyledButton
                 className={styles.folderButton}
@@ -100,7 +112,11 @@ export const CopySetModal: React.FC<TCopySetModalProps> = ({ setId, onClose, onS
                 disabled={isPending}
                 onClick={() => handleSelectFolder(folder.id)}
               >
-                <Icon name="Folder" size={20} strokeWidth={1.75} />
+                <Icon
+                  name={folder.kind === 'student' ? 'UserRound' : 'Folder'}
+                  size={20}
+                  strokeWidth={1.75}
+                />
                 <span>{folder.name}</span>
               </UnstyledButton>
             ))}
