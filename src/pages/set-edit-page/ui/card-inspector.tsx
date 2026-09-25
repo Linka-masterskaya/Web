@@ -69,12 +69,14 @@ export const CardInspector: React.FC<{ pageId: string; card: TSetPageElement }> 
           </Button>
         ))}
       </div>
-      <TextInput
-        aria-label="Название карточки"
-        placeholder="Введите название"
-        value={card.value ?? ''}
-        onChange={(event) => update({ value: event.currentTarget.value })}
-      />
+      {card.card_type !== 'empty' && card.card_type !== 'space' && (
+        <TextInput
+          aria-label="Название карточки"
+          placeholder="Введите название"
+          value={card.value ?? ''}
+          onChange={(event) => update({ value: event.currentTarget.value })}
+        />
+      )}
       <Stack gap="sm">
         <Text fw={600} ta="center">
           Изображение

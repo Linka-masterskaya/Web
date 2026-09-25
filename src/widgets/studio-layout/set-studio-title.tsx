@@ -1,7 +1,13 @@
 import { folderQueryKeys, useSectionContents } from '@entities/folder'
-import { getSetPageTitle, useSaveSetEditor, useSet, useUpdateSetTitle } from '@entities/set'
+import {
+  getSetPageTitle,
+  useSaveSetEditor,
+  useSet,
+  useSetAccess,
+  useUpdateSetTitle,
+} from '@entities/set'
 import { ActionIcon, Text, TextInput } from '@mantine/core'
-import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useQueryClient } from '@tanstack/react-query'
 import { type FormEvent, type KeyboardEvent, useEffect, useState } from 'react'
@@ -25,6 +31,7 @@ export const SetStudioTitle: React.FC = () => {
     subsetEditorUrl,
   } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
+  const { canEditSet, backUrl } = useSetAccess(setQuery.data?.folderId)
   const studentFoldersQuery = useSectionContents({
     section: 'students',
     limit: 50,
@@ -54,7 +61,7 @@ export const SetStudioTitle: React.FC = () => {
     : activePage
       ? getSetPageTitle(activePage, activePageIndex)
       : (setQuery.data?.title ?? (hasValidSetId ? 'Набор' : 'Новый набор'))
-  const canEditTitle = isSetOverview && Boolean(setQuery.data?.title)
+  const canEditTitle = canEditSet && isSetOverview && Boolean(setQuery.data?.title)
 
   useEffect(() => {
     void resolvedSetId
@@ -64,8 +71,12 @@ export const SetStudioTitle: React.FC = () => {
   }, [resolvedSetId, updateSetTitleMutation.reset])
 
   const handleBack = async () => {
-    if (isSubsetPreview && subsetEditorUrl) {
+    if (isSubsetPreview && subsetEditorUrl && canEditSet) {
       navigate(subsetEditorUrl)
+      return
+    }
+    if (isSubsetPreview && setOverviewUrl) {
+      navigate(setOverviewUrl)
       return
     }
     if ((isSetEditor || isSubsetEditor || isSubsetNew) && !(await saveEditor())) {
@@ -85,7 +96,7 @@ export const SetStudioTitle: React.FC = () => {
       return
     }
 
-    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
+    navigate(backUrl)
   }
 
   const handleStartEditing = () => {
@@ -145,7 +156,9 @@ export const SetStudioTitle: React.FC = () => {
         onClick={handleBack}
         aria-label={
           isSubsetPreview
-            ? 'Назад к редактированию'
+            ? canEditSet
+              ? 'Назад к редактированию'
+              : 'Назад к набору'
             : isSetOverview
               ? 'К списку наборов'
               : 'Вернуться к набору'
@@ -197,7 +210,11 @@ export const SetStudioTitle: React.FC = () => {
       ) : (
         <>
           <Text className={styles.title}>
-            {isSubsetPreview ? 'Назад к редактированию' : currentTitle}
+            {isSubsetPreview
+              ? canEditSet
+                ? 'Назад к редактированию'
+                : 'Назад к набору'
+              : currentTitle}
           </Text>
 
           {canEditTitle && (

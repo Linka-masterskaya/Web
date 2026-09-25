@@ -1,6 +1,11 @@
-import { setQueryKeys, useSaveSetEditor, useSet, useSetEditorStore } from '@entities/set'
+import {
+  setQueryKeys,
+  useSaveSetEditor,
+  useSet,
+  useSetAccess,
+  useSetEditorStore,
+} from '@entities/set'
 import { Button } from '@mantine/core'
-import { createDashboardSetsUrl } from '@shared/lib/routes'
 import { useIsMutating } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 import { useSetStudioRoute } from './model/use-set-studio-route'
@@ -10,6 +15,7 @@ export const SetStudioExitButton: React.FC = () => {
   const navigate = useNavigate()
   const { isEditorRoute, isSubsetPreview, resolvedSetId, setOverviewUrl } = useSetStudioRoute()
   const setQuery = useSet(resolvedSetId)
+  const { backUrl, canEditSet } = useSetAccess(setQuery.data?.folderId)
   const save = useSaveSetEditor(resolvedSetId)
   const editorSaving = useSetEditorStore((state) => state.setId === resolvedSetId && state.isSaving)
   const isSaving =
@@ -17,7 +23,7 @@ export const SetStudioExitButton: React.FC = () => {
       mutationKey: setQueryKeys.detail(resolvedSetId),
     }) > 0
 
-  if (!isEditorRoute && !isSubsetPreview) {
+  if (!isEditorRoute && !(isSubsetPreview && canEditSet)) {
     return null
   }
 
@@ -30,7 +36,7 @@ export const SetStudioExitButton: React.FC = () => {
       return
     }
 
-    navigate(createDashboardSetsUrl(setQuery.data?.folderId))
+    navigate(backUrl)
   }
 
   return (

@@ -5,8 +5,10 @@ import {
   type TSectionFolderContext,
 } from '@features/section-contents-browser'
 import { Button, Title } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router'
 import styles from './library-page.module.scss'
 
 const ROOT_FOLDER_CONTEXT: TSectionFolderContext = {
@@ -14,9 +16,10 @@ const ROOT_FOLDER_CONTEXT: TSectionFolderContext = {
 }
 
 export const LibraryPage: React.FC = () => {
-  // Папки Библиотеки создаёт только главный методист (остальным раздел доступен для чтения и копирования)
+  // Редактирование Библиотеки доступно только главному методисту
   const role = useUserStore((state) => state.role)
   const canEditLibrary = isHeadDefectologist(role)
+  const navigate = useNavigate()
   const openCreateFolder = useOpenCreateFolder()
   const [folderContext, setFolderContext] = useState<TSectionFolderContext>(ROOT_FOLDER_CONTEXT)
 
@@ -27,7 +30,7 @@ export const LibraryPage: React.FC = () => {
   const handleCreateFolder = () => {
     openCreateFolder({
       section: 'library',
-      parentId: folderContext.currentFolderId ?? null,
+      parentId: null,
     })
   }
 
@@ -38,7 +41,7 @@ export const LibraryPage: React.FC = () => {
           Библиотека
         </Title>
 
-        {canEditLibrary && (
+        {canEditLibrary && folderContext.isRoot && (
           <Button
             variant="filled"
             classNames={{ inner: styles.createActionInner }}
@@ -50,7 +53,23 @@ export const LibraryPage: React.FC = () => {
         )}
       </div>
 
-      <SectionContentsBrowser section="library" onFolderContextChange={handleFolderContextChange} />
+      <SectionContentsBrowser
+        section="library"
+        dashboardHref={createUrl(routerPath.dashboard)}
+        onFolderContextChange={handleFolderContextChange}
+        onOpenPack={(pack, context) => {
+          navigate(
+            createUrl(
+              routerPath.dashboardSetId,
+              { setId: pack.id },
+              {
+                section: 'library',
+                ...(context.currentFolderId ? { folderId: context.currentFolderId } : {}),
+              },
+            ),
+          )
+        }}
+      />
     </section>
   )
 }

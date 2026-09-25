@@ -100,6 +100,15 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   useEffect(() => {
     setPage(1)
   }, [currentFolderId, filters, section])
+  // Несуществующий parent_id в разделе (например, folderId из Библиотеки на /sets) → 404.
+  // Сбрасываем folderId, чтобы не зациклиться на ошибке.
+  useEffect(() => {
+    if (!currentFolderId || !error || !isHTTPError(error) || error.response.status !== 404) {
+      return
+    }
+
+    goToRoot()
+  }, [currentFolderId, error, goToRoot])
 
   const items = data?.items ?? []
   const totalPages = Math.ceil((data?.total ?? 0) / PAGE_SIZE)
@@ -287,18 +296,6 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       disabled: isPackActionPending,
       onClick: handleCopyPack,
     },
-    ...(canEditLibrary
-      ? [
-          {
-            id: 'unpublish',
-            label: 'Снять публикацию',
-            disabled: isPackActionPending,
-            onClick: (pack: TPackContentItem) => {
-              void handleUnpublishPack(pack)
-            },
-          },
-        ]
-      : []),
   ]
 
   const ownPackContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] = [
@@ -344,22 +341,17 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
   const packContextMenuItems: readonly TContextMenuItem<TPackContentItem>[] =
     section === 'library' ? libraryPackContextMenuItems : ownPackContextMenuItems
 
-  // Переименование папки — только в «Моих наборах».
-  // Удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
-  const canDeleteFolder = section === 'my' || (section === 'library' && canEditLibrary)
+  // Переименование и удаление: в «Моих наборах» — всегда, в Библиотеке — только главному методисту
+  const canManageFolder = section === 'my' || (section === 'library' && canEditLibrary)
 
   const folderContextMenuItems: readonly TContextMenuItem<TFolderContentItem>[] = [
-    ...(section === 'my'
+    ...(canManageFolder
       ? [
           {
             id: 'rename',
             label: 'Переименовать',
             onClick: handleRenameFolder,
           },
-        ]
-      : []),
-    ...(canDeleteFolder
-      ? [
           {
             id: 'delete',
             label: 'Удалить',

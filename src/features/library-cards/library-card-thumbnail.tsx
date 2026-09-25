@@ -28,6 +28,7 @@ export const LibraryCardThumbnail: React.FC<TLibraryCardThumbnailProps> = ({
 
   return (
     <Card
+      fill
       variant="image"
       label={card.title}
       imageSrc={imageUrl}

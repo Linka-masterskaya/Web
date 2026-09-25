@@ -1,4 +1,4 @@
-import { useSet } from '@entities/set'
+import { useSet, useSetAccess } from '@entities/set'
 import { useOpenSetSettings } from '@features/set-settings'
 import { Slider, Text, UnstyledButton } from '@mantine/core'
 import { createUrl, routerPath } from '@shared/lib/routes'
@@ -12,6 +12,7 @@ export const SetStudioToolbar: React.FC = () => {
 
   const navigate = useNavigate()
   const setQuery = useSet(resolvedSetId)
+  const { canEditSet, navigationQuery } = useSetAccess(setQuery.data?.folderId)
   const openSetSettings = useOpenSetSettings()
   const pages = setQuery.data?.pages ?? []
   const activeIndex = pages.findIndex((page) => page.id === resolvedSubsetId)
@@ -46,10 +47,14 @@ export const SetStudioToolbar: React.FC = () => {
               }
 
               navigate(
-                createUrl(routerPath.dashboardSubsetId, {
-                  setId: resolvedSetId,
-                  subsetId: page.id,
-                }),
+                createUrl(
+                  routerPath.dashboardSubsetId,
+                  {
+                    setId: resolvedSetId,
+                    subsetId: page.id,
+                  },
+                  navigationQuery,
+                ),
               )
             }}
           />
@@ -57,7 +62,7 @@ export const SetStudioToolbar: React.FC = () => {
       </section>
     )
   }
-  if (!isSetOverview) {
+  if (!isSetOverview || !canEditSet) {
     return null
   }
 

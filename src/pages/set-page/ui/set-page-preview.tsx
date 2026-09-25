@@ -1,11 +1,13 @@
 import {
   getSequenceElements,
+  readSetPageAnswers,
   readSetPageCategories,
   readSetPagePairs,
   type TSetPage,
   type TSetPageElement,
 } from '@entities/set'
 import { FitText } from '@shared/ui/assignment-card'
+import { Icon } from '@shared/ui/icon'
 import { PictureImage } from '@shared/ui/picture-image/picture-image'
 import clsx from 'clsx'
 import type { CSSProperties, ReactNode } from 'react'
@@ -149,7 +151,27 @@ const renderPreview = (page: TSetPage) => {
       )
 
     case 'single_choice':
-    case 'multi_choice':
+    case 'multi_choice': {
+      const correctIds = new Set(
+        readSetPageAnswers(page)
+          .filter((answer) => answer.is_correct)
+          .map((answer) => answer.element_id),
+      )
+
+      return (
+        <GridPreview
+          elements={page.elements}
+          renderBadge={(element) =>
+            correctIds.has(element.id) ? (
+              <span className={styles.correctBadge}>
+                <Icon name="Check" size={10} aria-hidden="true" />
+              </span>
+            ) : null
+          }
+        />
+      )
+    }
+
     case 'grid':
       return <GridPreview elements={page.elements} />
 
