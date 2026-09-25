@@ -1,5 +1,6 @@
 export type { TFolderPathItem } from './model/use-folder-navigation'
 export { useFolderNavigation } from './model/use-folder-navigation'
+export { PackContentCard } from './ui/pack-content-card'
 export type {
   TOpenSectionPackContext,
   TOpenSectionPackHandler,

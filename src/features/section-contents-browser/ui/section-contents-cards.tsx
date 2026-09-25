@@ -11,6 +11,7 @@ import { Card } from '@shared/ui/card'
 import { ContextMenu, type TContextMenuItem, useContextMenu } from '@shared/ui/context-menu'
 import { Icon } from '@shared/ui/icon'
 import type { FC, MouseEvent as ReactMouseEvent } from 'react'
+import { PackContentCard } from './pack-content-card'
 import styles from './section-contents-cards.module.scss'
 
 type TBackCardAction =
@@ -115,6 +116,18 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
 
             const isPack = isPackContentItem(item)
 
+            if (isPack) {
+              return (
+                <PackContentCard
+                  key={`${item.type}:${item.id}`}
+                  item={item}
+                  className={gridStyles.card}
+                  onClick={handleClick}
+                  onContextMenu={onContextMenu}
+                />
+              )
+            }
+
             return (
               <Card
                 key={`${item.type}:${item.id}`}
@@ -125,8 +138,6 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                 action={{ type: 'function', onClick: handleClick }}
                 className={gridStyles.card}
                 onContextMenu={onContextMenu}
-                level={isPack ? (item.difficulty ?? undefined) : undefined}
-                age={isPack ? (item.age ?? undefined) : undefined}
                 // TODO: вернуть после бэкенда is_favorite на contents
                 // favorite={
                 //   isPack
