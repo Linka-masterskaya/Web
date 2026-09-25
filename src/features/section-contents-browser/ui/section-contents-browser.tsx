@@ -95,6 +95,16 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     ...filters,
   })
 
+  // Несуществующий parent_id в разделе (например, folderId из Библиотеки на /sets) → 404.
+  // Сбрасываем folderId, чтобы не зациклиться на ошибке.
+  useEffect(() => {
+    if (!currentFolderId || !error || !isHTTPError(error) || error.response.status !== 404) {
+      return
+    }
+
+    goToRoot()
+  }, [currentFolderId, error, goToRoot])
+
   const items = data?.items ?? []
   const emptyText = filters.isFavorite ? FAVORITES_EMPTY_TEXT : config.emptyText
 

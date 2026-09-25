@@ -6,10 +6,10 @@ import type { TSection } from '../model/content-item.schema'
 
 const SECTION_FOLDERS_STALE_TIME_MS = 30_000
 
-export const useSectionFolders = (section: TSection) =>
+export const useSectionFolders = (section: TSection, options?: { enabled?: boolean }) =>
   useQuery({
     queryKey: folderQueryKeys.sectionList(section),
     queryFn: () => getSectionFolders({ section }),
     staleTime: SECTION_FOLDERS_STALE_TIME_MS,
-    enabled: getIsAuth(),
+    enabled: getIsAuth() && (options?.enabled ?? true),
   })

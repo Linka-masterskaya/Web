@@ -23,9 +23,8 @@
 
 .grid {
   display: grid;
-  /* Карточка 334px; на узком экране сжимается до ширины колонки. */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 334px), 334px));
+  /* Колонки растягиваются на всю ширину; число столбцов зависит от контейнера. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 16px;
-  justify-content: start;
   width: 100%;
 }

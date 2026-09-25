@@ -1,3 +1,4 @@
+import type { TSetLocationState } from '@entities/set'
 import { useOpenCreateFolder } from '@features/create-folder'
 import { useOpenCreateSet } from '@features/create-set'
 import {
@@ -69,8 +70,15 @@ export const SetsPage: React.FC = () => {
         section="my"
         dashboardHref={createUrl(routerPath.dashboard)}
         onFolderContextChange={handleFolderContextChange}
-        onOpenPack={(pack) => {
-          navigate(createUrl(routerPath.dashboardSetId, { setId: pack.id }))
+        onOpenPack={(pack, context) => {
+          const locationState: TSetLocationState = {
+            section: 'my',
+            folderId: context.currentFolderId,
+          }
+
+          navigate(createUrl(routerPath.dashboardSetId, { setId: pack.id }, { section: 'my' }), {
+            state: locationState,
+          })
         }}
       />
     </section>

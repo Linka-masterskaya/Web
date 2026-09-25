@@ -1,3 +1,4 @@
+import type { TSetLocationState } from '@entities/set'
 import { isHeadDefectologist, useUserStore } from '@entities/user'
 import { useOpenCreateFolder } from '@features/create-folder'
 import {
@@ -5,8 +6,10 @@ import {
   type TSectionFolderContext,
 } from '@features/section-contents-browser'
 import { Button, Title } from '@mantine/core'
+import { createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router'
 import styles from './library-page.module.scss'
 
 const ROOT_FOLDER_CONTEXT: TSectionFolderContext = {
@@ -17,6 +20,7 @@ export const LibraryPage: React.FC = () => {
   // Папки Библиотеки создаёт только главный методист (остальным раздел доступен для чтения и копирования)
   const role = useUserStore((state) => state.role)
   const canEditLibrary = isHeadDefectologist(role)
+  const navigate = useNavigate()
   const openCreateFolder = useOpenCreateFolder()
   const [folderContext, setFolderContext] = useState<TSectionFolderContext>(ROOT_FOLDER_CONTEXT)
 
@@ -50,7 +54,22 @@ export const LibraryPage: React.FC = () => {
         )}
       </div>
 
-      <SectionContentsBrowser section="library" onFolderContextChange={handleFolderContextChange} />
+      <SectionContentsBrowser
+        section="library"
+        dashboardHref={createUrl(routerPath.dashboard)}
+        onFolderContextChange={handleFolderContextChange}
+        onOpenPack={(pack, context) => {
+          const locationState: TSetLocationState = {
+            section: 'library',
+            folderId: context.currentFolderId,
+          }
+
+          navigate(
+            createUrl(routerPath.dashboardSetId, { setId: pack.id }, { section: 'library' }),
+            { state: locationState },
+          )
+        }}
+      />
     </section>
   )
 }

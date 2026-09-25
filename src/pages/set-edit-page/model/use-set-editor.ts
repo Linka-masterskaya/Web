@@ -4,10 +4,11 @@ import {
   setPageTypeSchema,
   useSaveSetEditor,
   useSet,
+  useSetAccess,
   useSetEditorStore,
 } from '@entities/set'
 import { useConfirmDelete } from '@features/confirm-delete'
-import { createDashboardSetsUrl, createUrl, routerPath } from '@shared/lib/routes'
+import { createSetSectionQuery, createUrl, routerPath } from '@shared/lib/routes'
 import { useEffect, useLayoutEffect } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
@@ -27,10 +28,54 @@ export const useSetEditor = () => {
   const parsedSubsetId = subsetId == null ? null : idSchema.safeParse(subsetId)
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
   const setQuery = useSet(resolvedSetId)
+  const { canEditSet, backUrl, isAccessResolved, section } = useSetAccess(setQuery.data?.folderId)
+  const sectionQuery = createSetSectionQuery(section)
   const editor = useSetEditorStore()
   const save = useSaveSetEditor(resolvedSetId)
   const initialize = editor.initialize
   const seededPageId = seededPageByLocationKey.get(location.key)
+
+  useEffect(() => {
+    if (!isAccessResolved || canEditSet || !parsedSetId.success) {
+      return
+    }
+
+    if (parsedSubsetId?.success) {
+      navigate(
+        createUrl(
+          routerPath.dashboardSubsetId,
+          {
+            setId: resolvedSetId,
+            subsetId: parsedSubsetId.data,
+          },
+          createSetSectionQuery(section),
+        ),
+        { replace: true, state: location.state },
+      )
+      return
+    }
+
+    navigate(
+      createUrl(
+        routerPath.dashboardSetId,
+        { setId: resolvedSetId },
+        createSetSectionQuery(section),
+      ),
+      {
+        replace: true,
+        state: location.state,
+      },
+    )
+  }, [
+    canEditSet,
+    isAccessResolved,
+    location.state,
+    navigate,
+    parsedSetId.success,
+    parsedSubsetId,
+    resolvedSetId,
+    section,
+  ])
 
   useEffect(() => {
     if (setQuery.data && !isSubsetNew) {
@@ -39,7 +84,7 @@ export const useSetEditor = () => {
   }, [setQuery.data, initialize, isSubsetNew])
 
   useLayoutEffect(() => {
-    if (!isSubsetNew || !parsedSetId.success || !setQuery.data) {
+    if (!isSubsetNew || !parsedSetId.success || !setQuery.data || !canEditSet) {
       return
     }
 
@@ -58,19 +103,26 @@ export const useSetEditor = () => {
     }
 
     navigate(
-      createUrl(routerPath.dashboardSubsetIdEdit, {
-        setId: resolvedSetId,
-        subsetId: pageId,
-      }),
-      { replace: true },
+      createUrl(
+        routerPath.dashboardSubsetIdEdit,
+        {
+          setId: resolvedSetId,
+          subsetId: pageId,
+        },
+        createSetSectionQuery(section),
+      ),
+      { replace: true, state: location.state },
     )
   }, [
+    canEditSet,
     initialize,
     isSubsetNew,
     location.key,
+    location.state,
     navigate,
     parsedSetId.success,
     resolvedSetId,
+    section,
     setQuery.data,
   ])
 
@@ -124,15 +176,18 @@ export const useSetEditor = () => {
     }
     navigate(
       parsedSetId.success
-        ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId })
-        : createDashboardSetsUrl(setQuery.data?.folderId),
+        ? createUrl(routerPath.dashboardSetId, { setId: resolvedSetId }, sectionQuery)
+        : backUrl,
+      { state: location.state },
     )
   }
 
-  const handleBackToSets = () => navigate(createDashboardSetsUrl(setQuery.data?.folderId))
+  const handleBackToSets = () => navigate(backUrl)
   const handleCreatePage = async () => {
     if (parsedSetId.success && (await save())) {
-      navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
+      navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, sectionQuery), {
+        state: location.state,
+      })
     }
   }
 
@@ -144,10 +199,15 @@ export const useSetEditor = () => {
       return
     }
     navigate(
-      createUrl(routerPath.dashboardSubsetId, {
-        setId: resolvedSetId,
-        subsetId: activePage.id,
-      }),
+      createUrl(
+        routerPath.dashboardSubsetId,
+        {
+          setId: resolvedSetId,
+          subsetId: activePage.id,
+        },
+        sectionQuery,
+      ),
+      { state: location.state },
     )
   }
 

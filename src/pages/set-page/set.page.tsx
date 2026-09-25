@@ -1,9 +1,9 @@
-import { useSet } from '@entities/set'
+import { useSet, useSetAccess } from '@entities/set'
 import { Blockquote, Button, Center, Group, Loader, Stack, Text, Title } from '@mantine/core'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createSetSectionQuery, createUrl, routerPath } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { isHTTPError } from 'ky'
-import { useNavigate, useParams } from 'react-router'
+import { useLocation, useNavigate, useParams } from 'react-router'
 import { z } from 'zod'
 
 import styles from './set-page.module.scss'
@@ -21,11 +21,14 @@ const getLoadErrorMessage = (error: unknown) => {
 
 export const SetPage: React.FC = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { setId } = useParams()
   const parsedSetId = setIdSchema.safeParse(setId)
   const resolvedSetId = parsedSetId.success ? parsedSetId.data : ''
 
   const setQuery = useSet(resolvedSetId)
+  const { canEditSet, backUrl, section } = useSetAccess(setQuery.data?.folderId)
+  const sectionQuery = createSetSectionQuery(section)
 
   if (!parsedSetId.success) {
     return (
@@ -34,8 +37,8 @@ export const SetPage: React.FC = () => {
           <Text c="red.6" role="alert">
             Некорректный идентификатор набора
           </Text>
-          <Button variant="outline" onClick={() => navigate(createUrl(routerPath.dashboardSets))}>
-            К списку наборов
+          <Button variant="outline" onClick={() => navigate(backUrl)}>
+            Назад
           </Button>
         </Stack>
       </section>
@@ -54,15 +57,20 @@ export const SetPage: React.FC = () => {
           </Text>
         </Stack>
 
-        <Button
-          leftSection={<Icon name="Plus" size={16} />}
-          disabled={setQuery.isLoading || setQuery.isError}
-          onClick={() =>
-            navigate(createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }))
-          }
-        >
-          Создать страницу
-        </Button>
+        {canEditSet && (
+          <Button
+            leftSection={<Icon name="Plus" size={16} />}
+            disabled={setQuery.isLoading || setQuery.isError}
+            onClick={() =>
+              navigate(
+                createUrl(routerPath.dashboardSubsetNew, { setId: resolvedSetId }, sectionQuery),
+                { state: location.state },
+              )
+            }
+          >
+            Создать страницу
+          </Button>
+        )}
       </Group>
 
       {setQuery.isLoading && (
@@ -97,12 +105,18 @@ export const SetPage: React.FC = () => {
         <SetPageGrid
           setId={resolvedSetId}
           pages={pages}
+          readOnly={!canEditSet}
           onOpenPage={(page) =>
             navigate(
-              createUrl(routerPath.dashboardSubsetIdEdit, {
-                setId: resolvedSetId,
-                subsetId: page.id,
-              }),
+              createUrl(
+                canEditSet ? routerPath.dashboardSubsetIdEdit : routerPath.dashboardSubsetId,
+                {
+                  setId: resolvedSetId,
+                  subsetId: page.id,
+                },
+                sectionQuery,
+              ),
+              { state: location.state },
             )
           }
         />
