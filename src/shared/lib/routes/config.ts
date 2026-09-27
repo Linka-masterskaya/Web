@@ -40,6 +40,7 @@ export const routeQueryParams = {
   sort: 'sort',
   order: 'order',
   section: 'section',
+  emailExists: 'email_exists',
 } as const
 
 // Routes
