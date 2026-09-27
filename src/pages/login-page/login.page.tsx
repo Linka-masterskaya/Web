@@ -5,7 +5,8 @@ import {
   emailVerificationNoticeModalOptions,
 } from '@features/email-verification-notice'
 import { LoginForm } from '@features/login'
-import { Title } from '@mantine/core'
+import { YandexLoginButton } from '@features/yandex-login'
+import { Text, Title } from '@mantine/core'
 import { useModal } from '@shared/lib/modal'
 import { createUrl, routerPath } from '@shared/lib/routes'
 import { useEffect, useRef } from 'react'
@@ -49,6 +50,8 @@ export const LoginPage = () => {
         Войти
       </Title>
       <LoginForm onSubmit={handleSubmit} />
+      <Text className={styles.divider}>или</Text>
+      <YandexLoginButton />
     </div>
   )
 }
