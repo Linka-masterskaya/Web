@@ -49,16 +49,16 @@ export const LoginPage = () => {
   return (
     <div className={styles.content}>
       <Title order={1} className={styles.title}>
-        Войти
+        Вход
       </Title>
       {showEmailExists && (
         <Text className={styles.emailExists}>
           Этот email уже зарегистрирован. Войдите с паролем.
         </Text>
       )}
-      <LoginForm onSubmit={handleSubmit} />
-      <Text className={styles.divider}>или</Text>
       <YandexLoginButton />
+      <Text className={styles.divider}>или Email</Text>
+      <LoginForm onSubmit={handleSubmit} />
     </div>
   )
 }
