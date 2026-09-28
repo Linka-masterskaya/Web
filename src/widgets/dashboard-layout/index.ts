@@ -1,4 +1,5 @@
 export { DashboardBreadcrumbs } from './dashboard-breadcrumbs'
 export { DashboardCreateEntity } from './dashboard-create-entity'
+export { DashboardHeaderTitle } from './dashboard-header-title'
 export { DashboardLayout } from './dashboard-layout'
 export type { TDashboardLayoutProps } from './types'

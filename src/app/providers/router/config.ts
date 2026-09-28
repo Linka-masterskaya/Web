@@ -13,6 +13,7 @@ import { AuthLayoutLeft, AuthLayoutRight } from '@widgets/auth-layout'
 import {
   DashboardBreadcrumbs,
   DashboardCreateEntity,
+  DashboardHeaderTitle,
   DashboardLayout,
 } from '@widgets/dashboard-layout'
 import { ProfileToggleButton } from '@widgets/profile-toggle/profile-toggle'
@@ -32,14 +33,18 @@ import { RouteErrorFallback } from './route-error-fallback'
 
 // Общий хедер разделов: заголовок, поиск + фильтры, избранное и профиль.
 // options позволяют переопределить состав под конкретный раздел:
+// - titleSlot: заменить заголовок (по умолчанию — имя текущего раздела)
 // - searchSlot: null — скрыть поиск/фильтры
 // - actionsSlot: заменить правую часть (например, только профиль)
 const createDashboardHeader = (options?: {
+  titleSlot?: React.ReactNode
   searchSlot?: React.ReactNode
   actionsSlot?: React.ReactNode
 }) =>
   createElement(AppLayout, {
-    titleSlot: 'Библиотека наборов',
+    // У «Библиотеки» и «Моих наборов» общий хедер, поэтому заголовок берём из маршрута
+    titleSlot:
+      options?.titleSlot === undefined ? createElement(DashboardHeaderTitle) : options.titleSlot,
     searchSlot:
       options?.searchSlot === undefined
         ? createElement(
