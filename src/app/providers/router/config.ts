@@ -1,6 +1,5 @@
 import { FilterAge } from '@features/filter-age'
-// TODO: вернуть после бэкенда is_favorite на contents
-// import { FilterFavorite } from '@features/filter-favorite'
+import { FilterFavorite } from '@features/filter-favorite'
 import { FilterLevel } from '@features/filter-level'
 import { FilterSearch } from '@features/filter-search'
 import { CreateSetButton } from '@pages/student-shelf-page/create-set-button'
@@ -55,8 +54,7 @@ const createDashboardHeader = (options?: {
         ? createElement(
             React.Fragment,
             null,
-            // TODO: вернуть после бэкенда is_favorite на contents
-            // createElement(FilterFavorite),
+            createElement(FilterFavorite),
             createElement(ProfileToggleButton),
           )
         : options.actionsSlot,
