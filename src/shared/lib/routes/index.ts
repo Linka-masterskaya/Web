@@ -1,4 +1,5 @@
 export { routeParams, routeQueryParams, routerPath, routeSegments } from './config'
+export { useIsSetsRoot } from './hooks/use-is-sets-root'
 export { useRouteQueryParams } from './hooks/use-route-query-params'
 export type {
   TRouteQueryParamsState,

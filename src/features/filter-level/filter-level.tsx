@@ -1,11 +1,12 @@
 import { Select } from '@mantine/core'
-import { useRouteQueryParams } from '@shared/lib/routes'
+import { useIsSetsRoot, useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useState } from 'react'
 import { FILTER_LEVEL_LABELS, FILTER_LEVEL_OPTIONS, type TFilterLevel } from './config'
 import styles from './filter-level.module.scss'
 
 export const FilterLevel: React.FC = () => {
+  const isSetsRoot = useIsSetsRoot()
   const { queryParams, setQueryParams } = useRouteQueryParams()
 
   const [value, setValue] = useState<TFilterLevel | null>(() => {
@@ -30,6 +31,10 @@ export const FilterLevel: React.FC = () => {
     value: level,
     label: FILTER_LEVEL_LABELS[level],
   }))
+
+  if (isSetsRoot) {
+    return null
+  }
 
   return (
     <Select

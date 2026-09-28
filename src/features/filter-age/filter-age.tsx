@@ -1,11 +1,12 @@
 import { Select } from '@mantine/core'
-import { useRouteQueryParams } from '@shared/lib/routes'
+import { useIsSetsRoot, useRouteQueryParams } from '@shared/lib/routes'
 import { Icon } from '@shared/ui/icon'
 import { useState } from 'react'
 import { FILTER_AGE_OPTIONS } from './config'
 import styles from './filter-age.module.scss'
 
 export const FilterAge: React.FC = () => {
+  const isSetsRoot = useIsSetsRoot()
   const { queryParams, setQueryParams } = useRouteQueryParams()
 
   const [value, setValue] = useState<string | null>(() => {
@@ -19,6 +20,10 @@ export const FilterAge: React.FC = () => {
   const handleChange = (newValue: string | null) => {
     setValue(newValue)
     setQueryParams({ age: newValue })
+  }
+
+  if (isSetsRoot) {
+    return null
   }
 
   return (

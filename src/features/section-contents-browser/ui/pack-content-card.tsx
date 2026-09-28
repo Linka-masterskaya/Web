@@ -1,5 +1,6 @@
 import { useLibraryPictureContentUrl } from '@entities/library'
 import type { TPackContentItem } from '@entities/section-content'
+import { useToggleSetFavorite } from '@entities/set'
 import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
 import type { MouseEventHandler } from 'react'
@@ -18,8 +19,18 @@ export const PackContentCard: React.FC<TPackContentCardProps> = ({
   onContextMenu,
 }) => {
   const { data: imageSrc } = useLibraryPictureContentUrl(item.coverSourcePictureId ?? '')
+  const { mutate: toggleFavorite } = useToggleSetFavorite()
 
   const action = { type: 'function' as const, onClick }
+  const favorite = {
+    isFavorite: item.isFavorite ?? false,
+    onToggle: () => {
+      toggleFavorite({
+        setId: item.id,
+        nextFavorite: !(item.isFavorite ?? false),
+      })
+    },
+  }
 
   if (imageSrc) {
     return (
@@ -34,6 +45,7 @@ export const PackContentCard: React.FC<TPackContentCardProps> = ({
         onContextMenu={onContextMenu}
         level={item.difficulty ?? undefined}
         age={item.age ?? undefined}
+        favorite={favorite}
       />
     )
   }
@@ -49,6 +61,7 @@ export const PackContentCard: React.FC<TPackContentCardProps> = ({
       onContextMenu={onContextMenu}
       level={item.difficulty ?? undefined}
       age={item.age ?? undefined}
+      favorite={favorite}
     />
   )
 }

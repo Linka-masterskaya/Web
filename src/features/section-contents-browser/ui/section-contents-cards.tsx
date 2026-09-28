@@ -3,8 +3,6 @@ import type {
   TPackContentItem,
   TSectionContentItem,
 } from '@entities/section-content'
-// TODO: вернуть после бэкенда is_favorite на contents
-// import { useToggleSetFavorite } from '@entities/set'
 import { Blockquote, ScrollArea } from '@mantine/core'
 import gridStyles from '@shared/styles/stretch-card-grid.module.scss'
 import { Card } from '@shared/ui/card'
@@ -61,8 +59,6 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
 }) => {
   const contextMenu = useContextMenu<TPackContentItem>()
   const folderContextMenu = useContextMenu<TFolderContentItem>()
-  // TODO: вернуть после бэкенда is_favorite на contents
-  // const { mutate: toggleFavorite } = useToggleSetFavorite()
 
   return (
     <section aria-label="Содержимое папки" className={styles.root}>
@@ -138,20 +134,6 @@ export const SectionContentsCards: FC<TSectionContentsCardProps> = ({
                 action={{ type: 'function', onClick: handleClick }}
                 className={gridStyles.card}
                 onContextMenu={onContextMenu}
-                // TODO: вернуть после бэкенда is_favorite на contents
-                // favorite={
-                //   isPack
-                //     ? {
-                //         isFavorite: item.isFavorite ?? false,
-                //         onToggle: () => {
-                //           toggleFavorite({
-                //             setId: item.id,
-                //             nextFavorite: !(item.isFavorite ?? false),
-                //           })
-                //         },
-                //       }
-                //     : undefined
-                // }
               />
             )
           })}
