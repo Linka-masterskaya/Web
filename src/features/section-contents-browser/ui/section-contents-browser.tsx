@@ -87,6 +87,14 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
 
   const filters = useMemo(() => parseSectionContentsFilters(queryParams), [queryParams])
 
+  // Сброс пагинации при смене папки / фильтров / раздела (без useEffect — иначе biome useExhaustiveDependencies).
+  const paginationScope = `${section}:${currentFolderId ?? ''}:${filters.query ?? ''}:${filters.age ?? ''}:${filters.difficulty ?? ''}:${filters.isFavorite ?? ''}`
+  const [prevPaginationScope, setPrevPaginationScope] = useState(paginationScope)
+  if (paginationScope !== prevPaginationScope) {
+    setPrevPaginationScope(paginationScope)
+    setPage(1)
+  }
+
   const { data, isLoading, error, refetch } = useSectionContents({
     section,
     parentId: currentFolderId,
@@ -97,9 +105,6 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     offset: (page - 1) * PAGE_SIZE,
   })
 
-  useEffect(() => {
-    setPage(1)
-  }, [currentFolderId, filters, section])
   // Несуществующий parent_id в разделе (например, folderId из Библиотеки на /sets) → 404.
   // Сбрасываем folderId, чтобы не зациклиться на ошибке.
   useEffect(() => {
