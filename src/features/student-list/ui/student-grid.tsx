@@ -38,7 +38,7 @@ export const StudentGrid: React.FC<TStudentGridProps> = ({
         </div>
         <BackButton
           variant="tile"
-          className={clsx(gridStyles.card, styles.tile)}
+          className={gridStyles.card}
           to={createUrl(routerPath.dashboard)}
         />
         {students.map((student) => (

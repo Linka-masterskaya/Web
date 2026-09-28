@@ -14,23 +14,3 @@
     color: var(--mantine-color-text);
   }
 }
-
-.tile {
-  width: 100%;
-  min-width: 0;
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    outline: 2px solid rgba(62, 135, 255, 0.75);
-    box-shadow: none;
-  }
-}
-
-.tileIconArea {
-  aspect-ratio: 302 / 180;
-  height: auto;
-  min-height: 0;
-  background-color: var(--mantine-color-lightBlue-0);
-  border-radius: var(--mantine-radius-md);
-}
