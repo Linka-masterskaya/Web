@@ -1,0 +1,13 @@
+a.button {
+  background: var(--mantine-color-lightBlue-0);
+  color: var(--mantine-color-blue-4);
+  border: 1px solid var(--mantine-color-lightBlue-0);
+  font-weight: 500;
+
+  &:hover,
+  &:active {
+    background: var(--mantine-color-lightBlue-1);
+    color: var(--mantine-color-blue-4);
+    border-color: var(--mantine-color-lightBlue-1);
+  }
+}

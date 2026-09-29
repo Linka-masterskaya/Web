@@ -10,6 +10,8 @@ export {
   useResendVerificationEmail,
   useVerifyEmail,
 } from './hooks'
+export { consumeOAuthAccessToken } from './lib/consume-oauth-access-token'
+export { getYandexLoginUrl } from './lib/get-yandex-login-url'
 export { isAccessLevelVisible } from './lib/is-access-level-visible'
 export * from './model'
 export { useAuthStore } from './model/auth-store'

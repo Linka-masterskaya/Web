@@ -5,9 +5,10 @@ import {
   emailVerificationNoticeModalOptions,
 } from '@features/email-verification-notice'
 import { LoginForm } from '@features/login'
-import { Title } from '@mantine/core'
+import { YandexLoginButton } from '@features/yandex-login'
+import { Text, Title } from '@mantine/core'
 import { useModal } from '@shared/lib/modal'
-import { createUrl, routerPath } from '@shared/lib/routes'
+import { createUrl, routerPath, useRouteQueryParams } from '@shared/lib/routes'
 import { useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import styles from './login.page.module.scss'
@@ -24,6 +25,8 @@ export const LoginPage = () => {
   const hasOpenedNotice = useRef(false)
   const locationState = location.state as TLoginPageLocationState | null
   const shouldShowNotice = locationState?.[EMAIL_VERIFICATION_NOTICE_STATE_KEY] === true
+  const { queryParams } = useRouteQueryParams()
+  const showEmailExists = queryParams.emailExists === 'true'
 
   useEffect(() => {
     if (!shouldShowNotice || hasOpenedNotice.current) {
@@ -46,8 +49,15 @@ export const LoginPage = () => {
   return (
     <div className={styles.content}>
       <Title order={1} className={styles.title}>
-        Войти
+        Вход
       </Title>
+      {showEmailExists && (
+        <Text className={styles.emailExists}>
+          Этот email уже зарегистрирован. Войдите с паролем.
+        </Text>
+      )}
+      <YandexLoginButton />
+      <Text className={styles.divider}>или Email</Text>
       <LoginForm onSubmit={handleSubmit} />
     </div>
   )

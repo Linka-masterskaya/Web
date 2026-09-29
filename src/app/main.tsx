@@ -1,7 +1,7 @@
 import '@mantine/core/styles.css'
 import { Router } from '@app/providers/router'
 import { ThemeProvider } from '@app/providers/theme'
-import { useAuthStore } from '@entities/auth'
+import { consumeOAuthAccessToken, useAuthStore } from '@entities/auth'
 import { TtsInitializer } from '@entities/tts'
 import { UserProfileInitializer } from '@entities/user'
 import {
@@ -26,6 +26,8 @@ setApiAccessTokenUpdateHandler((accessToken) => {
 setApiAuthFailureHandler(() => {
   useAuthStore.getState().logout()
 })
+
+consumeOAuthAccessToken()
 
 createRoot(root).render(
   <StrictMode>
