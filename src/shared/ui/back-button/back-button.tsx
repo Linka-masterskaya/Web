@@ -1,6 +1,6 @@
-import { Card, Group, Text } from '@mantine/core'
+import { Text } from '@mantine/core'
+import { Card } from '@shared/ui/card'
 import { Icon } from '@shared/ui/icon'
-import clsx from 'clsx'
 import { useNavigate } from 'react-router'
 import styles from './back-button.module.scss'
 
@@ -15,10 +15,12 @@ export type TBackButtonProps = {
   to?: string
 }
 
+const LABEL = 'Вернуться назад'
+
 export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', className, to }) => {
   const navigate = useNavigate()
 
-  const handleClick = () => {
+  const goBack = () => {
     if (to) {
       navigate(to)
       return
@@ -26,32 +28,27 @@ export const BackButton: React.FC<TBackButtonProps> = ({ variant = 'inline', cla
     navigate(-1)
   }
 
+  // Плитка — тот же Card variant="icon", что и у соседних карточек грида: размер иконки
+  // и фон иконочной области задаются стилями карточки, а не пропом size. Иначе иконка
+  // не масштабируется вместе с колонкой и выглядит крупнее соседей.
   if (variant === 'tile') {
     return (
       <Card
-        shadow="sm"
-        padding="md"
-        radius="md"
-        withBorder
-        className={clsx(styles.tile, className)}
-        onClick={handleClick}
-        role="button"
-      >
-        <Group justify="center" className={styles.tileIconArea}>
-          <Icon name="CornerUpLeft" size={72} color="var(--mantine-color-blue-4)" />
-        </Group>
-        <Text ta="left" fw={600} mt="sm">
-          Вернуться назад
-        </Text>
-      </Card>
+        fill
+        variant="icon"
+        className={className}
+        label={LABEL}
+        icon={<Icon name="CornerUpLeft" aria-hidden="true" />}
+        action={to ? { type: 'link', href: to } : { type: 'function', onClick: goBack }}
+      />
     )
   }
 
   return (
-    <button type="button" className={styles.inline} onClick={handleClick}>
+    <button type="button" className={styles.inline} onClick={goBack}>
       <Icon name="CornerUpLeft" size={24} />
       <Text fz={16} fw={600}>
-        Вернуться назад
+        {LABEL}
       </Text>
     </button>
   )
