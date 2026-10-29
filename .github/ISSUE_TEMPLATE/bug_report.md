@@ -1,9 +1,9 @@
+---
 name: Баг-репорт
 about: Сообщить о баге
-title: '[BUG] '
+title: ''
 labels: bug
 assignees: ''
-visibility: public
 ---
 
 ### Окружение
@@ -27,4 +27,3 @@ visibility: public
 Скриншот, видео, ответ сервера (DevTools, Network)
 
 ### Ссылка на чек-лист (если есть)
-<!-- Вставьте ссылку на TestRail / Qase / Google Sheet -->
