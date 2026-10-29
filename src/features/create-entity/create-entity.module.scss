@@ -1,0 +1,26 @@
+.button {
+	width: 216px;
+}
+
+.buttonOpened,
+.buttonOpened:hover {
+	background: var(--mantine-color-black);
+	color: var(--mantine-color-gray-0);
+	border-color: var(--mantine-color-black);
+	opacity: 0.1;
+}
+
+.dropdown {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	width: 260px;
+	padding: 22px 20px;
+	background: var(--mantine-color-gray-0);
+	border: 1px solid var(--mantine-color-gray-2);
+	border-radius: 8px;
+}
+
+.action {
+	justify-content: center;
+}

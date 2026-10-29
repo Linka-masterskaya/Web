@@ -1,0 +1,8 @@
+export const LIBRARY_DEFAULT_CATEGORY_ID: string | null = null
+
+export const LIBRARY_STALE_TIME_MS = 60_000
+export const LIBRARY_GC_TIME_MS = LIBRARY_STALE_TIME_MS * 5
+
+export const LIBRARY_SEARCH_MIN_QUERY_LENGTH = 2
+
+export const LIBRARY_SEARCH_RESULTS_LIMIT = 10

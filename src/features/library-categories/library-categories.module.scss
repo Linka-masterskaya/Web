@@ -1,0 +1,32 @@
+/* Card format Segmented Item по макету: 216x40, радиус 8, padding 8/12, текст 16/24 */
+
+.category {
+  height: 40px;
+  padding: 8px 0;
+  border-radius: var(--mantine-radius-default);
+  color: var(--mantine-color-gray-6);
+  font-size: var(--mantine-font-size-md);
+  line-height: 24px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    background-color: var(--mantine-color-gray-1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--mantine-color-blue-4);
+    outline-offset: 2px;
+  }
+}
+
+.active {
+  background-color: var(--mantine-color-lightBlue-0);
+  color: var(--mantine-color-blue-4);
+
+  &:hover {
+    background-color: var(--mantine-color-lightBlue-0);
+  }
+}

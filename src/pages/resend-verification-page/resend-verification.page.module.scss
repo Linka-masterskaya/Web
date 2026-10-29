@@ -1,0 +1,16 @@
+.content {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  max-width: 334px;
+}
+
+.contentInner {
+  width: 100%;
+}
+
+.closeButton {
+  position: fixed;
+  top: 122px;
+  right: 22px;
+}

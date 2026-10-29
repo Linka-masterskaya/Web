@@ -1,0 +1,18 @@
+export const setQueryKeys = {
+  all: ['sets'] as const,
+  lists: () => [...setQueryKeys.all, 'list'] as const,
+  list: (filters?: Record<string, unknown>) => [...setQueryKeys.lists(), filters] as const,
+  details: () => [...setQueryKeys.all, 'detail'] as const,
+  detail: (id: string) => [...setQueryKeys.details(), id] as const,
+}
+
+export const setMutationKeys = {
+  updateSettings: (id: string) => [...setQueryKeys.detail(id), 'update-settings'] as const,
+  updatePageType: (id: string) => [...setQueryKeys.detail(id), 'update-page-type'] as const,
+  updatePageStructure: (id: string) =>
+    [...setQueryKeys.detail(id), 'update-page-structure'] as const,
+  updateTitle: (id: string) => [...setQueryKeys.detail(id), 'update-title'] as const,
+  duplicatePage: (id: string) => [...setQueryKeys.detail(id), 'duplicate-page'] as const,
+  deletePage: (id: string) => [...setQueryKeys.detail(id), 'delete-page'] as const,
+  insertPage: (id: string) => [...setQueryKeys.detail(id), 'insert-page'] as const,
+}

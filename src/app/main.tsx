@@ -1,0 +1,44 @@
+import '@mantine/core/styles.css'
+import { Router } from '@app/providers/router'
+import { ThemeProvider } from '@app/providers/theme'
+import { consumeOAuthAccessToken, useAuthStore } from '@entities/auth'
+import { TtsInitializer } from '@entities/tts'
+import { UserProfileInitializer } from '@entities/user'
+import {
+  setApiAccessTokenProvider,
+  setApiAccessTokenUpdateHandler,
+  setApiAuthFailureHandler,
+} from '@shared/lib/api'
+import { ErrorBoundary } from '@shared/lib/error'
+import { QueryProvider } from '@shared/lib/query'
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+
+const root = document.getElementById('root')
+if (!root) {
+  throw new Error('Root element not found')
+}
+
+setApiAccessTokenProvider(() => useAuthStore.getState().accessToken)
+setApiAccessTokenUpdateHandler((accessToken) => {
+  useAuthStore.getState().setAccessToken(accessToken)
+})
+setApiAuthFailureHandler(() => {
+  useAuthStore.getState().logout()
+})
+
+consumeOAuthAccessToken()
+
+createRoot(root).render(
+  <StrictMode>
+    <ErrorBoundary>
+      <QueryProvider>
+        <ThemeProvider>
+          <TtsInitializer />
+          <UserProfileInitializer />
+          <Router />
+        </ThemeProvider>
+      </QueryProvider>
+    </ErrorBoundary>
+  </StrictMode>,
+)

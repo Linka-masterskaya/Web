@@ -1,0 +1,31 @@
+.grid {
+  display: flex;
+  gap: var(--column-gap, 100px);
+  width: 100%;
+  /*
+    Высоту задаёт родитель: компонент растягивается на неё целиком, чтобы карточки
+    всегда помещались на экран. От этой высоты считается размер карточки, поэтому
+    родитель обязан иметь определённую высоту (flex/grid с заданной высотой).
+  */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 100%;
+  min-height: 0;
+  padding: 12px;
+  border-radius: 16px;
+  background-color: var(--mantine-color-lightBlue-0);
+}
+
+/*
+  Колонки остались разметкой: они держат распределение вариантов по категориям, но
+  визуально их не видно — ни заливки, ни рамки, ни внутренних отступов, поэтому фон
+  колонки совпадает с фоном между колонками.
+*/
+.column {
+  display: grid;
+  flex: 1 1 0;
+  gap: 12px;
+  min-width: 0;
+  overflow: visible;
+  align-content: start;
+}

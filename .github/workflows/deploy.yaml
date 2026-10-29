@@ -1,0 +1,35 @@
+---
+name: Deploy
+on:
+  push:
+    branches: [develop, devops/test-deploy]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      VITE_API_DOMAIN: ${{ vars.VITE_API_DOMAIN }}
+      VITE_TEST_NUMBER: ${{ vars.VITE_TEST_NUMBER }}
+      VITE_TEST_BOOLEAN: ${{ vars.VITE_TEST_BOOLEAN }}
+    steps:
+      - name: 1. Check out branch
+        uses: actions/checkout@v3
+
+      - name: 2. Install npm
+        run: |
+          sudo apt install nodejs npm -y
+          npm ci
+
+      - name: 3. Build dist folder
+        run: |
+          npm run build
+
+      - name: 4. Copy dist to dev folder on server
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ vars.SSH_DEPLOY_HOST }}
+          username: ${{ secrets.SSH_DEPLOY_USER }}
+          key: ${{ secrets.SSH_DEPLOY_KEY }}
+          overwrite: true
+          source: "dist"
+          target: "~/frontend/"

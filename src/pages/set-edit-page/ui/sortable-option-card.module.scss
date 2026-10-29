@@ -1,0 +1,9 @@
+.optionCard {
+  position: relative;
+  touch-action: none;
+
+  &[data-dragging] {
+    opacity: 0.6;
+    cursor: grabbing;
+  }
+}

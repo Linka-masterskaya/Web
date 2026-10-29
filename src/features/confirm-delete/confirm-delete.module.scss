@@ -1,0 +1,20 @@
+.wrapper {
+	gap: 24px;
+	align-items: center;
+	box-sizing: border-box;
+	padding: 20px 40px 40px;
+}
+
+.buttonWrapper {
+	width: 240px;
+	gap: 20px;
+}
+
+.deleteButton {
+	background: var(--mantine-color-red-6);
+	border-color: var(--mantine-color-red-6);
+
+	&:hover {
+		background: var(--mantine-color-red-5);
+	}
+}

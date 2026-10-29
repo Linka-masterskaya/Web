@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.emptyText {
+  flex-shrink: 0;
+  margin-top: var(--mantine-spacing-md);
+  margin-left: calc(var(--bq-icon-size, 2rem) / 2);
+  margin-bottom: var(--mantine-spacing-md);
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+}
+
+.viewport {
+  --card-grid-hover-padding: 4px;
+
+  padding: var(--card-grid-hover-padding);
+  scroll-padding: var(--card-grid-hover-padding);
+}

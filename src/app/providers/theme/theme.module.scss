@@ -1,0 +1,157 @@
+.anchorRoot {
+  color: #787b82;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.buttonRoot {
+  height: 48px;
+  max-height: 48px;
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 24px;
+
+  &:focus-visible {
+    outline: 2px solid #3884ff;
+    outline-offset: 2px;
+  }
+
+  &:disabled,
+  &[data-disabled] {
+    background: #0e0e0e;
+    opacity: 0.1;
+    cursor: not-allowed;
+  }
+}
+
+.buttonFilled {
+  font-weight: 600;
+  background: #3e87ff;
+  color: #ffffff;
+  border: 1px solid #3e87ff;
+
+  &:hover {
+    background: linear-gradient(
+      270deg,
+      rgba(62, 135, 255, 0.75) 0%,
+      rgba(56, 132, 255, 0.75) 100%
+    );
+    border: 1px solid #ebf3ff;
+  }
+}
+
+.buttonOutline {
+  font-weight: 400;
+  background: #ffffff;
+  color: #3e87ff;
+  border: 1px solid #ebf3ff;
+
+  &:hover {
+    background: #ebf3ff;
+    color: #3e87ff;
+    border: 1px solid #3e87ff;
+  }
+}
+
+.input {
+  min-height: 40px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: #ffffff;
+  border: 1px solid #eeeff1;
+
+  &:focus-visible {
+    outline: 2px solid #3884ff;
+  }
+
+  &:disabled,
+  &[data-disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    outline: 1px solid #eeeff1;
+  }
+
+  &[data-error] {
+    border: 1px solid #ec2121;
+  }
+}
+
+.textareaInput {
+  max-height: 200px;
+}
+
+.checkboxInput {
+  background: #ffffff;
+  border: 1px solid #eeeff1;
+
+  &:checked {
+    background: #3884ff;
+    border: 1px solid #3884ff;
+  }
+}
+
+.passwordVisibilityToggle {
+  color: #787b82;
+}
+
+.menuDropdown {
+  background: rgba(238, 239, 241, 0.85);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 12px 8px;
+  min-width: 129px;
+}
+
+.menuItem {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 0px 0px;
+  text-align: center;
+}
+
+.menuItem:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.menuDivider {
+  margin: 8px 0;
+  border-top: 0.5px solid var(--mantine-color-gray-6);
+}
+
+.autocompleteInput {
+  padding: 14px 40px;
+}
+
+.dropdown {
+  font-size: 14px;
+  color: #787b82;
+
+  &[data-combobox-active] {
+    color: #0e0e0e;
+  }
+
+  &:hover {
+    background: #eeeff1;
+    color: #0e0e0e;
+  }
+}
+
+.avatarPlaceholder {
+  background-color: var(--mantine-color-lightBlue-0);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0E0E0E;
+}
+
+.inputLabel {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--mantine-color-black);
+}

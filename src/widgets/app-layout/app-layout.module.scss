@@ -1,0 +1,37 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.title {
+  flex: 0 1 auto;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.search {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: right;
+  justify-content: right;
+  gap: 20px;
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}

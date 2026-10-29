@@ -1,0 +1,77 @@
+import {
+  changeUserAvatar,
+  changeUserAvatarFormSchema,
+  deleteUserAvatar,
+  useUserStore,
+} from '@entities/user'
+import { useState } from 'react'
+
+export const useAvatarUpload = () => {
+  const { avatarSrc, setAvatarSrc, name, email } = useUserStore()
+
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleFileChange = async (file: File | null) => {
+    if (!file) {
+      return
+    }
+    const parsed = changeUserAvatarFormSchema.safeParse({ avatar: file })
+    if (!parsed.success) {
+      setError(parsed.error.issues[0]?.message ?? 'Не удалось обновить аватар')
+      return
+    }
+    const previousAvatar = avatarSrc
+    const tempUrl = URL.createObjectURL(file)
+    setIsLoading(true)
+    setError(null)
+    setAvatarSrc(tempUrl)
+
+    try {
+      const response = await changeUserAvatar(file)
+      setAvatarSrc(response.avatarUrl)
+    } catch (error) {
+      setAvatarSrc(previousAvatar)
+      setError(error instanceof Error ? error.message : 'Не удалось обновить аватар')
+      // biome-ignore lint/suspicious/noConsole: debug only
+      console.error('Не удалось обновить аватар:', error)
+    } finally {
+      setIsLoading(false)
+      if (tempUrl) {
+        URL.revokeObjectURL(tempUrl)
+      }
+    }
+  }
+
+  const handleDelete = async () => {
+    const previousAvatar = avatarSrc
+    setIsLoading(true)
+    setError(null)
+    setAvatarSrc(null)
+
+    try {
+      await deleteUserAvatar()
+    } catch (error) {
+      setAvatarSrc(previousAvatar)
+      setError(error instanceof Error ? error.message : 'Не удалось удалить аватар')
+      // biome-ignore lint/suspicious/noConsole: debug only
+      console.error('Не удалось удалить аватар:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const hasAvatar = !!avatarSrc
+
+  const displayName = name?.[0] || email?.[0] || ' '
+
+  return {
+    avatarSrc,
+    hasAvatar,
+    displayName,
+    isLoading,
+    error,
+    handleFileChange,
+    handleDelete,
+  }
+}
