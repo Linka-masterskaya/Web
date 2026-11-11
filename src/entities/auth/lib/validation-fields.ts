@@ -5,6 +5,9 @@ export const emailField = z
   .trim()
   .min(1, { message: 'Введите email' })
   .pipe(z.email({ message: 'Некорректный формат email' }))
+  .refine((value) => !value.startsWith('-'), {
+    message: 'Некорректный формат email',
+  })
 
 export const passwordField = z
   .string()
