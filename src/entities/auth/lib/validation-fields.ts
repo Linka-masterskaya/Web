@@ -5,9 +5,19 @@ export const emailField = z
   .trim()
   .min(1, { message: 'Введите email' })
   .pipe(z.email({ message: 'Некорректный формат email' }))
-  .refine((value) => !value.startsWith('-'), {
-    message: 'Некорректный формат email',
-  })
+  .refine(
+    (value) => {
+      const [localPart, domain] = value.split('@')
+      const domainLabels = domain.split('.')
+
+      return (
+        localPart.length <= 64 &&
+        !localPart.startsWith('-') &&
+        domainLabels.every((label) => !label.startsWith('-') && !label.endsWith('-'))
+      )
+    },
+    { message: 'Некорректный формат email' },
+  )
 
 export const passwordField = z
   .string()
