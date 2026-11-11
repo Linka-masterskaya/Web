@@ -25,6 +25,7 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
   const {
     handleSubmit,
     register,
+    trigger,
     clearErrors,
     setError,
     formState: { errors, isSubmitting, isValid },
@@ -71,7 +72,12 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
         <PasswordInput
           autoComplete="new-password"
           placeholder="Пароль"
-          {...register('password', { onChange: clearSubmitError })}
+          {...register('password', {
+            onChange: () => {
+              clearSubmitError()
+              void trigger('passwordConfirm')
+            },
+          })}
           error={errors.password?.message ?? Boolean(errors.root)}
         />
 
