@@ -28,7 +28,7 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
     trigger,
     clearErrors,
     setError,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
   } = form
 
   const submit = async (values: TRegisterFormValues) => {
@@ -57,7 +57,18 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
           type="text"
           autoComplete="name"
           placeholder="Имя"
-          {...register('name', { onChange: clearSubmitError })}
+          {...register('name', {
+            onChange: clearSubmitError,
+
+            onBlur: (event) => {
+              const value = event.target.value.trim()
+
+              form.setValue('name', value, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            },
+          })}
           error={errors.name?.message ?? Boolean(errors.root)}
         />
 
@@ -65,7 +76,18 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
           type="email"
           autoComplete="email"
           placeholder="Email"
-          {...register('email', { onChange: clearSubmitError })}
+          {...register('email', {
+            onChange: clearSubmitError,
+
+            onBlur: (event) => {
+              const value = event.target.value.trim()
+
+              form.setValue('email', value, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            },
+          })}
           error={errors.email?.message ?? Boolean(errors.root)}
         />
 
@@ -91,7 +113,7 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
         <Button
           type="submit"
           loading={isSubmitting}
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           variant="filled"
           className={styles.submitButton}
         >
@@ -104,6 +126,8 @@ export const RegisterForm = ({ onSubmit }: TRegisterFormProps) => {
         <Anchor
           component={Link}
           to={createUrl(routerPath.privacyPolicy)}
+          target="_blank"
+          rel="noopener noreferrer"
           className={styles.agreementLink}
         >
           Политики обработки персональных данных

@@ -9,20 +9,36 @@ import { useForm } from 'react-hook-form'
 import type { TForgotPasswordFormProps } from './types'
 
 export const ForgotPasswordForm: React.FC<TForgotPasswordFormProps> = ({ onSubmit }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<TForgotPasswordFormValues>({
+  const form = useForm<TForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: forgotPasswordFormDefaultValues,
   })
+
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    formState: { errors, isSubmitting },
+  } = form
+
+  const clearSubmitError = () => clearErrors('email')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <Stack gap="20px">
         <TextInput
-          {...register('email')}
+          {...register('email', {
+            onChange: clearSubmitError,
+
+            onBlur: (event) => {
+              const value = event.target.value.trim()
+
+              form.setValue('email', value, {
+                shouldValidate: true,
+                shouldDirty: true,
+              })
+            },
+          })}
           type="email"
           placeholder="Email"
           autoComplete="email"

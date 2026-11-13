@@ -41,7 +41,9 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
         return
       }
 
-      setError('root', { message: 'Вы ввели неверные данные. Попробуйте ещё раз.' })
+      setError('root', {
+        message: 'Вы ввели неверные данные. Попробуйте ещё раз.',
+      })
     }
   }
 
@@ -72,7 +74,18 @@ export const LoginForm = ({ onSubmit }: TLoginFormProps) => {
             type="email"
             autoComplete="email"
             placeholder="Email"
-            {...register('email', { onChange: clearSubmitError })}
+            {...register('email', {
+              onChange: clearSubmitError,
+
+              onBlur: (event) => {
+                const value = event.target.value.trim()
+
+                form.setValue('email', value, {
+                  shouldValidate: true,
+                  shouldDirty: true,
+                })
+              },
+            })}
             error={errors.email?.message ?? Boolean(errors.root)}
           />
         </div>
