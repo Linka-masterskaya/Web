@@ -40,7 +40,7 @@ export const CardInspector: React.FC<{ pageId: string; card: TSetPageElement }> 
               source_picture_id: imported.sourcePictureId,
               media_id: null,
               media_url: imported.contentUrl,
-              value: card.value || picture.title,
+              value: picture.title,
             })
           }}
         />
@@ -99,6 +99,7 @@ export const CardInspector: React.FC<{ pageId: string; card: TSetPageElement }> 
                   source_picture_id: null,
                   media_id: null,
                   media_url: undefined,
+                  value: '',
                 })
               }
             >
