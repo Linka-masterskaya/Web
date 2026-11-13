@@ -133,7 +133,12 @@ export const CardAudioEditor: React.FC<{ pageId: string; card: TSetPageElement }
               variant="outline"
               onClick={() => {
                 player.current?.pause()
-                update({ audio_media_id: null, audio_url: undefined, audio_name: undefined })
+                update({
+                  audio_media_id: null,
+                  audio_url: undefined,
+                  audio_name: undefined,
+                  speech_text: '',
+                })
                 setError('')
               }}
             >
