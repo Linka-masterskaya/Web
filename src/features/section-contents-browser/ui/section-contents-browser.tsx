@@ -263,8 +263,8 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
     try {
       setActionError(null)
       await unpublishSet({ setId: pack.id })
-    } catch (error) {
-      setActionError(await getApiErrorMessage(error))
+    } catch {
+      setActionError('Не удалось снять набор с публикации. Попробуйте позже.')
     }
   }
 
