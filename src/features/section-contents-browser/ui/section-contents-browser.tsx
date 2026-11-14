@@ -174,7 +174,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       withCloseButton: false,
       content: (
         <ConfirmDelete
-          title={`Удалить набор «${pack.name}»?`}
+          title={`Удалить набор`}
           description="Вы уверены?"
           onConfirm={() => deleteSet({ setId: pack.id })}
         />
