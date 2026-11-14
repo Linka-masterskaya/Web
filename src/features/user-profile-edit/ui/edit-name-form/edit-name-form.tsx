@@ -65,6 +65,7 @@ export const EditNameForm: React.FC<TEditNameFormProps> = ({
           miw={200}
           error={errors.name?.message}
           rightSectionPointerEvents="all"
+          styles={{ input: { paddingRight: 44 } }}
           rightSection={
             <ActionIcon
               type="button"
