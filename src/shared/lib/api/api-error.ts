@@ -32,7 +32,10 @@ export const getSchemaValidationMessage = (error: unknown): string | null => {
  * Достаёт человекочитаемое сообщение из ошибки API.
  * Бэкенд отвечает в формате { error: { code, message, details } }.
  */
-export const getApiErrorMessage = async (error: unknown): Promise<string> => {
+export const getApiErrorMessage = async (
+  error: unknown,
+  fallback = FALLBACK_MESSAGE,
+): Promise<string> => {
   const schemaMessage = getSchemaValidationMessage(error)
   if (schemaMessage) {
     return schemaMessage
@@ -59,15 +62,9 @@ export const getApiErrorMessage = async (error: unknown): Promise<string> => {
     if (error.response.status === 404) {
       return 'Набор не найден или недоступен для изменения'
     }
-
     if (error.response.status >= 500) {
       return 'Сервер временно недоступен. Попробуйте позже'
     }
   }
-
-  if (error instanceof Error && error.message) {
-    return error.message
-  }
-
-  return FALLBACK_MESSAGE
+  return fallback
 }

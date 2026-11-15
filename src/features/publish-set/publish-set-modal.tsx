@@ -1,6 +1,7 @@
 import { useSectionFolders } from '@entities/folder'
 import { usePublishSet } from '@entities/set'
 import { ActionIcon, Button, Loader, Text, Title, UnstyledButton } from '@mantine/core'
+import { getApiErrorMessage } from '@shared/lib/api'
 import { Icon } from '@shared/ui/icon'
 import { type FormEvent, useState } from 'react'
 import styles from './publish-set-modal.module.scss'
@@ -36,8 +37,10 @@ export const PublishSetModal: React.FC<TPublishSetModalProps> = ({ setId, onClos
 
       onSuccess?.()
       onClose()
-    } catch {
-      setActionError('Не удалось опубликовать набор. Попробуйте позже.')
+    } catch (error) {
+      setActionError(
+        await getApiErrorMessage(error, 'Не удалось опубликовать набор. Попробуйте позже.'),
+      )
     }
   }
 
