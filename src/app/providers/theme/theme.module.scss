@@ -56,7 +56,8 @@
 
 .input {
 	min-height: 40px;
-	padding: 10px 12px;
+	padding-block: 10px;
+	padding-inline-start: 12px;
 	font-size: 14px;
 	background: #ffffff;
 	border: 1px solid var(--input-bd, #eeeff1);

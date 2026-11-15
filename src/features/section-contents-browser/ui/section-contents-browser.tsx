@@ -174,7 +174,7 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       withCloseButton: false,
       content: (
         <ConfirmDelete
-          title={`Удалить набор «${pack.name}»?`}
+          title={`Удалить набор`}
           description="Вы уверены?"
           onConfirm={() => deleteSet({ setId: pack.id })}
         />
@@ -264,7 +264,9 @@ export const SectionContentsBrowser: FC<TSectionContentsBrowserProps> = ({
       setActionError(null)
       await unpublishSet({ setId: pack.id })
     } catch (error) {
-      setActionError(await getApiErrorMessage(error))
+      setActionError(
+        await getApiErrorMessage(error, 'Не удалось снять набор с публикации. Попробуйте позже.'),
+      )
     }
   }
 

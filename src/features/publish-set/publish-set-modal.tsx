@@ -38,7 +38,9 @@ export const PublishSetModal: React.FC<TPublishSetModalProps> = ({ setId, onClos
       onSuccess?.()
       onClose()
     } catch (error) {
-      setActionError(await getApiErrorMessage(error))
+      setActionError(
+        await getApiErrorMessage(error, 'Не удалось опубликовать набор. Попробуйте позже.'),
+      )
     }
   }
 
