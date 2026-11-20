@@ -196,11 +196,13 @@ export const useSetEditorStore = createStore<TEditorStore>('set-editor')((set) =
     resizeOptions: (pageId, count) =>
       updatePage(pageId, (page) => {
         const limits = getSetPageStructure(page)
+        const currentCount = page.elements.length
+        // Выше потолка можно только шаг вниз, к уже сохранённой странице с лишними карточками.
         if (
           !['single_choice', 'multi_choice', 'sequence'].includes(page.type) ||
           !Number.isInteger(count) ||
           count < limits.primaryMin ||
-          count > limits.primaryMax
+          (count > limits.primaryMax && count >= currentCount)
         ) {
           return page
         }
