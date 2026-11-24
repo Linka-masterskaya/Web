@@ -25,8 +25,14 @@ export const studentSchema = z.object({
   last_lesson_at: z.string().nullable().optional(),
   avatar_media_id: z.string().uuid().nullable().optional(),
   avatar_url: z.string().nullable().optional(),
-  created_at: z.iso.datetime({ offset: true, message: 'Некорректная дата создания' }),
-  updated_at: z.iso.datetime({ offset: true, message: 'Некорректная дата обновления' }),
+  created_at: z.iso.datetime({
+    offset: true,
+    message: 'Некорректная дата создания',
+  }),
+  updated_at: z.iso.datetime({
+    offset: true,
+    message: 'Некорректная дата обновления',
+  }),
 })
 
 export const studentsListResponseSchema = z.object({
@@ -69,7 +75,9 @@ export type TStudentFormValues = {
 }
 
 export const studentFormFieldsSchema = z.object({
-  name: z.string().trim().min(1, { message: 'Введите имя' }),
+  name: z.string().trim().min(1, { message: 'Введите имя' }).max(255, {
+    message: 'Имя ученика не должно превышать 255 символов',
+  }),
   email: z
     .string()
     .trim()

@@ -69,8 +69,7 @@ export const StudentForm = ({ defaultValues, initialAvatarUrl, onSubmit }: TStud
   const form = useForm<TStudentFormFieldsValues>({
     resolver: zodResolver(studentFormFieldsSchema),
     defaultValues: mergedDefaultValues,
-    // onTouched: ошибки показываются после ухода с поля и при отправке
-    mode: 'onTouched',
+    mode: 'onChange',
   })
 
   const {
